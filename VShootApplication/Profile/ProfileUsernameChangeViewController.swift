@@ -13,10 +13,17 @@ class ProfileUsernameChangeViewController: UIViewController {
 
     @IBOutlet weak var newUsername: UITextField!
     @IBOutlet weak var errorLabel: UILabel!
+    @IBOutlet weak var savBtn: UIButton!
+    @IBOutlet weak var cancelBtn: UIButton!
+    
+    
     var currUser:String = ""
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        self.savBtn.layer.cornerRadius = CGFloat(Float(4.0))
+        self.cancelBtn.layer.cornerRadius = CGFloat(Float(4.0))
+        savBtn.titleLabel?.adjustsFontSizeToFitWidth = true;
+        cancelBtn.titleLabel?.adjustsFontSizeToFitWidth = true;
         currUser = SocketIOManager.sharedInstance.currUserObj.username
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
@@ -53,38 +60,62 @@ class ProfileUsernameChangeViewController: UIViewController {
     
     @IBAction func saveNewUsername(_ sender: Any) {
         if (newUsername.text == ""){
-            errorLabel.text = "New Username Cannot be Blank"
+            //errorLabel.text = "New Username Cannot be Blank"
+            let alertController = UIAlertController(title: "Sorry!", message:
+                "New Username cannot be blank.", preferredStyle: UIAlertController.Style.alert)
+            alertController.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default,handler: {(action) in }))
+            
+            self.present(alertController, animated: true, completion: nil)
         }
         else {
+            self.cancelBtn.isEnabled = false
+            self.savBtn.isEnabled = false
             var geturl = SocketIOManager.sharedInstance.serverUrl + "/user/username"
-            
-            let info: [String:Any] = ["currUsername": currUser as Any, "newUsername": newUsername.text as Any]
+            let username = (newUsername.text?.trimmingCharacters(in: .whitespaces))?.lowercased()
+            print(currUser)
+            print(username)
+            print(username!)
+            let info: [String:Any] = ["currUsername": currUser as Any, "newUsername": username as Any]
             
             let url = URL(string: geturl);
             
             Alamofire.request(url!, method: .post, parameters: info, encoding: JSONEncoding.default, headers: ["Content-Type":"application/json"])
-                .validate(statusCode: 200..<500)
+                .validate(statusCode: 200..<201)
                 .responseString{ (response) in
                     print(response)
                     switch response.result {
                     case .success(let data):
                         print(data)
                         if (data == "username updated successfully"){
-                            SocketIOManager.sharedInstance.currUserObj.username = self.newUsername.text!
-                            SocketIOManager.sharedInstance.currUser = self.newUsername.text!
+                            SocketIOManager.sharedInstance.currUserObj.username = username!
+                            SocketIOManager.sharedInstance.currUser = username!
                             NotificationCenter.default.post(name: NSNotification.Name(rawValue: "refresh"), object: nil)
                             self.dismiss(animated: true, completion: nil)
                             
                         }
                         else {
-                            print("error trying to change username")
-                            //add a label "Sorry request could not be processed. Try again"
-                            self.errorLabel.text = "Username is Taken."
+                            print("username taken")
+                            self.cancelBtn.isEnabled = true
+                            self.savBtn.isEnabled = true
+                            //self.errorLabel.text = "Username is Taken."
+                            let alertController = UIAlertController(title: "OOPS!", message:
+                                "This username is already taken. Try another.", preferredStyle: UIAlertController.Style.alert)
+                            alertController.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default,handler: {(action) in }))
+                            
+                            self.present(alertController, animated: true, completion: nil)
                         }
                         
                     case .failure(let error):
                         print("failure")
                         print(error)
+                        print(response)
+                        self.cancelBtn.isEnabled = true
+                        self.savBtn.isEnabled = true
+                        let alertController = UIAlertController(title: "Sorry!", message:
+                            "Looks like something went wrong. Please try again.", preferredStyle: UIAlertController.Style.alert)
+                        alertController.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default,handler: {(action) in }))
+                        
+                        self.present(alertController, animated: true, completion: nil)
                     }
             }
         }

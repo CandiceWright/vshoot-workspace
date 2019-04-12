@@ -18,7 +18,9 @@ class ImageService {
         let dataTask = URLSession.shared.dataTask(with: url!){ data, url, error in
             var downloadedImage:UIImage?
             if let data = data {
+                print(myUrl)
                 downloadedImage = UIImage(data: data)
+                cache.setObject(downloadedImage!, forKey: myUrl as NSString)
             }
             
             DispatchQueue.main.async {
@@ -30,6 +32,7 @@ class ImageService {
     
     static func getImage(withURL url:String, completion: @escaping (_ image:UIImage?)->()) {
         if let image = cache.object(forKey: url as NSString) {
+            print("cached image")
             completion(image)
         } else {
             downloadImage(myUrl: url, completion: completion)

@@ -12,7 +12,7 @@ class PhotoProcessingViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(5), execute: {
+        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(6), execute: {
             self.dismiss(animated: true, completion: nil)
             
             

@@ -8,6 +8,7 @@
 
 import UIKit
 import TwilioVideo
+import SwiftSpinner
 
 class VotographerViewController: UIViewController {
   
@@ -54,6 +55,28 @@ class VotographerViewController: UIViewController {
             
         }
         
+        SocketIOManager.sharedInstance.socket.on("vmodelInBackground"){ dataResults, ack in
+            print("vmodel is going to background")
+            let alertController = UIAlertController(title: "Wait a Sec...", message:
+                "Vmodel has temporarily left the shooting room, most likely to view photos. They should be back shortly!", preferredStyle: UIAlertController.Style.alert)
+            alertController.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default,handler: {(action) in
+                self.waitForVmodel() }))
+            self.present(alertController, animated: true, completion: nil)
+            
+        }
+        
+        SocketIOManager.sharedInstance.socket.on("vmodelIsBack"){data, ack in
+            print("Votographer is Back")
+            SwiftSpinner.hide()
+            let alertController = UIAlertController(title: "Vmodel is Back!", message: "If you are not automatically connected back to the virtual shoot, press the capture button to reconnect.", preferredStyle: UIAlertController.Style.alert)
+            alertController.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default,handler: {(action) in
+                
+            }))
+            
+            self.present(alertController, animated: true, completion: nil)
+            
+        }
+        
         //self.title = "QuickStart"
         self.messageLabel.adjustsFontSizeToFitWidth = true;
         self.messageLabel.minimumScaleFactor = 0.75;
@@ -64,6 +87,30 @@ class VotographerViewController: UIViewController {
         //self.micButton.isHidden = true
         
         self.connect()
+    }
+    
+    func waitForVmodel(){
+        //show a spinner
+        self.showSpinner(receiver: "vmodel")
+    }
+    
+    func showSpinner(receiver:String){
+        SwiftSpinner.show("Waiting for " + receiver + "...").addTapHandler({
+            SwiftSpinner.hide()
+            let alertController = UIAlertController(title: "Cancel?", message: "Are you sure you want to cancel?", preferredStyle: UIAlertController.Style.alert)
+            alertController.addAction(UIAlertAction(title: "Yes", style: UIAlertAction.Style.default,handler: {(action) in
+                //SwiftSpinner.hide()
+                self.disconnectWhileWaiting()
+                
+            }))
+            alertController.addAction(UIAlertAction(title: "No", style: UIAlertAction.Style.default,handler: {(action) in
+                self.showSpinner(receiver: receiver)
+                
+                
+            }))
+            
+            self.present(alertController, animated: true, completion: nil)
+        }, subtitle: "Tired of waiting? Tap screen to end vshoot!")
     }
     
     override var prefersHomeIndicatorAutoHidden: Bool {
@@ -116,9 +163,21 @@ class VotographerViewController: UIViewController {
     
     /* This function handles the case where the votographer opts to cancel the vshoot */
     func disconnectOnServerRequest(){
-        self.room!.disconnect()
+        if (room != nil){
+            self.room!.disconnect()
+        }
 
         //dismiss(animated: true, completion: nil)
+        
+        self.performSegue(withIdentifier: "backToTBFromVotographer", sender: self)
+    }
+    
+    func disconnectWhileWaiting(){
+        if (room != nil){
+            self.room!.disconnect()
+        }
+        
+        SocketIOManager.sharedInstance.endVShoot(vsId: self.vshootId, endInitiator: self.title!)
         
         self.performSegue(withIdentifier: "backToTBFromVotographer", sender: self)
     }
@@ -126,6 +185,7 @@ class VotographerViewController: UIViewController {
     func connect() {
         // Configure access token either from server or manually.
         // If the default wasn't changed, try fetching from server.
+        print("I am inside of connect function for votographer")
         if (accessToken == "TWILIO_ACCESS_TOKEN") {
             do {
                 accessToken = try TokenUtils.fetchToken(url: tokenUrl)
@@ -298,9 +358,9 @@ class VotographerViewController: UIViewController {
         }
         
         // Create a video track which captures from the camera.
-        if (localVideoTrack == nil) {
-            self.startPreview()
-        }
+//        if (localVideoTrack == nil) {
+//            self.startPreview()
+//        }
     }
     
     // Update our UI based upon if we are in a Room or not
@@ -340,6 +400,16 @@ class VotographerViewController: UIViewController {
     
     func logMessage(messageText: String) {
         messageLabel.text = messageText
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if (segue.identifier == "backToTBFromVotographer"){
+            let barViewControllers = segue.destination as! UITabBarController
+            barViewControllers.selectedIndex = 1
+            
+            
+        }
+        
     }
 }
 

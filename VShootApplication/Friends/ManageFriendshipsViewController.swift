@@ -15,10 +15,13 @@ class ManageFriendshipsViewController: UIViewController {
     @IBOutlet weak var username: UILabel!
     @IBOutlet weak var userImage: UIImageView!
     @IBOutlet weak var optionBtn: UIButton!
+    //var friends = SocketIOManager.sharedInstance.currUserObj.friends
+    var fromFriendsPage:Bool = false
     var currUser:String = ""
     var userImg:UIImage = UIImage()
     var opBtnTxt:String = ""
     var dataString: String = "";
+    var Users = [User]()
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -44,11 +47,21 @@ class ManageFriendshipsViewController: UIViewController {
     }
     
     @IBAction func manageFriendship(_ sender: Any) {
+        self.optionBtn.isEnabled = false
         //first check tto see what the text of the button is
         if (optionBtn.currentTitle == "Add"){
             //make a request to add friend
             let geturl = SocketIOManager.sharedInstance.serverUrl + "/addFriends"
-            let currU = SocketIOManager.sharedInstance.currUser
+            //let currU = SocketIOManager.sharedInstance.currUser
+            let currU = SocketIOManager.sharedInstance.currUserObj.username
+            let addedUsername = username.text
+            var addedU:User = User(username: "",imageUrl: "")
+            for i in 0..<Users.count{
+                if (Users[i].username == addedUsername){
+                    addedU = Users[i]
+                }
+            }
+            
             print("current logged in user: " + currU)
             let info: [String:Any] = ["currentUser": currU ,"addedFriend": username.text as Any]
             do {
@@ -62,25 +75,46 @@ class ManageFriendshipsViewController: UIViewController {
             let url = URL(string: geturl);
             
             Alamofire.request(url!, method: .post, parameters: info, encoding: JSONEncoding.default, headers: ["Content-Type":"application/json"])
-                .validate(statusCode: 200..<500)
+                .validate(statusCode: 200..<201)
                 .responseString{ (response) in
                     print(response)
                     switch response.result {
                         case .success(let data):
                             print(data)
-                        //change button color to black and text to remove
+                            print("friends count before adding")
+                            print(SocketIOManager.sharedInstance.currUserObj.friends.count)
+                            SocketIOManager.sharedInstance.currUserObj.friends.append(addedU);
+                            print("friends count after adding")
+                            print(SocketIOManager.sharedInstance.currUserObj.friends.count)
+                            
                             self.optionBtn.setTitle("Remove", for: UIControl.State.normal)
-                    //self.optionBtn.setTitleShadowColor(UIColor.black, for: UIControl.State.normal)
+                   
                     self.optionBtn.backgroundColor = UIColor.black
+                        self.optionBtn.isEnabled = true
+                        
                     case .failure(let error):
                             print(error)
+                            self.optionBtn.isEnabled = true
+                            let alertController = UIAlertController(title: "Sorry!", message:
+                                "Looks like something went wrong. Please try again.", preferredStyle: UIAlertController.Style.alert)
+                            alertController.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default,handler: {(action) in }))
+                            
+                            self.present(alertController, animated: true, completion: nil)
                     }
             }
         }
         else {
             //make request to remove friend
             let geturl = SocketIOManager.sharedInstance.serverUrl + "/deleteFriend"
-            let currU = SocketIOManager.sharedInstance.currUser
+            //let currU = SocketIOManager.sharedInstance.currUser
+            let currU = SocketIOManager.sharedInstance.currUserObj.username
+            let removedUsername = username.text
+            var removedUserIndex = -1
+            for i in 0..<SocketIOManager.sharedInstance.currUserObj.friends.count{
+                if (SocketIOManager.sharedInstance.currUserObj.friends[i].username == removedUsername){
+                    removedUserIndex = i
+                }
+            }
             print("current logged in user: " + currU)
             let info: [String:Any] = ["currentUser": currU ,"deletedFriend": username.text as Any]
             do {
@@ -94,25 +128,43 @@ class ManageFriendshipsViewController: UIViewController {
             let url = URL(string: geturl);
             
             Alamofire.request(url!, method: .post, parameters: info, encoding: JSONEncoding.default, headers: ["Content-Type":"application/json"])
-                .validate(statusCode: 200..<500)
+                .validate(statusCode: 200..<201)
                 .responseString{ (response) in
                     print(response)
                     switch response.result {
                     case .success(let data):
                         print(data)
+                        print("friends count before removing")
+                        print(SocketIOManager.sharedInstance.currUserObj.friends.count)
+                        SocketIOManager.sharedInstance.currUserObj.friends.remove(at: removedUserIndex);
+                        print("friends count after removing")
+                        print(SocketIOManager.sharedInstance.currUserObj.friends.count)
+                        
                         //change button color to black and text to remove
                         self.optionBtn.setTitle("Add", for: UIControl.State.normal)
                         let greenColor = UIColor(rgb: 0x31D283)
                         self.optionBtn.backgroundColor = greenColor
+                        self.optionBtn.isEnabled = true
                     case .failure(let error):
                         print(error)
+                        self.optionBtn.isEnabled = true
+                        let alertController = UIAlertController(title: "Sorry!", message:
+                            "Looks like something went wrong. Please try again.", preferredStyle: UIAlertController.Style.alert)
+                        alertController.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default,handler: {(action) in }))
+                        
+                        self.present(alertController, animated: true, completion: nil)
                     }
             }
         }
     }
     
     @IBAction func closePopup(_ sender: Any) {
-        dismiss(animated: true, completion: nil)
+        if (fromFriendsPage){
+            ModalTransitionMediator.instance.sendPopoverDismissed(modelChanged: true)
+        }
+        else {
+           dismiss(animated: true, completion: nil)
+        }
     }
     /*
     // MARK: - Navigation

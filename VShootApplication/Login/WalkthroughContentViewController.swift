@@ -10,10 +10,14 @@ import UIKit
 
 class WalkthroughContentViewController: UIViewController {
 
+    @IBOutlet weak var content: UIImageView!
+    
+    var index = 0
+    var imageFile = ""
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+        
+        content.image = UIImage(named: imageFile)
     }
     
 

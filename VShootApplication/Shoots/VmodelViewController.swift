@@ -9,6 +9,7 @@
 import UIKit
 
 import TwilioVideo
+import SwiftSpinner
 
 
 class VmodelViewController: UIViewController {
@@ -62,6 +63,9 @@ class VmodelViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         print(roomName)
+        let tap = UITapGestureRecognizer(target: self, action: #selector(VmodelViewController.showPhotoMsg))
+        capturedImage.isUserInteractionEnabled = true
+        self.capturedImage.addGestureRecognizer(tap)
         SocketIOManager.sharedInstance.socket.on("VShootEnded"){ dataResults, ack in
             let alertController = UIAlertController(title: "The Votographer has ended the VShoot", message:
                 nil, preferredStyle: UIAlertController.Style.alert)
@@ -78,17 +82,12 @@ class VmodelViewController: UIViewController {
         
         if PlatformUtils.isSimulator {
             self.previewView.removeFromSuperview()
-        } else {
-            // Preview our local camera track in the local video preview view.
-            self.startPreview()
         }
         
         // Disconnect and mic button will be displayed when the Client is connected to a Room.
         self.disconnectButton.isHidden = true
         self.micButton.isHidden = true
         
-//        let tap = UITapGestureRecognizer(target: self, action: #selector(VmodelViewController.dismissKeyboard))
-//        self.view.addGestureRecognizer(tap)
         
         self.setupCaptureSession()
         self.setupDevice()
@@ -105,6 +104,7 @@ class VmodelViewController: UIViewController {
                     self.localVideoTrack = nil
                     //self.localVideoTrack?.isEnabled = false
                     self.camera = nil
+
                     
                     // It is safe to init and start your own AVCaptureSession.
                     self.captureSession.startRunning()
@@ -120,15 +120,81 @@ class VmodelViewController: UIViewController {
                 })
         }
         
+        SocketIOManager.sharedInstance.socket.on("votographerInBackground"){ dataResults, ack in
+            print("votographer is going to background")
+            let alertController = UIAlertController(title: "Wait a Sec...", message:
+                "Votographer has temporarily left the shooting room. They should be back shortly!", preferredStyle: UIAlertController.Style.alert)
+            alertController.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default,handler: {(action) in
+                self.waitForVmodel() }))
+            self.present(alertController, animated: true, completion: nil)
+            
+        }
+        
+        SocketIOManager.sharedInstance.socket.on("votographerIsBack"){data, ack in
+            print("Votographer is Back")
+            SwiftSpinner.hide()
+            let alertController = UIAlertController(title: "Votographer is Back!", message: "You will be automatically connected back to the virtual shoot.", preferredStyle: UIAlertController.Style.alert)
+            alertController.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default,handler: {(action) in
+                
+            }))
+            
+            self.present(alertController, animated: true, completion: nil)
+        }
+        
         self.connect()
     }
     
     /* This function handles the case where the votographer opts to cancel the vshoot */
     func disconnectOnServerRequest(){
-        self.room!.disconnect()
+        if (room != nil){
+           self.room!.disconnect()
+        }
 
         //dismiss(animated: true, completion: nil)
         self.performSegue(withIdentifier: "backToTBFromVmodel", sender: self)
+        
+    }
+    
+    func disconnectWhileWaiting(){
+        if (room != nil){
+            self.room!.disconnect()
+        }
+        
+        SocketIOManager.sharedInstance.endVShoot(vsId: self.vshootId, endInitiator: self.title!)
+        
+        self.performSegue(withIdentifier: "backToTBFromVmodel", sender: self)
+    }
+    
+    func waitForVmodel(){
+        //show a spinner
+        self.showSpinner(receiver: "votographer")
+    }
+    
+    func showSpinner(receiver:String){
+        SwiftSpinner.show("Waiting for " + receiver + "...").addTapHandler({
+            SwiftSpinner.hide()
+            let alertController = UIAlertController(title: "Are you ", message: "Are you sure you want to cancel?", preferredStyle: UIAlertController.Style.alert)
+            alertController.addAction(UIAlertAction(title: "Yes", style: UIAlertAction.Style.default,handler: {(action) in
+                //SwiftSpinner.hide()
+                self.disconnectWhileWaiting()
+                
+            }))
+            alertController.addAction(UIAlertAction(title: "No", style: UIAlertAction.Style.default,handler: {(action) in
+                self.showSpinner(receiver: receiver)
+                
+                
+            }))
+            
+            self.present(alertController, animated: true, completion: nil)
+        }, subtitle: "Tired of waiting? Tap screen to end vshoot!")
+    }
+    
+    @objc func showPhotoMsg(){
+        print("in photo msg func")
+        let alertController = UIAlertController(title: "View New Photos", message:
+            "Go to your iphone photo library to view your new photos. You will be able to talk to the votographer while you're out of the app. When back, the video will resume.", preferredStyle: UIAlertController.Style.alert)
+        alertController.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default,handler: {(action) in }))
+        self.present(alertController, animated: true, completion: nil)
     }
     
     func takePhoto(flashSet:Bool) {
@@ -154,6 +220,7 @@ class VmodelViewController: UIViewController {
             self.photoOutput?.capturePhoto(with: photoSettings, delegate: self)
         }
     }
+    
     
     func setupCaptureSession() {
         self.captureSession.sessionPreset = AVCaptureSession.Preset.photo
@@ -240,6 +307,7 @@ class VmodelViewController: UIViewController {
     func connect() {
         // Configure access token either from server or manually.
         // If the default wasn't changed, try fetching from server.
+        print("I am in connect function for vmodel")
         if (accessToken == "TWILIO_ACCESS_TOKEN") {
             do {
                 accessToken = try TokenUtils.fetchToken(url: tokenUrl)
@@ -352,6 +420,7 @@ class VmodelViewController: UIViewController {
     
     // MARK: Private
     func startPreview() {
+        print("I am starting preview in vmodel")
         if PlatformUtils.isSimulator {
             return
         }
@@ -367,6 +436,7 @@ class VmodelViewController: UIViewController {
             // Add renderer to video track for local preview
             localVideoTrack!.addRenderer(self.previewView)
             logMessage(messageText: "Video track created")
+            print("video track created")
             
             if (frontCamera != nil && backCamera != nil) {
                 // We will flip camera on tap.
@@ -410,7 +480,7 @@ class VmodelViewController: UIViewController {
     }
     
     func prepareLocalMedia() {
-        
+        print("I am preparing local media in vmodel")
         // We will share local audio and video when we connect to the Room.
         
         // Create an audio track.
@@ -443,6 +513,8 @@ class VmodelViewController: UIViewController {
         if #available(iOS 11.0, *) {
             self.setNeedsUpdateOfHomeIndicatorAutoHidden()
         }
+        
+        //print("I am done with connect function in vmodel")
     }
     
 //    @objc func dismissKeyboard() {
@@ -466,6 +538,22 @@ class VmodelViewController: UIViewController {
     func logMessage(messageText: String) {
         messageLabel.text = messageText
     }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if (segue.identifier == "backToTBFromVmodel"){
+            let barViewControllers = segue.destination as! UITabBarController
+            barViewControllers.selectedIndex = 1
+            
+            //let VSViewController = barViewControllers.viewControllers?[1] as! InitiateVSViewController
+            //VSViewController.username = UsernameField.text!
+            //            let FriendsViewController = barViewControllers.viewControllers?[0] as! FriendsViewController
+            //            FriendsViewController.username = UsernameField.text!
+            //            let ProfileViewController = barViewControllers.viewControllers?[2] as! ProfileViewController
+            //            ProfileViewController.username = UsernameField.text!
+            
+        }
+        
+    }
 }
 
 // MARK: UITextFieldDelegate
@@ -479,7 +567,7 @@ class VmodelViewController: UIViewController {
 // MARK: TVIRoomDelegate
 extension VmodelViewController : TVIRoomDelegate {
     func didConnect(to room: TVIRoom) {
-        
+        print("did connect to room!")
         // At the moment, this example only supports rendering one Participant at a time.
         
         logMessage(messageText: "Connected to room \(room.name) as \(String(describing: room.localParticipant?.identity))")
@@ -507,6 +595,7 @@ extension VmodelViewController : TVIRoomDelegate {
     }
     
     func room(_ room: TVIRoom, participantDidConnect participant: TVIRemoteParticipant) {
+        print("in participant did connect")
         if (self.remoteParticipant == nil) {
             self.remoteParticipant = participant
             self.remoteParticipant?.delegate = self
@@ -661,7 +750,9 @@ extension VmodelViewController: AVCapturePhotoCaptureDelegate {
             UIImageWriteToSavedPhotosAlbum(UIImage(data: imageData)!, nil, nil, nil)
             
             self.captureSession.stopRunning()
-            self.connect()
+            DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1), execute: {
+                self.connect()
+            })
         }
         else {
             print(error as Any)

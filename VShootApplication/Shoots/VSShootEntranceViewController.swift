@@ -31,6 +31,7 @@ class VSShootEntranceViewController: UIViewController {
             self.accessToken = data["accessToken"] as! String
             self.roomName = data["roomName"] as! String
             self.myRole = data["myRole"] as! String
+            print("I am inside vshoot entrance socket event")
             print("my role before showing video view: " + self.myRole);
             if (self.myRole == "vmodel"){
                 //just show view controller that has video, soon allow user to access their albums

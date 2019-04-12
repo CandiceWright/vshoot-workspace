@@ -32,9 +32,10 @@ class ProfileViewController: UIViewController {
 //        self.currUser = SocketIOManager.sharedInstance.currUser
         print("I am in view did load")
         //make profile pic round
-        profilePic.layer.borderColor = UIColor.black.cgColor
-        profilePic.layer.cornerRadius = profilePic.frame.height/2
-        profilePic.clipsToBounds = true
+        //profilePic.layer.borderColor = UIColor.black.cgColor
+        
+        self.profilePic.layer.cornerRadius = self.profilePic.frame.height/2
+        self.profilePic.clipsToBounds = true
         
         //allow image to be clickable
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(changeProfilePic))
@@ -48,11 +49,11 @@ class ProfileViewController: UIViewController {
         
         NotificationCenter.default.addObserver(self, selector: #selector(self.refreshlbl(notification:)), name: NSNotification.Name(rawValue: "refresh"), object: nil)
         
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        print("I am in view will appeear")
-          profilePic.image = nil
+        //print("I am in view will appeear")
+        print(self.profilePic.frame.height);
+        print(self.profilePic.frame.width);
+        
+        //profilePic.image = nil
         self.currUser = SocketIOManager.sharedInstance.currUser
         self.username.text = currUser
         
@@ -62,6 +63,7 @@ class ProfileViewController: UIViewController {
             let geturl = SocketIOManager.sharedInstance.serverUrl + "/user/" + currUser
             let url = URL(string: geturl)
             Alamofire.request(url!)
+                .validate(statusCode: 200..<201)
                 .responseString{ (response) in
                     switch response.result {
                     case .success(let data):
@@ -74,6 +76,7 @@ class ProfileViewController: UIViewController {
                             let geturl2 = SocketIOManager.sharedInstance.serverUrl + "/user/profilePic/" + self.currUser
                             let url2 = URL(string: geturl2)
                             Alamofire.request(url2!)
+                                .validate(statusCode: 200..<201)
                                 .responseString{ (response) in
                                     print(response)
                                     switch response.result {
@@ -86,6 +89,11 @@ class ProfileViewController: UIViewController {
                                                 //download this pic
                                                 ImageService.downloadImage(myUrl: picurl){ image in
                                                     self.profilePic.image = image
+                                                 
+                                                    self.profilePic.layer.cornerRadius = self.profilePic.frame.height/2
+                                                    self.profilePic.clipsToBounds = true
+                                                    print(self.profilePic.frame.height);
+                                                    print(self.profilePic.frame.width);
                                                     SocketIOManager.sharedInstance.currUserObj.image = image
                                                 }
                                             }
@@ -93,17 +101,32 @@ class ProfileViewController: UIViewController {
                                                 print("no profile pic")
                                                 let noProfileImage: UIImage = UIImage(named: "profilepic_none")!
                                                 self.profilePic.image = noProfileImage
+                                                self.profilePic.layer.cornerRadius = self.profilePic.frame.height/2
+                                                self.profilePic.clipsToBounds = true
+                                                
+                                                print(self.profilePic.frame.height);
+                                                print(self.profilePic.frame.width);
                                                 SocketIOManager.sharedInstance.currUserObj.image = noProfileImage
                                             }
                                         }
                                         else {
                                             print("cant convert")
+                                            let alertController = UIAlertController(title: "Sorry!", message:
+                                                "Looks like something went wrong. Please try again.", preferredStyle: UIAlertController.Style.alert)
+                                            alertController.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default,handler: {(action) in }))
+                                            
+                                            self.present(alertController, animated: true, completion: nil)
                                         }
                                         
                                         
                                     case .failure(let error):
-                                        print("for some reason it fails to get pricture when none")
+                                        
                                         print(error)
+                                        let alertController = UIAlertController(title: "Sorry!", message:
+                                            "Looks like something went wrong. Please try again.", preferredStyle: UIAlertController.Style.alert)
+                                        alertController.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default,handler: {(action) in }))
+                                        
+                                        self.present(alertController, animated: true, completion: nil)
                                     }
                             }
                         }
@@ -113,14 +136,28 @@ class ProfileViewController: UIViewController {
                         
                     case .failure(let error):
                         print(error)
+                        let alertController = UIAlertController(title: "Sorry!", message:
+                            "Looks like something went wrong. Please try again.", preferredStyle: UIAlertController.Style.alert)
+                        alertController.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default,handler: {(action) in }))
+                        
+                        self.present(alertController, animated: true, completion: nil)
                     }
             }
         }
         else {
-          //we already have an image
+            //we already have an image
             print("image already saved")
             self.profilePic.image = SocketIOManager.sharedInstance.currUserObj.image
+            self.profilePic.layer.cornerRadius = self.profilePic.frame.height/2
+            self.profilePic.clipsToBounds = true
+            print(self.profilePic.frame.height);
+            print(self.profilePic.frame.width);
         }
+        
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+
     }
     @IBAction func changeUsername(_ sender: Any) {
         
@@ -140,25 +177,31 @@ class ProfileViewController: UIViewController {
         
         let url = URL(string: posturl);
         Alamofire.request(url!, method: .post, parameters: info, encoding: JSONEncoding.default, headers: ["Content-Type":"application/json"])
-            .validate(statusCode: 200..<300)
+            .validate(statusCode: 200..<201)
             .responseString{ (response) in
                 print(response)
                 switch response.result {
                 case .success(let data):
                     print(data)
-                    if (data == "logout successful"){
                         print("logout successful")
+                    SocketIOManager.sharedInstance.currUser = ""
+                    SocketIOManager.sharedInstance.currUserObj.username = ""
+                    SocketIOManager.sharedInstance.currUserObj.imageUrl = ""
+                    SocketIOManager.sharedInstance.currUserObj.friends.removeAll()
                         //SocketIOManager.sharedInstance.closeConnection()
                         self.performSegue(withIdentifier: "logoutSegue", sender: self)
                         
-                    }
-                    else {
-                        print("logout unsuccessful")
-                    }
+                    
+                    
                     
                 case .failure(let error):
                     print("failure")
                     print(error)
+                    let alertController = UIAlertController(title: "Sorry!", message:
+                        "Looks like something went wrong. Please try again.", preferredStyle: UIAlertController.Style.alert)
+                    alertController.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default,handler: {(action) in }))
+                    
+                    self.present(alertController, animated: true, completion: nil)
                 }
         }
     }
@@ -182,28 +225,28 @@ class ProfileViewController: UIViewController {
         
         let url = URL(string: geturl);
         Alamofire.request(url!, method: .post, parameters: info, encoding: JSONEncoding.default, headers: ["Content-Type":"application/json"])
-            .validate(statusCode: 200..<300)
+            .validate(statusCode: 200..<201)
             .responseString{ (response) in
                 print(response)
                 switch response.result {
                 case .success(let data):
                     print(data)
-                    if (data == "profile picture added successfully"){
                         print("profile pic added successful")
-                        
-                    }
-                    else {
-                        print("profile picture could not bee added")
-                    }
                     
                 case .failure(let error):
                     print("failure")
                     print(error)
+                    let alertController = UIAlertController(title: "Sorry!", message:
+                        "Looks like something went wrong. Please try again.", preferredStyle: UIAlertController.Style.alert)
+                    alertController.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default,handler: {(action) in }))
+                    
+                    self.present(alertController, animated: true, completion: nil)
                 }
         }
     }
     
     @objc func uploadProfilePic(image:UIImage){
+        print(self.userId)
         let storageRef = Storage.storage().reference().child("profile_pics/" + self.userId! + ".jpg")
         let imageData = image.jpegData(compressionQuality: 0.75)
         
@@ -222,21 +265,14 @@ class ProfileViewController: UIViewController {
                 print(error as Any)
                 guard let downloadURL = url else {
                     // Uh-oh, an error occurred!
+                    print("error while getting download url")
                     return
                 }
                 let stringUrl = downloadURL.absoluteString
+                print("printing url returned from firebase")
+                print(stringUrl)
                 self.downloadUrl = stringUrl
                 self.savePicUrltoDB(url: stringUrl)
-            }
-        }
-        
-        storageRef.putData(imageData!, metadata: metaData){ md, error in
-            if error == nil, md != nil{
-                //success
-                
-            }
-            else {
-                //failed
             }
         }
     }

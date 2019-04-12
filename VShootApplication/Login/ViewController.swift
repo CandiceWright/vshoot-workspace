@@ -11,6 +11,7 @@ import Alamofire
 import AlamofireSwiftyJSON
 import SwiftyJSON
 import FirebaseAuth
+import SocketIO
 
 @IBDesignable
 class ViewController: UIViewController {
@@ -19,20 +20,22 @@ class ViewController: UIViewController {
     @IBOutlet weak var PasswordField: UITextField!
     @IBOutlet weak var loginError: UILabel!
     @IBOutlet weak var LoginButton: UIButton!
+    @IBOutlet weak var signUpButton: UIButton!
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
-        self.UsernameField.layer.cornerRadius = CGFloat(Float(10.0))
-        self.PasswordField.layer.cornerRadius = CGFloat(Float(10.0))
-        self.LoginButton.layer.cornerRadius = CGFloat(Float(9.0))
-        
+        //self.UsernameField.layer.cornerRadius = CGFloat(Float(10.0))
+        //self.PasswordField.layer.cornerRadius = CGFloat(Float(10.0))
+        self.LoginButton.layer.cornerRadius = CGFloat(Float(4.0))
+        self.signUpButton.layer.cornerRadius = CGFloat(Float(4.0))
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
         
         NotificationCenter.default.addObserver(self, selector: #selector(textChanged), name: UITextField.textDidChangeNotification, object: nil)
         LoginButton.isEnabled = false
-        LoginButton.alpha = 0.5
+        LoginButton.alpha = 0.1
         //dismiss keyboard if touch outside text field
         //setupKeyboardDismissRecognizer()
         self.hideKeyboard()
@@ -46,7 +49,7 @@ class ViewController: UIViewController {
         }
         else {
             LoginButton.isEnabled = false
-            LoginButton.alpha = 0.5
+            LoginButton.alpha = 0.1
         }
     }
     
@@ -67,16 +70,13 @@ class ViewController: UIViewController {
     
     
     @IBAction func Login(_ sender: Any) {
-        if (UsernameField.text == "" || PasswordField.text == ""){
-            self.loginError.text = "All field are required";
-        }
-        else {
-            //http://localhost:7343
+        self.LoginButton.isEnabled = false
+        self.signUpButton.isEnabled = false
             var geturl = SocketIOManager.sharedInstance.serverUrl + "/login/"
             //geturl += UsernameField.text! + "/"
             //geturl += PasswordField.text!
-            
-            let info: [String:Any] = ["username": UsernameField.text as Any, "password": PasswordField.text as Any]
+            let username = (UsernameField.text?.trimmingCharacters(in: .whitespaces))?.lowercased()
+            let info: [String:Any] = ["username": username as Any, "password": PasswordField.text as Any]
             do {
                 let data = try JSONSerialization.data(withJSONObject: info, options: [])
                 dataString = String(data: data, encoding: .utf8)!
@@ -85,56 +85,84 @@ class ViewController: UIViewController {
             }
             
             let url = URL(string: geturl);
-            //let url = URL(string: geturl.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!)
-            //        print(url)
+        
             Alamofire.request(url!, method: .post, parameters: info, encoding: JSONEncoding.default, headers: ["Content-Type":"application/json"])
-                .validate(statusCode: 200..<300)
+                .validate(statusCode: 200..<201)
                 .responseString{ (response) in
                     print(response)
                     switch response.result {
                     case .success(let data):
-                        //                        print("success")
-                        //                        print(response.result.value)
                         print(data)
-//
-                        if (data == "failed"){
+                        if (data == "wrong password"){
                             print("wrong pass")
-                            self.loginError.text = "Invalid Password."
+                            self.LoginButton.isEnabled = true
+                            self.signUpButton.isEnabled = true
+                            let alertController = UIAlertController(title: "OOPS", message:
+                                "Looks like you've entered the wrong password. Please try again.", preferredStyle: UIAlertController.Style.alert)
+                            alertController.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default,handler: {(action) in }))
+                            
+                            self.present(alertController, animated: true, completion: nil)
                         }
                         else if(data == "no user exists"){
                             print("no user");
-                            self.loginError.text = "No user exists with given username."
+                            self.LoginButton.isEnabled = true
+                            self.signUpButton.isEnabled = true
+                            let alertController = UIAlertController(title: "OOPS", message:
+                                "No User exists with the given username. Please try again.", preferredStyle: UIAlertController.Style.alert)
+                            alertController.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default,handler: {(action) in }))
+                            
+                            self.present(alertController, animated: true, completion: nil)
                         }
+                        else if(data == "already logged in"){
+                            let alertController = UIAlertController(title: "OOPS", message:
+                                "Looks like you are already logged in on another device and you can only be logged into one device at a time.", preferredStyle: UIAlertController.Style.alert)
+                            alertController.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default,handler: {(action) in }))
+                            
+                            self.present(alertController, animated: true, completion: nil)
+                        }
+                        
                         else {
                             print("login should be successful")
                             print(data)
-                            // login is successful so notify the server to store relationship between this user and its socket
                             
-                            SocketIOManager.sharedInstance.storeSocketRef(username: self.UsernameField.text!);
-                            let token = data
-                            Auth.auth().signIn(withCustomToken: token, completion: {user, error in
-                                if let error = error {
-                                    print("unable to sign in with error \(error)")
-                                }
+                            //establish connection, store socket and load friends
+                            SocketIOManager.sharedInstance.establishConnection(username: username!, fromLogin: true, completion: {
+                                print("friends loading complete")
+                                let token = data
+                                Auth.auth().signIn(withCustomToken: token, completion: {user, error in
+                                    if let error = error {
+                                        print("unable to sign in with error \(error)")
+                                    }
+                                })
+                                self.performSegue(withIdentifier: "segueToHomeFromLogin", sender: self)
                             })
-                            self.performSegue(withIdentifier: "segueToHomeFromLogin", sender: self)
+                            
                         }
                         
                     case .failure(let error):
                         print("failure")
                         print(error)
+                        self.LoginButton.isEnabled = true
+                        self.signUpButton.isEnabled = true
+                        let alertController = UIAlertController(title: "Sorry!", message:
+                            "Looks like something went wrong. Please try again.", preferredStyle: UIAlertController.Style.alert)
+                        alertController.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default,handler: {(action) in }))
+                        
+                        self.present(alertController, animated: true, completion: nil)
                     }
             }
-        }
+        
         
         
     }
     @IBAction func forgotPassword(_ sender: Any) {
     }
-    @IBOutlet weak var signUp: UIButton!
-    @IBAction func signUpFunc(_ sender: Any) {
+    
+    @IBAction func createAccount(_ sender: Any) {
         self.performSegue(withIdentifier: "signUpSegue", sender: self)
     }
+    
+    
     
 
     override func didReceiveMemoryWarning() {

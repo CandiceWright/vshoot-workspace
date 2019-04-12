@@ -7,3 +7,20 @@
 //
 
 import Foundation
+import UIKit
+
+class User {
+    var username: String = ""
+    var imageUrl: String
+    var image: UIImage? = nil
+    //var image = UIImage()
+    var vsPreference:String = ""
+    //var isFriends: Bool
+    var friends = [User]()
+    
+    init(username:String, imageUrl:String) {
+        self.username = username
+        self.imageUrl = imageUrl
+        //self.isFriends = isFriends
+    }
+}

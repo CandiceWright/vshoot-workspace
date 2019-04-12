@@ -40,7 +40,7 @@ class VSViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
         SocketIOManager.sharedInstance.sendUserAcceptance(vsID: vshootId, username: username)
     }
     override func viewWillAppear(_ animated: Bool) {
-        SocketIOManager.sharedInstance.establishConnection()
+        //SocketIOManager.sharedInstance.establishConnection()
     }
     
     override func viewDidLoad() {
@@ -52,7 +52,7 @@ class VSViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
 
         // Do any additional setup after loading the view.
         
-        SocketIOManager.sharedInstance.storeSocketRef(username: self.username);
+        //SocketIOManager.sharedInstance.storeSocketRef(username: self.username);
         
         SocketIOManager.sharedInstance.socket.on("newVSRequest") { dataArray, ack in
             print("dataArray: ")

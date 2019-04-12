@@ -7,36 +7,30 @@
 //
 
 import SocketIO
+import Alamofire
 
 class SocketIOManager: NSObject {
     static let sharedInstance = SocketIOManager()
-    var serverUrl = "https://1e4ecea3.ngrok.io";
-    let manager = SocketManager(socketURL: URL(string: "https://1e4ecea3.ngrok.io")!, config: [.log(true), .compress])
+    var resetAck: SocketAckEmitter?
+    var serverUrl = "https://serve-thevshoot.com";
+
+    let manager = SocketManager(socketURL: URL(string: "https://serve-thevshoot.com")!, config: [.log(false), .forcePolling(false), .reconnects(true), .secure(true)])
+    //.forceWebsockets(true)
+//    let manager = SocketManager(socketURL: URL(string: "https://8fa0e2b5.ngrok.io")!, config: [.log(true), .compress])
+
+    //var name: String?
+    //var resetAck: SocketAckEmitter?
     var socket:SocketIOClient!
     var currUser: String = "";
-    var currUserObj:MainUser = MainUser()
+    //var currUserObj:MainUser = MainUser()
+    var currUserObj:User = User(username: "",imageUrl: "")
     var vsRequestor:String = "";
     
     
     override init() {
         super.init()
-        self.socket = manager.defaultSocket;
-        socket.on("test") { dataArray, ack in
-            print(dataArray)
-        }
-        
-//        socket.on("newVSRequest") { dataArray, ack in
-//            figure out how this notification center works
-//            NotificationCenter.default
-//                .post(name: Notification.Name(rawValue: "newVshootRequestNotification"), object: dataArray[0] as? [String: AnyObject])
-//            let alertController = UIAlertController(title: "iOScreator", message:
-//                "Hello, world!", preferredStyle: UIAlertControllerStyle.alert)
-//            alertController.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.default,handler: nil))
-//
-//            self.present(alertController, animated: true, completion: nil)
-//        }
-        
-        //add more .on listeners to get info from server
+        socket = manager.defaultSocket;
+        print("initializing new socket")
         
     }
     
@@ -100,28 +94,121 @@ class SocketIOManager: NSObject {
     }
     
     func triggerPhotoCapture(takePhoto:Bool){
+        print("inside of take photo")
         var data = [String:Any]()
         data["flash"] = takePhoto
         let socketData = data.socketRepresentation()
         socket.emit("takephoto", socketData)
     }
     
-    func establishConnection() {
-        socket.connect()
-        //should emit the join message right after
+    func establishConnection(username: String, fromLogin: Bool, completion: @escaping () -> ()) {
+        print("printing socket status")
+        print(socket.status)
+        if(socket.status == SocketIOStatus.disconnected || socket.status == SocketIOStatus.notConnected){
+            print("status is not connected")
+            socket.connect()
+            //clientEvent: .connect
+            socket.on("connected") {data, ack in
+                print("socket connected \(data)")
+                print("printing socket status")
+                print(self.socket.status)
+                self.storeSocketRef(username: username, completion: {
+                    print("stored socket reference")
+                    if (fromLogin){
+                        self.loadFriends(username: username, completion: {
+                            print("friends loaded")
+                            completion()
+                        })
+                    }
+                })
+            }
+        }
+        else { //already connected so just store ref
+            self.storeSocketRef(username: username, completion: {
+                print("stored socket reference")
+                if (fromLogin){
+                    self.loadFriends(username: username, completion: {
+                        print("friends loaded")
+                        completion()
+                    })
+                }
+            })
+        }
+        
+        
+
+
     }
     
-    func storeSocketRef(username: String) {
+    func loadFriends(username: String, completion: @escaping () -> ()) {
+        let currUser = SocketIOManager.sharedInstance.currUser
+        let geturl = SocketIOManager.sharedInstance.serverUrl + "/friends/" + currUser
+        let url = URL(string: geturl)
+        Alamofire.request(url!)
+            .responseJSON{ (response) in
+                switch response.result {
+                case .success(let data):
+                    print(data)
+                    if let friendDict = data as? [Dictionary<String,String>]{
+                        print("successfully converted friend response")
+                        //change result to an array of friends like you did with the array of users in addFriend
+                        SocketIOManager.sharedInstance.currUserObj.friends.removeAll()
+                        for i in 0..<friendDict.count {
+                            let newUser = User.init(username: friendDict[i]["username"]!, imageUrl: friendDict[i]["pic"]!)
+                            SocketIOManager.sharedInstance.currUserObj.friends.append(newUser)
+                        }
+                        print("done adding friends")
+                        print(SocketIOManager.sharedInstance.currUserObj.friends.count)
+                        //now get vsPreference
+                        let geturl2 = SocketIOManager.sharedInstance.serverUrl + "/user/preference/" + currUser
+                        let url = URL(string: geturl2)
+                        Alamofire.request(url!)
+                            .responseString{ (response) in
+                                switch response.result {
+                                case .success(let data):
+                                    print(data)
+                                    if (data != "failed to get preference"){
+                                        print("successfully got preference")
+                                        SocketIOManager.sharedInstance.currUserObj.vsPreference = data
+                                        print(SocketIOManager.sharedInstance.currUserObj.vsPreference)
+                                        completion()
+                                    }
+                                    else {
+                                        print("could not convert vs preference")
+                                    }
+                                    
+                                    
+                                case .failure(let error):
+                                    print(error)
+                                }
+                        }
+                        
+                    }
+                    else {
+                        print("couldnt convert friends")
+                    }
+                    
+                case .failure(let error):
+                    print(error)
+                }
+        }
+    }
+    
+    func storeSocketRef(username: String, completion: @escaping () -> ()) {
         print("trying to store reference")
         currUserObj.username = username
         self.currUser = username;
         currUserObj.image = nil
         print("username passed to storeSocketRef " + username)
         socket.emit("join", username);
+        completion()
+        
     }
     
     
     func closeConnection() {
+        print("disconnecting")
         socket.disconnect()
+        //SocketIOManager.sharedInstance.socket.disconnect()
     }
 }

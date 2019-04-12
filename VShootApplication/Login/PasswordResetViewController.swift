@@ -19,9 +19,9 @@ class PasswordResetViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        self.newPasswordTF.layer.cornerRadius = CGFloat(Float(8.0))
-        self.nextBtn.layer.cornerRadius = CGFloat(Float(9.0))
-        self.cancelBtn.layer.cornerRadius = CGFloat(Float(9.0))
+        self.newPasswordTF.layer.cornerRadius = CGFloat(Float(4.0))
+        self.nextBtn.layer.cornerRadius = CGFloat(Float(4.0))
+        self.cancelBtn.layer.cornerRadius = CGFloat(Float(4.0))
         
         NotificationCenter.default.addObserver(self, selector: #selector(textChanged), name: UITextField.textDidChangeNotification, object: nil)
         nextBtn.isEnabled = false
@@ -43,6 +43,8 @@ class PasswordResetViewController: UIViewController {
     }
     
     @IBAction func next(_ sender: Any) {
+        self.nextBtn.isEnabled = false
+        self.cancelBtn.isEnabled = false
         var posturl = SocketIOManager.sharedInstance.serverUrl + "/user/password"
         
         
@@ -57,22 +59,25 @@ class PasswordResetViewController: UIViewController {
         let url = URL(string: posturl);
         
         Alamofire.request(url!, method: .post, parameters: info, encoding: JSONEncoding.default, headers: ["Content-Type":"application/json"])
-            .validate(statusCode: 200..<300)
+            .validate(statusCode: 200..<201)
             .responseString{ (response) in
                 print(response)
                 switch response.result {
                 case .success(let data):
                     print(data)
-                    if(data == "password updated successfully"){
                         self.performSegue(withIdentifier: "backToLogin", sender: self)
-                    }
-                    else {
-                        //maybe add a label to say password couldn't be changed
-                    }
+                    
                     
                 case .failure(let error):
                     print("failure")
                     print(error)
+                    self.nextBtn.isEnabled = true
+                    self.cancelBtn.isEnabled = true
+                    let alertController = UIAlertController(title: "Sorry!", message:
+                        "Looks like something went wrong. Please try again.", preferredStyle: UIAlertController.Style.alert)
+                    alertController.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default,handler: {(action) in }))
+                    
+                    self.present(alertController, animated: true, completion: nil)
                 }
         }
     }

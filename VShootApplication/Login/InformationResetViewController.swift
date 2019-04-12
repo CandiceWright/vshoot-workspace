@@ -10,13 +10,16 @@ import UIKit
 
 class InformationResetViewController: UIViewController {
 
+    @IBOutlet weak var usernameBtn: UIButton!
+    @IBOutlet weak var passwordBtn: UIButton!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
+        self.usernameBtn.layer.cornerRadius = CGFloat(Float(5.0))
+        self.passwordBtn.layer.cornerRadius = CGFloat(Float(5.0))
     }
     
-
     /*
     // MARK: - Navigation
 

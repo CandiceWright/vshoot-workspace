@@ -13,6 +13,7 @@ class PasswordResetUsernameViewController: UIViewController {
 
     var securityQuestion: String = ""
     var securityAnswerEncrypted: String = ""
+    var dataString: String = "";
     @IBOutlet weak var usernameTF: UITextField!
     @IBOutlet weak var errLabel: UILabel!
     @IBOutlet weak var nextBtn: UIButton!
@@ -21,9 +22,9 @@ class PasswordResetUsernameViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        self.usernameTF.layer.cornerRadius = CGFloat(Float(8.0))
-        self.nextBtn.layer.cornerRadius = CGFloat(Float(9.0))
-        self.cancelBtn.layer.cornerRadius = CGFloat(Float(9.0))
+        self.usernameTF.layer.cornerRadius = CGFloat(Float(4.0))
+        self.nextBtn.layer.cornerRadius = CGFloat(Float(4.0))
+        self.cancelBtn.layer.cornerRadius = CGFloat(Float(4.0))
         
         NotificationCenter.default.addObserver(self, selector: #selector(textChanged), name: UITextField.textDidChangeNotification, object: nil)
         nextBtn.isEnabled = false
@@ -45,51 +46,55 @@ class PasswordResetUsernameViewController: UIViewController {
     }
     
     @IBAction func next(_ sender: Any) {
+        nextBtn.isEnabled = false
+        cancelBtn.isEnabled = false
         //send a request to server to see if username exists. If it does, segue to ask security question and pass UN
-        let geturl = SocketIOManager.sharedInstance.serverUrl + "/user/security/" + usernameTF.text!
+        //let username = (usernameTF.text?.trimmingCharacters(in: .whitespaces))?.lowercased()
+        let geturl = SocketIOManager.sharedInstance.serverUrl + "/forgotPass"
+        
+        let info: [String:Any] = ["username": self.usernameTF.text! as Any]
+        //"securityQuestion": self.question as Any, "securityAnswer": SQAnswer.text as Any
+        do {
+            let data = try JSONSerialization.data(withJSONObject: info, options: [])
+            dataString = String(data: data, encoding: .utf8)!
+        } catch {
+            print("error")
+        }
+        
         let url = URL(string: geturl)
-        Alamofire.request(url!)
-            .responseJSON{ (response) in
+        Alamofire.request(url!, method: .post, parameters: info, encoding: JSONEncoding.default, headers: ["Content-Type":"application/json"])
+            .validate(statusCode: 200..<201)
+            .responseString{ (response) in
                 switch response.result {
                 case .success(let data):
                     print(data)
-                    if let result = data as? [Dictionary<String,Any>]{
-                        print(result)
-                        //print(result["userExists"] as Any)
-                        //if (result["userExists"] == "Yes" ){
-                        if (result.count != 0){
-                            print("in user exists")
-                            let securityQuestionNum = result[0]["securityQuestion"]!
-                            if (securityQuestionNum as! Int == 1){
-                                self.securityQuestion = "What is your mother's maiden name?"
-                            }
-                            else if(securityQuestionNum as! Int == 2){
-                                self.securityQuestion = "What street did you grow up on?"
-                            }
-                            else if(securityQuestionNum as! Int == 3){
-                                self.securityQuestion = "In what city were you born?"
-                            }
-                            else if (securityQuestionNum as! Int == 4){
-                                self.securityQuestion = "What was the make of your first car?"
-                            }
-                            else {
-                                self.securityQuestion = "What high school did you go to?"
-                            }
-                            self.securityAnswerEncrypted = result[0]["securityQAnswer"]! as! String
-                            print(self.securityQuestion)
-                            print(self.securityAnswerEncrypted)
-                            self.performSegue(withIdentifier: "segueToSecurityQuestion", sender: self)
-                        }
-//                        else if (result["userExists"] == "No"){
-//                            self.errLabel.textColor = UIColor.red
-//                            self.errLabel.text = "Username doesn't exist."
-//                        }
-                        else {
-                            //failed
-                            self.errLabel.textColor = UIColor.red
-                            self.errLabel.text = "Username doesn't exist."
-                        }
+                        //self.performSegue(withIdentifier: "pinVCSegue", sender: self)
+                    if (data == "no user exists"){
+                        self.nextBtn.isEnabled = true
+                        self.cancelBtn.isEnabled = true
+                        let alertController = UIAlertController(title: "OOPS", message: "There is no user with that username. Please try again.", preferredStyle: UIAlertController.Style.alert)
+                        alertController.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default,handler: {(action) in }))
+                        
+                        self.present(alertController, animated: true, completion: nil)
                     }
+                    else if (data == "could not send email"){ //bad email
+                        self.nextBtn.isEnabled = true
+                        self.cancelBtn.isEnabled = true
+                        let alertController = UIAlertController(title: "OOPS", message: "It looks like the email you provided is invalid. Please email us at info@thevshoot.com for further assistance.", preferredStyle: UIAlertController.Style.alert)
+                        alertController.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default,handler: {(action) in }))
+                        
+                        self.present(alertController, animated: true, completion: nil)
+                    }
+                    else { //successful
+                        let alertController = UIAlertController(title: "Password Reset", message: "We've sent you an email with a reset code which you'll enter on the next screen", preferredStyle: UIAlertController.Style.alert)
+                        alertController.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default,handler: {(action) in
+                            
+                            self.performSegue(withIdentifier: "pinVCSegue", sender: self)
+                        }))
+                        
+                        self.present(alertController, animated: true, completion: nil)
+                    }
+
                     
                     
                     
@@ -97,6 +102,12 @@ class PasswordResetUsernameViewController: UIViewController {
                 case .failure(let error):
                     print("failure")
                     print(error)
+                    self.nextBtn.isEnabled = true
+                    self.cancelBtn.isEnabled = true
+                    let alertController = UIAlertController(title: "OOPS", message: "Looks like there was a problem. Please try again.", preferredStyle: UIAlertController.Style.alert)
+                    alertController.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default,handler: {(action) in }))
+                    
+                    self.present(alertController, animated: true, completion: nil)
                 }
         }
     }
@@ -108,11 +119,17 @@ class PasswordResetUsernameViewController: UIViewController {
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if (segue.identifier == "segueToSecurityQuestion"){
-            let securityQuestionController = segue.destination as! PasswordResetSecurityQuestionViewController
-            securityQuestionController.username = self.usernameTF.text!
-            securityQuestionController.securityQuestion = self.securityQuestion
-            securityQuestionController.securityQAEncrypted = self.securityAnswerEncrypted
+//        if (segue.identifier == "segueToSecurityQuestion"){
+//            let securityQuestionController = segue.destination as! PasswordResetSecurityQuestionViewController
+//            securityQuestionController.username = self.usernameTF.text!
+//            securityQuestionController.securityQuestion = self.securityQuestion
+//            securityQuestionController.securityQAEncrypted = self.securityAnswerEncrypted
+//        }
+        
+        if (segue.identifier == "pinVCSegue"){
+            let pinController = segue.destination as! PasswordResetPinViewController
+            pinController.username = usernameTF.text!
+           
         }
         
     }

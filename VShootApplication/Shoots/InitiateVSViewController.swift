@@ -8,6 +8,7 @@
 
 import UIKit
 import Alamofire
+import SocketIO
 
 class InitiateVSViewController: UIViewController {
 
@@ -19,17 +20,20 @@ class InitiateVSViewController: UIViewController {
     var accessToken:String = ""
     var roomName:String = ""
     var friends:Array<String> = []
+    
     @IBOutlet weak var startVSButton: UIButton!
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        print("printing friends count")
+        print(SocketIOManager.sharedInstance.currUserObj.friends.count)
         // Do any additional setup after loading the view.
         
         self.startVSButton.layer.cornerRadius = CGFloat(Float(10.0))
-        
+        SocketIOManager.sharedInstance.socket.removeAllHandlers()
         SocketIOManager.sharedInstance.socket.on("newVSRequest") { dataArray, ack in
+            print("new vs request")
             print("dataArray: ")
             print(dataArray)
             let data = dataArray[0] as! Dictionary<String,AnyObject>
@@ -51,6 +55,7 @@ class InitiateVSViewController: UIViewController {
             alertController.addAction(UIAlertAction(title: "Decline", style: UIAlertAction.Style.default,handler: {(action) in self.declineVSRequest() }))
             
             self.present(alertController, animated: true, completion: nil)
+            
         }
         
         SocketIOManager.sharedInstance.socket.on("VSRequestActionFailed"){
@@ -61,11 +66,13 @@ class InitiateVSViewController: UIViewController {
             
             self.present(alertController, animated: true, completion: nil)
         }
-        
-        
-        
     
     }
+    
+    @IBAction func showVSGuide(_ sender: Any) {
+        performSegue(withIdentifier: "toAboutVS", sender: self)
+    }
+    
     @IBAction func startVS(_ sender: Any) {
         //populate friends list
         self.friends.removeAll()
@@ -73,6 +80,7 @@ class InitiateVSViewController: UIViewController {
         let geturl = SocketIOManager.sharedInstance.serverUrl + "/friends/" + currUser
         let url = URL(string: geturl)
         Alamofire.request(url!)
+            .validate(statusCode: 200..<201)
             .responseJSON{ (response) in
                 switch response.result {
                 case .success(let data):
@@ -84,7 +92,7 @@ class InitiateVSViewController: UIViewController {
                             self.friends.append(friendDict[i]["username"]!)
                         }
                         if (self.friends.count == 0){ //no friends yet
-                            let alertController = UIAlertController(title: "It looks like you haven't added any Votographriends to have VShoots with yet. ", message:
+                            let alertController = UIAlertController(title: "It looks like you haven't added any phriends to have VShoots with yet. ", message:
                                 nil, preferredStyle: UIAlertController.Style.alert)
                             alertController.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default,handler: {(action) in
                                  }))
@@ -99,10 +107,20 @@ class InitiateVSViewController: UIViewController {
                     }
                     else {
                         print("couldnt convert friends")
+                        let alertController = UIAlertController(title: "Sorry!", message:
+                            "Looks like something went wrong. Please try again.", preferredStyle: UIAlertController.Style.alert)
+                        alertController.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default,handler: {(action) in }))
+                        
+                        self.present(alertController, animated: true, completion: nil)
                     }
                     
                 case .failure(let error):
                     print(error)
+                    let alertController = UIAlertController(title: "Sorry!", message:
+                        "Looks like something went wrong. Please try again.", preferredStyle: UIAlertController.Style.alert)
+                    alertController.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default,handler: {(action) in }))
+                    
+                    self.present(alertController, animated: true, completion: nil)
                 }
         }
         
@@ -144,7 +162,7 @@ class InitiateVSViewController: UIViewController {
             destinationController.roomName = self.roomName
         }
             
-        else {
+        else if (segue.identifier == "newVSPopup") {
             let destinationVC:NewVSInfoPopupViewController = segue.destination as! NewVSInfoPopupViewController
             print("username before I segue " + username)
             //destinationVC.username = username

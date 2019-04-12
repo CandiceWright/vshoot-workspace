@@ -10,6 +10,7 @@ import UIKit
 import Alamofire
 
 class AddFriendsViewController: UIViewController, UISearchBarDelegate, UITableViewDelegate,UITableViewDataSource,AddFriendCellDelegate {
+    //var friends = SocketIOManager.sharedInstance.currUserObj.friends
     var users = [User]()
     var filteredArray = [User]()
     var selectedUsername:String = ""
@@ -17,6 +18,7 @@ class AddFriendsViewController: UIViewController, UISearchBarDelegate, UITableVi
     var btnOpTxt:String = ""
     var searching = false
     @IBOutlet weak var usersTable: UITableView!
+    @IBOutlet weak var cancelBtn: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,6 +27,8 @@ class AddFriendsViewController: UIViewController, UISearchBarDelegate, UITableVi
         usersTable.tableFooterView = UIView()
         usersTable.rowHeight = UITableView.automaticDimension
         usersTable.estimatedRowHeight = 600
+        cancelBtn.layer.borderColor =  UIColor.black.cgColor
+        cancelBtn.layer.borderWidth = 0.2
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -42,7 +46,7 @@ class AddFriendsViewController: UIViewController, UISearchBarDelegate, UITableVi
         cell.delegate = self
         if (searching){
             cell.friendUsername.text = filteredArray[indexPath.row].username
-            let picUrl = filteredArray[indexPath.row].image
+            let picUrl = filteredArray[indexPath.row].imageUrl
             if (picUrl == "none"){
                 let noProfileImage: UIImage = UIImage(named: "profilepic_none")!
                 cell.friendPic.image = noProfileImage
@@ -57,7 +61,7 @@ class AddFriendsViewController: UIViewController, UISearchBarDelegate, UITableVi
         }
         else {
             cell.friendUsername.text = users[indexPath.row].username
-            let picUrl = users[indexPath.row].image
+            let picUrl = users[indexPath.row].imageUrl
             if (picUrl == "none"){
                 let noProfileImage: UIImage = UIImage(named: "profilepic_none")!
                 cell.friendPic.image = noProfileImage
@@ -79,30 +83,51 @@ class AddFriendsViewController: UIViewController, UISearchBarDelegate, UITableVi
         if (searching){
             selectedUsername = filteredArray[indexPath.row].username
             let currentCell = usersTable.cellForRow(at: indexPath) as! AddFriendTableViewCell
-            selectedImg = currentCell.friendPic.image!
-            if (filteredArray[indexPath.row].isFriends == true){
-                //show remove button
-                btnOpTxt = "Remove"
+            if (currentCell.friendPic.image != nil){
+                selectedImg = currentCell.friendPic.image!
+                var areFriends = false
+                for i in 0..<SocketIOManager.sharedInstance.currUserObj.friends.count {
+                    if (SocketIOManager.sharedInstance.currUserObj.friends[i].username == selectedUsername){
+                        areFriends = true
+                    }
+                }
+                if (areFriends){
+                    btnOpTxt = "Remove"
+                }
+                else {
+                    btnOpTxt = "Add"
+                }
+                //also assign image
+                self.performSegue(withIdentifier: "addFriendPopup", sender: self)
             }
-            else {
-                btnOpTxt = "Add"
-            }
+           
         }
         else {
             selectedUsername = users[indexPath.row].username
             let currentCell = usersTable.cellForRow(at: indexPath) as! AddFriendTableViewCell
-            selectedImg = currentCell.friendPic.image!
-            if (users[indexPath.row].isFriends == true){
-                //show remove button
-                btnOpTxt = "Remove"
-            }
-            else {
-                btnOpTxt = "Add"
+            if (currentCell.friendPic.image != nil){
+                selectedImg = currentCell.friendPic.image!
+                print("printing friend count in add friend controlle: ")
+                print(SocketIOManager.sharedInstance.currUserObj.friends.count)
+                var areFriends = false
+                for i in 0..<SocketIOManager.sharedInstance.currUserObj.friends.count {
+                    if (SocketIOManager.sharedInstance.currUserObj.friends[i].username == selectedUsername){
+                        areFriends = true
+                    }
+                }
+                if (areFriends){
+                    btnOpTxt = "Remove"
+                }
+                else {
+                    btnOpTxt = "Add"
+                }
+                
+                //also assign image
+                self.performSegue(withIdentifier: "addFriendPopup", sender: self)
             }
         }
         
-        //also assign image
-        self.performSegue(withIdentifier: "addFriendPopup", sender: self)
+        
     }
     
     func didTapAddFriend(username: String) {
@@ -158,6 +183,7 @@ class AddFriendsViewController: UIViewController, UISearchBarDelegate, UITableVi
             manageFriendshipVC?.currUser = self.selectedUsername
             manageFriendshipVC?.opBtnTxt = self.btnOpTxt
             manageFriendshipVC?.userImg = selectedImg
+            manageFriendshipVC?.Users = self.users
             //also set image
         }
         
