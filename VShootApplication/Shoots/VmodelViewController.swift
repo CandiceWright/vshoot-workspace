@@ -96,49 +96,57 @@ class VmodelViewController: UIViewController {
         //self.captureSession.startRunning()
         SocketIOManager.sharedInstance.socket.on("takephoto") { dataArray, ack in
             print("just got notified to take photo")
+            self.localVideoTrack?.isEnabled = false;
+            
+            
             //first stop video call
             //start camera session of your own
             let data = dataArray[0] as! Dictionary<String,AnyObject>
             let flash = data["flashSetting"] as! Bool
-                self.camera?.stopCapture(completion: { (error) in
-                    self.localVideoTrack = nil
-                    //self.localVideoTrack?.isEnabled = false
-                    self.camera = nil
-
-                    
-                    // It is safe to init and start your own AVCaptureSession.
-                    self.captureSession.startRunning()
-                    DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(3), execute: {
-                        // Put your code which should be executed with a delay here
-                        print("about to take photo")
-                        self.takePhoto(flashSet: flash)
-                        //start camera back up
-                        
-                        
-                    })
-                    
-                })
+            self.captureSession.startRunning();
+            DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2), execute: {
+                self.takePhoto(flashSet: flash)
+            })
+            
+//                self.camera?.stopCapture(completion: { (error) in
+//                    self.localVideoTrack = nil
+//                    //self.localVideoTrack?.isEnabled = false
+//                    self.camera = nil
+//
+//                    // It is safe to init and start your own AVCaptureSession.
+//                    self.captureSession.startRunning()
+//                    DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(3), execute: {
+//                        // Put your code which should be executed with a delay here
+//                        print("about to take photo")
+//                        self.takePhoto(flashSet: flash)
+//                        //start camera back up
+//
+//
+//                    })
+//
+//                })
         }
         
         SocketIOManager.sharedInstance.socket.on("votographerInBackground"){ dataResults, ack in
             print("votographer is going to background")
-            let alertController = UIAlertController(title: "Wait a Sec...", message:
-                "Votographer has temporarily left the shooting room. They should be back shortly!", preferredStyle: UIAlertController.Style.alert)
-            alertController.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default,handler: {(action) in
-                self.waitForVmodel() }))
-            self.present(alertController, animated: true, completion: nil)
+            self.waitForVotographer()
+//            let alertController = UIAlertController(title: "Wait a Sec...", message:
+//                "Votographer has temporarily left the shooting room. They should be back shortly!", preferredStyle: UIAlertController.Style.alert)
+//            alertController.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default,handler: {(action) in
+//                self.waitForVmodel() }))
+//            self.present(alertController, animated: true, completion: nil)
             
         }
         
         SocketIOManager.sharedInstance.socket.on("votographerIsBack"){data, ack in
             print("Votographer is Back")
             SwiftSpinner.hide()
-            let alertController = UIAlertController(title: "Votographer is Back!", message: "You will be automatically connected back to the virtual shoot.", preferredStyle: UIAlertController.Style.alert)
-            alertController.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default,handler: {(action) in
-                
-            }))
-            
-            self.present(alertController, animated: true, completion: nil)
+//            let alertController = UIAlertController(title: "Votographer is Back!", message: "You will be automatically connected back to the virtual shoot.", preferredStyle: UIAlertController.Style.alert)
+//            alertController.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default,handler: {(action) in
+//
+//            }))
+//
+//            self.present(alertController, animated: true, completion: nil)
         }
         
         self.connect()
@@ -165,13 +173,13 @@ class VmodelViewController: UIViewController {
         self.performSegue(withIdentifier: "backToTBFromVmodel", sender: self)
     }
     
-    func waitForVmodel(){
+    func waitForVotographer(){
         //show a spinner
         self.showSpinner(receiver: "votographer")
     }
     
     func showSpinner(receiver:String){
-        SwiftSpinner.show("Waiting for " + receiver + "...").addTapHandler({
+        SwiftSpinner.show("Waiting for " + receiver + " to return...").addTapHandler({
             SwiftSpinner.hide()
             let alertController = UIAlertController(title: "Are you ", message: "Are you sure you want to cancel?", preferredStyle: UIAlertController.Style.alert)
             alertController.addAction(UIAlertAction(title: "Yes", style: UIAlertAction.Style.default,handler: {(action) in
@@ -750,9 +758,10 @@ extension VmodelViewController: AVCapturePhotoCaptureDelegate {
             UIImageWriteToSavedPhotosAlbum(UIImage(data: imageData)!, nil, nil, nil)
             
             self.captureSession.stopRunning()
-            DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1), execute: {
-                self.connect()
-            })
+//            DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1), execute: {
+//                self.connect()
+//            })
+            self.localVideoTrack?.isEnabled = true;
         }
         else {
             print(error as Any)

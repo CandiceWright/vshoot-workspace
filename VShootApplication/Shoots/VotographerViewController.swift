@@ -57,23 +57,24 @@ class VotographerViewController: UIViewController {
         
         SocketIOManager.sharedInstance.socket.on("vmodelInBackground"){ dataResults, ack in
             print("vmodel is going to background")
-            let alertController = UIAlertController(title: "Wait a Sec...", message:
-                "Vmodel has temporarily left the shooting room, most likely to view photos. They should be back shortly!", preferredStyle: UIAlertController.Style.alert)
-            alertController.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default,handler: {(action) in
-                self.waitForVmodel() }))
-            self.present(alertController, animated: true, completion: nil)
+            self.waitForVmodel()
+//            let alertController = UIAlertController(title: "Wait a Sec...", message:
+//                "Vmodel has temporarily left the shooting room, most likely to view photos. They should be back shortly!", preferredStyle: UIAlertController.Style.alert)
+//            alertController.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default,handler: {(action) in
+//                self.waitForVmodel() }))
+//            self.present(alertController, animated: true, completion: nil)
             
         }
         
         SocketIOManager.sharedInstance.socket.on("vmodelIsBack"){data, ack in
-            print("Votographer is Back")
+            print("vmodel is Back")
             SwiftSpinner.hide()
-            let alertController = UIAlertController(title: "Vmodel is Back!", message: "If you are not automatically connected back to the virtual shoot, press the capture button to reconnect.", preferredStyle: UIAlertController.Style.alert)
-            alertController.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default,handler: {(action) in
-                
-            }))
-            
-            self.present(alertController, animated: true, completion: nil)
+//            let alertController = UIAlertController(title: "Vmodel is Back!", message: "If you are not automatically connected back to the virtual shoot, press the capture button to reconnect.", preferredStyle: UIAlertController.Style.alert)
+//            alertController.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default,handler: {(action) in
+//
+//            }))
+//
+//            self.present(alertController, animated: true, completion: nil)
             
         }
         
@@ -95,7 +96,7 @@ class VotographerViewController: UIViewController {
     }
     
     func showSpinner(receiver:String){
-        SwiftSpinner.show("Waiting for " + receiver + "...").addTapHandler({
+        SwiftSpinner.show("Waiting for " + receiver + " to return...").addTapHandler({
             SwiftSpinner.hide()
             let alertController = UIAlertController(title: "Cancel?", message: "Are you sure you want to cancel?", preferredStyle: UIAlertController.Style.alert)
             alertController.addAction(UIAlertAction(title: "Yes", style: UIAlertAction.Style.default,handler: {(action) in

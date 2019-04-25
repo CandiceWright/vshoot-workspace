@@ -9,7 +9,7 @@ target 'VShootApplication' do
     pod 'SwiftyJSON'
     pod 'Socket.IO-Client-Swift', '~> 13.2.0'
     pod 'iOSDropDown'
-    pod 'TwilioVideo', '~> 2.6.0-preview2'
+    pod 'TwilioVideo', '~> 2.8.0'
     pod 'SwiftSpinner'
     pod 'Firebase/Core'
     pod 'Firebase/Storage'

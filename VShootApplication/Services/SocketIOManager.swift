@@ -14,9 +14,10 @@ class SocketIOManager: NSObject {
     var resetAck: SocketAckEmitter?
     var serverUrl = "https://serve-thevshoot.com";
 
-    let manager = SocketManager(socketURL: URL(string: "https://serve-thevshoot.com")!, config: [.log(false), .forcePolling(false), .reconnects(true), .secure(true)])
-    //.forceWebsockets(true)
-//    let manager = SocketManager(socketURL: URL(string: "https://8fa0e2b5.ngrok.io")!, config: [.log(true), .compress])
+    //    var serverUrl = "https://8470700d.ngrok.io"
+//http://ec2-35-161-86-252.us-west-2.compute.amazonaws.com:7343
+    
+    let manager = SocketManager(socketURL: URL(string: "https://serve-thevshoot.com")!, config: [.log(false), .forcePolling(false), .reconnects(false)])
 
     //var name: String?
     //var resetAck: SocketAckEmitter?
@@ -107,8 +108,9 @@ class SocketIOManager: NSObject {
         if(socket.status == SocketIOStatus.disconnected || socket.status == SocketIOStatus.notConnected){
             print("status is not connected")
             socket.connect()
+            
             //clientEvent: .connect
-            socket.on("connected") {data, ack in
+            socket.once("connected") {data, ack in
                 print("socket connected \(data)")
                 print("printing socket status")
                 print(self.socket.status)
