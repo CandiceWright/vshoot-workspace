@@ -8,8 +8,9 @@
 
 import UIKit
 import Alamofire
+import XLPagerTabStrip
 
-class VotographriendViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate, FriendCellDelegate, ModalTransitionListener {
+class VotographriendViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate, FriendCellDelegate, ModalTransitionListener  {
     
     //need a list of friends from database
     //var friends = SocketIOManager.sharedInstance.currUserObj.friends

@@ -12,6 +12,7 @@ import AlamofireSwiftyJSON
 import SwiftyJSON
 import FirebaseAuth
 import SocketIO
+import SwiftSpinner
 
 @IBDesignable
 class ViewController: UIViewController {
@@ -28,19 +29,35 @@ class ViewController: UIViewController {
         // Do any additional setup after loading the view, typically from a nib.
         //self.UsernameField.layer.cornerRadius = CGFloat(Float(10.0))
         //self.PasswordField.layer.cornerRadius = CGFloat(Float(10.0))
-        self.LoginButton.layer.cornerRadius = CGFloat(Float(4.0))
-        self.signUpButton.layer.cornerRadius = CGFloat(Float(4.0))
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+        print("printing logged in status")
+        print(UserDefaults.standard.bool(forKey: "UserLoggedIn"))
+        if(UserDefaults.standard.bool(forKey: "UserLoggedIn") == true){
+            let username = UserDefaults.standard.string(forKey: "username")
+            print("printing username is defaults")
+            print(username)
+            
+            SocketIOManager.sharedInstance.establishConnection(username: username!, fromLogin: true, completion: {
+                self.performSegue(withIdentifier: "segueToHomeFromLogin", sender: self)
+
+            })
+        }
+        else {
+            self.LoginButton.layer.cornerRadius = CGFloat(Float(4.0))
+            self.signUpButton.layer.cornerRadius = CGFloat(Float(4.0))
+            NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+            NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+            
+            NotificationCenter.default.addObserver(self, selector: #selector(textChanged), name: UITextField.textDidChangeNotification, object: nil)
+            LoginButton.isEnabled = false
+            LoginButton.alpha = 0.1
+            //dismiss keyboard if touch outside text field
+            //setupKeyboardDismissRecognizer()
+            self.hideKeyboard()
+        }
         
-        NotificationCenter.default.addObserver(self, selector: #selector(textChanged), name: UITextField.textDidChangeNotification, object: nil)
-        LoginButton.isEnabled = false
-        LoginButton.alpha = 0.1
-        //dismiss keyboard if touch outside text field
-        //setupKeyboardDismissRecognizer()
-        self.hideKeyboard()
         
     }
+    
     
     @objc func textChanged(sender: NSNotification) {
         if (UsernameField.hasText && PasswordField.hasText){
@@ -134,6 +151,8 @@ class ViewController: UIViewController {
                                         print("unable to sign in with error \(error)")
                                     }
                                 })
+                                UserDefaults.standard.set(username!, forKey: "username")
+                                UserDefaults.standard.set(true, forKey: "UserLoggedIn")
                                 self.performSegue(withIdentifier: "segueToHomeFromLogin", sender: self)
                             })
                             

@@ -188,6 +188,8 @@ class ProfileViewController: UIViewController {
                     SocketIOManager.sharedInstance.currUserObj.username = ""
                     SocketIOManager.sharedInstance.currUserObj.imageUrl = ""
                     SocketIOManager.sharedInstance.currUserObj.friends.removeAll()
+                    UserDefaults.standard.set("", forKey: "username")
+                    UserDefaults.standard.set(false, forKey: "UserLoggedIn")
                         //SocketIOManager.sharedInstance.closeConnection()
                         self.performSegue(withIdentifier: "logoutSegue", sender: self)
                         

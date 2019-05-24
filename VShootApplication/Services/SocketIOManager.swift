@@ -14,8 +14,8 @@ class SocketIOManager: NSObject {
     var resetAck: SocketAckEmitter?
     var serverUrl = "https://serve-thevshoot.com";
 
-    //    var serverUrl = "https://8470700d.ngrok.io"
-//http://ec2-35-161-86-252.us-west-2.compute.amazonaws.com:7343
+    //var serverUrl = "https://0c849ad4.ngrok.io"
+
     
     let manager = SocketManager(socketURL: URL(string: "https://serve-thevshoot.com")!, config: [.log(false), .forcePolling(false), .reconnects(false)])
 

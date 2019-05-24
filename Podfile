@@ -15,6 +15,7 @@ target 'VShootApplication' do
     pod 'Firebase/Storage'
     pod 'Firebase/Database'
     pod 'Firebase/Auth'
+    pod 'XLPagerTabStrip', '~> 9.0'
     
     
 
