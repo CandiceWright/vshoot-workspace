@@ -1,24 +1,31 @@
 //
-//  NavGroupsViewController.swift
+//  GroupDetailsViewController.swift
 //  VShootApplication
 //
-//  Created by Candice Wright on 5/22/19.
+//  Created by Candice Wright on 5/25/19.
 //  Copyright © 2019 Candice Wright. All rights reserved.
 //
 
 import UIKit
-import XLPagerTabStrip
 
-class NavGroupsViewController: UINavigationController, IndicatorInfoProvider {
-
+class GroupDetailsViewController: UIViewController {
+    
+    var name:String = ""
+    var descr:String = ""
+    var creator:String = ""
+    var members = [String]()
+    
+    @IBOutlet weak var nameLabel: UILabel!
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
     }
     
-    func indicatorInfo(for pagerTabStripController: PagerTabStripViewController) -> IndicatorInfo {
-        return IndicatorInfo(title: "Groups")
+    override func viewWillAppear(_ animated: Bool) {
+        nameLabel.text = name
     }
     
 

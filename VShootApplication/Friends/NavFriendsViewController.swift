@@ -18,7 +18,7 @@ class NavFriendsViewController: UINavigationController, IndicatorInfoProvider {
     }
     
     func indicatorInfo(for pagerTabStripController: PagerTabStripViewController) -> IndicatorInfo {
-        return IndicatorInfo(title: "My Vriends")
+        return IndicatorInfo(title: "Friends")
     }
     
 
