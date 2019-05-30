@@ -12,12 +12,12 @@ import Alamofire
 class SocketIOManager: NSObject {
     static let sharedInstance = SocketIOManager()
     var resetAck: SocketAckEmitter?
-    var serverUrl = "https://serve-thevshoot.com";
+    //var serverUrl = "https://serve-thevshoot.com";
 
-    //var serverUrl = "https://0c849ad4.ngrok.io"
+    var serverUrl = "https://0c849ad4.ngrok.io"
 
     
-    let manager = SocketManager(socketURL: URL(string: "https://serve-thevshoot.com")!, config: [.log(false), .forcePolling(false), .reconnects(false)])
+    let manager = SocketManager(socketURL: URL(string: "https://0c849ad4.ngrok.io")!, config: [.log(false), .forcePolling(false), .reconnects(false)])
 
     //var name: String?
     //var resetAck: SocketAckEmitter?
@@ -184,11 +184,43 @@ class SocketIOManager: NSObject {
                                     print(error)
                                 }
                         }
+                        self.loadGroups(username: username)
                         
                     }
                     else {
                         print("couldnt convert friends")
                     }
+                    
+                case .failure(let error):
+                    print(error)
+                }
+                
+                
+        }
+    }
+    
+    func loadGroups(username: String){
+        let geturl2 = SocketIOManager.sharedInstance.serverUrl + "/groups/users/" + username
+        let url = URL(string: geturl2)
+        Alamofire.request(url!)
+            .responseJSON{ (response) in
+                switch response.result {
+                case .success(let data):
+                    print(data)
+                    if let groupDict = data as? [Dictionary<String,String>]{
+                        print("successfully converted group response")
+                        //change result to an array of friends like you did with the array of users in addFriend
+                        SocketIOManager.sharedInstance.currUserObj.groups.removeAll()
+                        for i in 0..<groupDict.count {
+                            let newGroup = Group.init(name: groupDict[i]["name"]!, creator: groupDict[i]["creator"]!, description: groupDict[i]["description"]!)
+                            SocketIOManager.sharedInstance.currUserObj.groups.append(newGroup)
+                        }
+                        print("done adding groups")
+                    }
+                    else {
+                        print("couldnt convert friends at 221")
+                    }
+                    
                     
                 case .failure(let error):
                     print(error)

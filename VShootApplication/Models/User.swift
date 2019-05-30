@@ -17,6 +17,7 @@ class User {
     var vsPreference:String = ""
     //var isFriends: Bool
     var friends = [User]()
+    var groups = [Group]()
     
     init(username:String, imageUrl:String) {
         self.username = username

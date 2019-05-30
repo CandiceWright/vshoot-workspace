@@ -9,7 +9,7 @@
 import UIKit
 import Alamofire
 
-class NewGroupViewController: UIViewController {
+class NewGroupViewController: UIViewController, UITextFieldDelegate {
 
     var dataString: String = "";
     
@@ -20,6 +20,7 @@ class NewGroupViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.name.delegate = self
         groupDescr.text = "Tell VShooters why they should join this group. Optional, but recommended!"
         groupDescr.textColor = .gray
         name.layer.cornerRadius = CGFloat(Float(4.0))
@@ -34,6 +35,14 @@ class NewGroupViewController: UIViewController {
         self.hideKeyboard()
         
     }
+    
+    @IBAction func showNameSpecs(_ sender: Any) {
+        let alertController = UIAlertController(title: "Group Name", message:
+            "This name allows users to find and join your group. It can only contain letters, numbers, and underscores.", preferredStyle: UIAlertController.Style.alert)
+        alertController.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default,handler: {(action) in }))
+        self.present(alertController, animated: true, completion: nil)
+    }
+    
     
     @IBAction func createGroup(_ sender: Any) {
         var posturl = SocketIOManager.sharedInstance.serverUrl + "/groups"
@@ -120,6 +129,15 @@ class NewGroupViewController: UIViewController {
         if self.view.frame.origin.y != 0 {
             self.view.frame.origin.y = 0
         }
+    }
+    
+    let ACCEPTABLE_CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_ "
+    
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        let cs = NSCharacterSet(charactersIn: ACCEPTABLE_CHARACTERS).inverted
+        let filtered = string.components(separatedBy: cs).joined(separator: "")
+        
+        return (string == filtered)
     }
     
     

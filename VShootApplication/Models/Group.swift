@@ -13,6 +13,7 @@ class Group {
     var name: String = ""
     var creator: String = ""
     var description: String
+    var members = [User]()
     
     init(name:String, creator:String, description:String) {
         self.name = name

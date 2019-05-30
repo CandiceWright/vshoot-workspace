@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Alamofire
 
 class AllGroupsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate {
     
@@ -16,13 +17,15 @@ class AllGroupsViewController: UIViewController, UITableViewDataSource, UITableV
     var selectedGroup:String = ""
     var selectedGroupDescr:String = ""
     var selecterGroupCreator:String = ""
+    var inGroup:Bool = false
+    var members = [User]()
     
     @IBOutlet weak var GroupsTableView: UITableView!
     
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        print(allGroups.count)
         // Do any additional setup after loading the view.
     }
     
@@ -30,6 +33,7 @@ class AllGroupsViewController: UIViewController, UITableViewDataSource, UITableV
         self.GroupsTableView.rowHeight = UITableView.automaticDimension
         self.GroupsTableView.estimatedRowHeight = 600
         GroupsTableView.tableFooterView = UIView()
+        
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -66,21 +70,90 @@ class AllGroupsViewController: UIViewController, UITableViewDataSource, UITableV
             selectedGroup = filteredArray[indexPath.row].name
             selectedGroupDescr = filteredArray[indexPath.row].description
             selecterGroupCreator = filteredArray[indexPath.row].creator
-            
-            let currentCell = GroupsTableView.cellForRow(at: indexPath) as! GroupTableViewCell
-            self.performSegue(withIdentifier: "ViewGroupSegue", sender: self)
         }
         else {
             selectedGroup = allGroups[indexPath.row].name
             selectedGroupDescr = allGroups[indexPath.row].description
             selecterGroupCreator = allGroups[indexPath.row].creator
-            let currentCell = GroupsTableView.cellForRow(at: indexPath) as! GroupTableViewCell
-            self.performSegue(withIdentifier: "ViewGroupSegue", sender: self)
-            
-            
         }
-        
-        
+            let newGroupString = selectedGroup.replacingOccurrences(of: " ", with: "%20")
+            let currentCell = GroupsTableView.cellForRow(at: indexPath) as! GroupTableViewCell
+            //check to see if they are apart of the group already
+            let geturl = SocketIOManager.sharedInstance.serverUrl + "/groups/members/" + SocketIOManager.sharedInstance.currUserObj.username + "/" + newGroupString
+            let url = URL(string: geturl)
+            Alamofire.request(url!)
+                .validate(statusCode: 200..<201)
+                .responseJSON{ (response) in
+                    switch response.result {
+                    case .success(let data):
+                        print(data)
+                        if let memberDict = data as? [Dictionary<String,String>]{
+                            if (memberDict.count == 0){
+                                //user is not in group
+                                self.inGroup = false
+                            }
+                            else {
+                                self.inGroup = true
+                            }
+                            //get group members
+                            let geturl = SocketIOManager.sharedInstance.serverUrl + "/groups/members/" + newGroupString
+                            let url = URL(string: geturl)
+                            Alamofire.request(url!)
+                                .validate(statusCode: 200..<201)
+                                .responseJSON{ (response) in
+                                    switch response.result {
+                                    case .success(let data):
+                                        print(data)
+                                        if let memberDict = data as? [Dictionary<String,String>]{
+                                            for i in 0..<memberDict.count {
+                                                let newUser = User.init(username: memberDict[i]["name"]!, imageUrl: memberDict[i]["image"]!)
+                                                self.members.append(newUser)
+                                            }
+                                            self.performSegue(withIdentifier: "ViewGroupSegue", sender: self)
+                                        }
+                                        else {
+                                            print("cant convert dictionary")
+                                            let alertController = UIAlertController(title: "Sorry!", message:
+                                                "Looks like something went wrong. Please try again.", preferredStyle: UIAlertController.Style.alert)
+                                            alertController.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default,handler: {(action) in }))
+                                            
+                                            self.present(alertController, animated: true, completion: nil)
+                                        }
+                                        
+                                        
+                                        
+                                    case .failure(let error):
+                                        print("failure")
+                                        print(error)
+                                        let alertController = UIAlertController(title: "Sorry!", message:
+                                            "Looks like something went wrong. Please try again.", preferredStyle: UIAlertController.Style.alert)
+                                        alertController.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default,handler: {(action) in }))
+                                        
+                                        self.present(alertController, animated: true, completion: nil)
+                                    }
+                            }
+                        }
+                        else {
+                            print("cant convert dictionary")
+                            let alertController = UIAlertController(title: "Sorry!", message:
+                                "Looks like something went wrong. Please try again.", preferredStyle: UIAlertController.Style.alert)
+                            alertController.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default,handler: {(action) in }))
+                            
+                            self.present(alertController, animated: true, completion: nil)
+                        }
+                        
+                        
+                        
+                    case .failure(let error):
+                        print("failure")
+                        print(error)
+                        let alertController = UIAlertController(title: "Sorry!", message:
+                            "Looks like something went wrong. Please try again.", preferredStyle: UIAlertController.Style.alert)
+                        alertController.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default,handler: {(action) in }))
+                        
+                        self.present(alertController, animated: true, completion: nil)
+                    }
+        }
     }
     
     
@@ -114,7 +187,10 @@ class AllGroupsViewController: UIViewController, UITableViewDataSource, UITableV
             detailsView?.creator = self.selecterGroupCreator
             detailsView?.name = self.selectedGroup
             detailsView?.descr = self.selectedGroupDescr
-            
+            detailsView?.inGroup = self.inGroup
+            detailsView?.allGroups = self.allGroups
+            detailsView?.fromAllGroups = true
+            detailsView?.members = self.members
         }
     }
     
