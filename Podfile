@@ -16,6 +16,7 @@ target 'VShootApplication' do
     pod 'Firebase/Database'
     pod 'Firebase/Auth'
     pod 'XLPagerTabStrip', '~> 9.0'
+    pod 'MessengerKit', :git => 'https://github.com/steve228uk/MessengerKit.git'
     
     
 

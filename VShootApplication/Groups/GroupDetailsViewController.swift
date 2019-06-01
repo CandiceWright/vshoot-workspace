@@ -21,7 +21,9 @@ class GroupDetailsViewController: UIViewController, UITableViewDataSource, UITab
     var fromAllGroups: Bool = true
     
     @IBOutlet weak var nameLabel: UILabel!
+    
     @IBOutlet weak var groupDescr: UITextView!
+    
     @IBOutlet weak var groupCreator: UILabel!
     
     @IBOutlet weak var leaveBtn: UIButton!
@@ -31,7 +33,7 @@ class GroupDetailsViewController: UIViewController, UITableViewDataSource, UITab
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        definesPresentationContext = true
         self.membersTableView.rowHeight = UITableView.automaticDimension
         self.membersTableView.estimatedRowHeight = 600
         membersTableView.tableFooterView = UIView()
@@ -175,6 +177,7 @@ class GroupDetailsViewController: UIViewController, UITableViewDataSource, UITab
     }
     
     @IBAction func chat(_ sender: Any) {
+        self.performSegue(withIdentifier: "ShowChatroom", sender: self)
     }
     
     
@@ -228,6 +231,12 @@ class GroupDetailsViewController: UIViewController, UITableViewDataSource, UITab
         if(segue.identifier == "AllGroupsFromDetailsSeg"){
             let groupsView = segue.destination as? AllGroupsViewController
             groupsView?.allGroups = self.allGroups
+        }
+        
+        else if(segue.identifier == "ShowChatroom"){
+            let destViewController = segue.destination as! UINavigationController
+            let chatview = destViewController.viewControllers.first as! ChatroomViewController
+            chatview.chatname = self.name
         }
        
     }
