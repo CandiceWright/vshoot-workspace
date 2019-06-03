@@ -14,10 +14,10 @@ class SocketIOManager: NSObject {
     var resetAck: SocketAckEmitter?
     //var serverUrl = "https://serve-thevshoot.com";
 
-    var serverUrl = "https://0c849ad4.ngrok.io"
+    var serverUrl = "https://337dcf25.ngrok.io"
 
     
-    let manager = SocketManager(socketURL: URL(string: "https://0c849ad4.ngrok.io")!, config: [.log(false), .forcePolling(false), .reconnects(false)])
+    let manager = SocketManager(socketURL: URL(string: "https://337dcf25.ngrok.io")!, config: [.log(false), .forcePolling(false), .reconnects(false)])
 
     //var name: String?
     //var resetAck: SocketAckEmitter?
@@ -52,6 +52,17 @@ class SocketIOManager: NSObject {
         
         return today_string
         
+    }
+    
+    func sendMsg(username: String, userImgUrl: String, group: String, message: String, date: String){
+        var data = [String:Any]()
+        data["username"] = username
+        data["userImg"] = userImgUrl
+        data["group"] = group
+        data["message"] = message
+        data["date"] = date
+        let socketData = data.socketRepresentation()
+        socket.emit("newMessage", socketData)
     }
     
     func sendUserAcceptance(vsID: NSInteger, username: String){
@@ -216,6 +227,7 @@ class SocketIOManager: NSObject {
                             SocketIOManager.sharedInstance.currUserObj.groups.append(newGroup)
                         }
                         print("done adding groups")
+                        self.getProfilePic(username: username)
                     }
                     else {
                         print("couldnt convert friends at 221")
@@ -223,6 +235,46 @@ class SocketIOManager: NSObject {
                     
                     
                 case .failure(let error):
+                    print(error)
+                }
+        }
+    }
+    
+    func getProfilePic(username: String){
+        //get profile pic url
+        let geturl2 = SocketIOManager.sharedInstance.serverUrl + "/user/profilePic/" + SocketIOManager.sharedInstance.currUserObj.username
+        let url2 = URL(string: geturl2)
+        Alamofire.request(url2!)
+            .validate(statusCode: 200..<201)
+            .responseString{ (response) in
+                print(response)
+                switch response.result {
+                case .success(let data):
+                    print("successfully got image url")
+                    print(data)
+                    if let picurl = data as? String {
+                        print(picurl)
+                        if (picurl != "no profile pic"){
+                            SocketIOManager.sharedInstance.currUserObj.imageUrl = picurl
+                            //download this pic
+                            ImageService.getImage(withURL: picurl){ image in
+                                SocketIOManager.sharedInstance.currUserObj.image = image
+                            }
+                        }
+                        else {
+                            print("no profile pic")
+                            SocketIOManager.sharedInstance.currUserObj.imageUrl = "none"
+                            let noProfileImage: UIImage = UIImage(named: "profilepic_none")!
+                                SocketIOManager.sharedInstance.currUserObj.image = noProfileImage
+                        }
+                    }
+                    else {
+                        print("cant convert")
+                    }
+                    
+                    
+                case .failure(let error):
+                    
                     print(error)
                 }
         }

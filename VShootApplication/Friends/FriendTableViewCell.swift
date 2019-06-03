@@ -40,6 +40,7 @@ class FriendTableViewCell: UITableViewCell {
 //            self.friendPic.image = image
 //        }
         ImageService.getImage(withURL: url){ image in
+            print(url)
             self.friendPic.image = image
             self.friendPic.layer.cornerRadius = self.friendPic.frame.height/2
             self.friendPic.clipsToBounds = true

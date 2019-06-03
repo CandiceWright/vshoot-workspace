@@ -9,7 +9,7 @@
 import UIKit
 import Alamofire
 
-class NewGroupViewController: UIViewController, UITextFieldDelegate {
+class NewGroupViewController: UIViewController, UITextFieldDelegate, UITextViewDelegate {
 
     var dataString: String = "";
     
@@ -21,7 +21,9 @@ class NewGroupViewController: UIViewController, UITextFieldDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.name.delegate = self
+        self.groupDescr.delegate = self
         groupDescr.text = "Tell VShooters why they should join this group. Optional, but recommended!"
+        //groupDescr.text = "Tell"
         groupDescr.textColor = .gray
         name.layer.cornerRadius = CGFloat(Float(4.0))
         createBtn.isEnabled = false
@@ -32,13 +34,17 @@ class NewGroupViewController: UIViewController, UITextFieldDelegate {
         
         NotificationCenter.default.addObserver(self, selector: #selector(textChanged), name: UITextField.textDidChangeNotification, object: nil)
         
+        NotificationCenter.default.addObserver(self, selector: #selector(textChanged), name: UITextView.textDidChangeNotification, object: nil)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(textViewTapped), name: UITextView.textDidBeginEditingNotification, object: nil)
+        
         self.hideKeyboard()
         
     }
     
     @IBAction func showNameSpecs(_ sender: Any) {
-        let alertController = UIAlertController(title: "Group Name", message:
-            "This name allows users to find and join your group. It can only contain letters, numbers, and underscores.", preferredStyle: UIAlertController.Style.alert)
+        let alertController = UIAlertController(title: "Group Info Details", message:
+            "Give your group a cool name of less than 30 characters, for users to find and join your group. Also give it a catchy description in less than 100 characters telling vshooters why your group is cool! ", preferredStyle: UIAlertController.Style.alert)
         alertController.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default,handler: {(action) in }))
         self.present(alertController, animated: true, completion: nil)
     }
@@ -106,13 +112,20 @@ class NewGroupViewController: UIViewController, UITextFieldDelegate {
     }
     
     @objc func textChanged(sender: NSNotification) {
-        if (name.hasText){
+        if (name.hasText && groupDescr.hasText){
             createBtn.isEnabled = true
             createBtn.alpha = 1.0
         }
         else {
             createBtn.isEnabled = false
             createBtn.alpha = 0.1
+        }
+    }
+    
+    @objc func textViewTapped(sender: NSNotification){
+        if(self.groupDescr.text == "Tell VShooters why they should join this group. Optional, but recommended!"){
+            groupDescr.text = ""
+            groupDescr.textColor = .black
         }
     }
     
@@ -136,8 +149,17 @@ class NewGroupViewController: UIViewController, UITextFieldDelegate {
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         let cs = NSCharacterSet(charactersIn: ACCEPTABLE_CHARACTERS).inverted
         let filtered = string.components(separatedBy: cs).joined(separator: "")
-        
-        return (string == filtered)
+        var allowMoreChars:Bool = true
+        if ((textField.text?.count)! + (string.count - range.length)) > 30 {
+            allowMoreChars = false;
+        }
+        return ((string == filtered) && allowMoreChars)
+    }
+    
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+        let newText = (textView.text as NSString).replacingCharacters(in: range, with: text)
+        let numberOfChars = newText.count
+        return numberOfChars < 100
     }
     
     

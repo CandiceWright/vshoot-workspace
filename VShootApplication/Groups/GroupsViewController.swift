@@ -33,6 +33,7 @@ class GroupsViewController: UIViewController, UITableViewDataSource, UITableView
             groupsTableView.tableFooterView = UIView()
         }
         
+        
     }
     
     @IBAction func showGroups(_ sender: Any) {

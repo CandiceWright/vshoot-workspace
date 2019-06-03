@@ -203,9 +203,10 @@ class SignUpVC: UIViewController {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if (segue.identifier == "segueToHomeFromSignUp"){
+            
             let barViewControllers = segue.destination as! UITabBarController
             barViewControllers.selectedIndex = 1
-            
+            print(barViewControllers.viewControllers)
             let VSViewController = barViewControllers.viewControllers?[1] as! InitiateVSViewController
             VSViewController.username = self.usernameStr
         }

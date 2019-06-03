@@ -54,8 +54,8 @@ class WalkthroughViewController: UIViewController, WalkThroughPageViewController
         if (segue.identifier == "doneOnBoardingSegue"){
             let barViewControllers = segue.destination as! UITabBarController
             barViewControllers.selectedIndex = 1
-            print(barViewControllers.viewControllers?.count)
-            let VSViewController = barViewControllers.viewControllers?[0] as! InitiateVSViewController
+            print(barViewControllers.viewControllers)
+            let VSViewController = barViewControllers.viewControllers?[1] as! InitiateVSViewController
             VSViewController.username = SocketIOManager.sharedInstance.currUserObj.username
            
             

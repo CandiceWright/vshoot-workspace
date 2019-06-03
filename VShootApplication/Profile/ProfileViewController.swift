@@ -87,9 +87,9 @@ class ProfileViewController: UIViewController {
                                             print(picurl)
                                             if (picurl != "no profile pic"){
                                                 //download this pic
-                                                ImageService.downloadImage(myUrl: picurl){ image in
+                                                ImageService.getImage(withURL: picurl){ image in
                                                     self.profilePic.image = image
-                                                 
+
                                                     self.profilePic.layer.cornerRadius = self.profilePic.frame.height/2
                                                     self.profilePic.clipsToBounds = true
                                                     print(self.profilePic.frame.height);
@@ -103,7 +103,7 @@ class ProfileViewController: UIViewController {
                                                 self.profilePic.image = noProfileImage
                                                 self.profilePic.layer.cornerRadius = self.profilePic.frame.height/2
                                                 self.profilePic.clipsToBounds = true
-                                                
+
                                                 print(self.profilePic.frame.height);
                                                 print(self.profilePic.frame.width);
                                                 SocketIOManager.sharedInstance.currUserObj.image = noProfileImage
@@ -114,18 +114,18 @@ class ProfileViewController: UIViewController {
                                             let alertController = UIAlertController(title: "Sorry!", message:
                                                 "Looks like something went wrong. Please try again.", preferredStyle: UIAlertController.Style.alert)
                                             alertController.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default,handler: {(action) in }))
-                                            
+
                                             self.present(alertController, animated: true, completion: nil)
                                         }
-                                        
-                                        
+
+
                                     case .failure(let error):
-                                        
+
                                         print(error)
                                         let alertController = UIAlertController(title: "Sorry!", message:
                                             "Looks like something went wrong. Please try again.", preferredStyle: UIAlertController.Style.alert)
                                         alertController.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default,handler: {(action) in }))
-                                        
+
                                         self.present(alertController, animated: true, completion: nil)
                                     }
                             }
