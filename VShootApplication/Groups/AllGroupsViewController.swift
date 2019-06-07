@@ -26,7 +26,11 @@ class AllGroupsViewController: UIViewController, UITableViewDataSource, UITableV
     override func viewDidLoad() {
         super.viewDidLoad()
         print(allGroups.count)
-        // Do any additional setup after loading the view.
+        
+//        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+//        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+        
+        self.hideKeyboard()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -35,6 +39,21 @@ class AllGroupsViewController: UIViewController, UITableViewDataSource, UITableV
         GroupsTableView.tableFooterView = UIView()
         
     }
+    
+//    @objc func keyboardWillShow(notification: NSNotification) {
+//        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
+//            if self.view.frame.origin.y == 0 {
+//                //keyboardSize.height
+//                self.view.frame.origin.y -= 50
+//            }
+//        }
+//    }
+//
+//    @objc func keyboardWillHide(notification: NSNotification) {
+//        if self.view.frame.origin.y != 0 {
+//            self.view.frame.origin.y = 0
+//        }
+//    }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if (searching){

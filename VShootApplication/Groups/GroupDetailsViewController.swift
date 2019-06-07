@@ -23,10 +23,8 @@ class GroupDetailsViewController: UIViewController, UITableViewDataSource, UITab
     var messages:[[MSGMessage]] = [[MSGMessage]]()
     
     @IBOutlet weak var nameLabel: UILabel!
-    
     @IBOutlet weak var groupDescr: UITextView!
-    
-    @IBOutlet weak var groupCreator: UILabel!
+    @IBOutlet weak var gCreator: UILabel!
     
     @IBOutlet weak var leaveBtn: UIButton!
     @IBOutlet weak var chatBtn: UIButton!
@@ -40,63 +38,21 @@ class GroupDetailsViewController: UIViewController, UITableViewDataSource, UITab
         self.membersTableView.estimatedRowHeight = 600
         membersTableView.tableFooterView = UIView()
         
+        groupDescr.isEditable = false
+        
         self.leaveBtn.layer.cornerRadius = CGFloat(Float(4.0))
         self.chatBtn.layer.cornerRadius = CGFloat(Float(4.0))
         self.joinBtn.layer.cornerRadius = CGFloat(Float(4.0))
         
-//        //get chat messages
-//        let newGroupString = self.name.replacingOccurrences(of: " ", with: "%20")
-//        let geturl = SocketIOManager.sharedInstance.serverUrl + "/groups/chat/" + newGroupString
-//        let url = URL(string: geturl)
-//        Alamofire.request(url!)
-//            .validate(statusCode: 200..<201)
-//            .responseJSON{ (response) in
-//                switch response.result {
-//                case .success(let data):
-//                    print(data)
-//                    if let messageDict = data as? [Dictionary<String,String>]{
-//                        //print(groupDict[0]["gName"])
-//                        for i in 0..<messageDict.count {
-//                            var isSender = false;
-//                            if (messageDict[i]["sender"] == SocketIOManager.sharedInstance.currUserObj.username){
-//                                isSender = true
-//                            }
-//                            ImageService.downloadImage(myUrl: messageDict[i]["userImage"]!){ image in
-//                                let chatUser = ChatUser(displayName: messageDict[i]["sender"]!, avatar: image, avatarUrl: nil, isSender: isSender)
-//                                let body: MSGMessageBody = .text(messageDict[i]["message"]!)
-//                                let message = MSGMessage(id: 1, body: body, user: chatUser, sentAt: Date())
-//                                self.messages.append([message])
-//                            }
-//                        }
-//
-//                    }
-//                    else {
-//                        print("cannot convert to dict")
-//                        let alertController = UIAlertController(title: "Sorry!", message:
-//                            "Looks like something went wrong. Please try again.", preferredStyle: UIAlertController.Style.alert)
-//                        alertController.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default,handler: {(action) in }))
-//
-//                        self.present(alertController, animated: true, completion: nil)
-//                    }
-//
-//
-//
-//                case .failure(let error):
-//                    print("failure")
-//                    print(error)
-//                    let alertController = UIAlertController(title: "Sorry!", message:
-//                        "Looks like something went wrong. Please try again.", preferredStyle: UIAlertController.Style.alert)
-//                    alertController.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default,handler: {(action) in }))
-//
-//                    self.present(alertController, animated: true, completion: nil)
-//                }
-//        }
+
     }
     
     override func viewWillAppear(_ animated: Bool) {
         nameLabel.text = name
+        print(descr)
         groupDescr.text = descr
-        groupCreator.text = creator
+        gCreator.text = gCreator.text! + " " + creator
+        
         //print(inGroup)
         if (!inGroup){
             chatBtn.isHidden = true

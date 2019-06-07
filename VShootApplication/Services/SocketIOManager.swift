@@ -14,10 +14,10 @@ class SocketIOManager: NSObject {
     var resetAck: SocketAckEmitter?
     //var serverUrl = "https://serve-thevshoot.com";
 
-    var serverUrl = "https://337dcf25.ngrok.io"
+    var serverUrl = "https://73b156b8.ngrok.io"
 
     
-    let manager = SocketManager(socketURL: URL(string: "https://337dcf25.ngrok.io")!, config: [.log(false), .forcePolling(false), .reconnects(false)])
+    let manager = SocketManager(socketURL: URL(string: "https://73b156b8.ngrok.io")!, config: [.log(false), .forcePolling(false), .reconnects(false)])
 
     //var name: String?
     //var resetAck: SocketAckEmitter?
@@ -227,7 +227,7 @@ class SocketIOManager: NSObject {
                             SocketIOManager.sharedInstance.currUserObj.groups.append(newGroup)
                         }
                         print("done adding groups")
-                        self.getProfilePic(username: username)
+//                        self.getProfilePic(username: username)
                     }
                     else {
                         print("couldnt convert friends at 221")
@@ -237,7 +237,9 @@ class SocketIOManager: NSObject {
                 case .failure(let error):
                     print(error)
                 }
+                
         }
+        self.getProfilePic(username: username)
     }
     
     func getProfilePic(username: String){
@@ -276,6 +278,32 @@ class SocketIOManager: NSObject {
                 case .failure(let error):
                     
                     print(error)
+                }
+        }
+        self.getUserId(username: username)
+    }
+    
+    func getUserId(username:String){
+        let geturl = SocketIOManager.sharedInstance.serverUrl + "/user/" + username
+        let url = URL(string: geturl)
+        Alamofire.request(url!)
+            .validate(statusCode: 200..<201)
+            .responseString{ (response) in
+                switch response.result {
+                case .success(let data):
+                    print(data)
+                    if let userId = data as? String {
+                        SocketIOManager.sharedInstance.currUserObj.userId = userId
+                        print("successfully got userid")
+                    }
+                    else {
+                        print("cant convert userId")
+                    }
+                    
+                case .failure(let error):
+                    print("error")
+                    print(error)
+                    
                 }
         }
     }

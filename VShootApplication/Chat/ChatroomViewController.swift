@@ -126,8 +126,9 @@ class ChatroomViewController: MSGMessengerViewController {
                             print(idx)
                             self.showMessages(data: messageDict[idx], completion: {
                                 print("block complete")
-                                idx += 1
+                                //idx += 1
                             })
+                            idx += 1
                         }
 
                         

@@ -15,22 +15,29 @@ class NewGroupViewController: UIViewController, UITextFieldDelegate, UITextViewD
     
     @IBOutlet weak var name: UITextField!
     @IBOutlet weak var groupDescr: UITextView!
-    @IBOutlet weak var createBtn: UIButton!
     
+    @IBOutlet weak var createBtn: UIButton!
+    @IBOutlet weak var cancelBtn: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.name.delegate = self
         self.groupDescr.delegate = self
-        groupDescr.text = "Tell VShooters why they should join this group. Optional, but recommended!"
+        groupDescr.text = "Give your group a description. Tell VShooters why they should join your cool group!"
         //groupDescr.text = "Tell"
-        groupDescr.textColor = .gray
+        groupDescr.textColor = .lightGray
         name.layer.cornerRadius = CGFloat(Float(4.0))
         createBtn.isEnabled = false
         createBtn.alpha = 0.1
+        groupDescr.layer.borderColor = UIColor.black.cgColor
+        groupDescr.layer.borderWidth = 1.0
+        self.createBtn.layer.cornerRadius = CGFloat(Float(4.0))
+        self.cancelBtn.layer.cornerRadius = CGFloat(Float(4.0))
+        self.name.layer.cornerRadius = CGFloat(Float(4.0))
+        self.groupDescr.layer.cornerRadius = CGFloat(Float(4.0))
         
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+//        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+//        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
         
         NotificationCenter.default.addObserver(self, selector: #selector(textChanged), name: UITextField.textDidChangeNotification, object: nil)
         
@@ -44,7 +51,7 @@ class NewGroupViewController: UIViewController, UITextFieldDelegate, UITextViewD
     
     @IBAction func showNameSpecs(_ sender: Any) {
         let alertController = UIAlertController(title: "Group Info Details", message:
-            "Give your group a cool name of less than 30 characters, for users to find and join your group. Also give it a catchy description in less than 100 characters telling vshooters why your group is cool! ", preferredStyle: UIAlertController.Style.alert)
+            "Give your group a cool name of less than 30 characters, for users to find and join your group. Also give it a catchy description in 150 characters or less, telling vshooters why your group is cool! ", preferredStyle: UIAlertController.Style.alert)
         alertController.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default,handler: {(action) in }))
         self.present(alertController, animated: true, completion: nil)
     }
@@ -54,7 +61,7 @@ class NewGroupViewController: UIViewController, UITextFieldDelegate, UITextViewD
         var posturl = SocketIOManager.sharedInstance.serverUrl + "/groups"
         let gName = ((self.name.text?.trimmingCharacters(in: .whitespaces))?.lowercased())!
         var descr = "";
-        if(self.groupDescr.text != "Tell VShooters why they should join this group. Optional, but recommended!"){
+        if(self.groupDescr.text != "Give your group a description. Tell VShooters why they should join your cool group!"){
             descr = self.groupDescr.text
         }
         let info: [String:Any] = ["creator": SocketIOManager.sharedInstance.currUserObj.username as Any, "gname": gName as Any, "descr": descr as Any]
@@ -76,9 +83,13 @@ class NewGroupViewController: UIViewController, UITextFieldDelegate, UITextViewD
                 case .success(let data):
                     print(data)
                     if (data == "created group successfully"){
+                        let newGroup = Group.init(name: self.name.text!, creator: SocketIOManager.sharedInstance.currUserObj.username, description: descr)
+                        SocketIOManager.sharedInstance.currUserObj.groups.append(newGroup)
                         let alertController = UIAlertController(title: "Great!", message:
                             "Your group has been created! Start inviting vshooters now to build your photo buddy community.", preferredStyle: UIAlertController.Style.alert)
-                        alertController.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default,handler: {(action) in self.dismiss(animated: true, completion: nil) }))
+                        alertController.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default,handler: {(action) in
+                            //DataReloadManager.shared.firstVC.groupsTableView.reloadData()
+                            self.dismiss(animated: true, completion: nil) }))
                         
                         self.present(alertController, animated: true, completion: nil)
                     }
@@ -112,7 +123,7 @@ class NewGroupViewController: UIViewController, UITextFieldDelegate, UITextViewD
     }
     
     @objc func textChanged(sender: NSNotification) {
-        if (name.hasText && groupDescr.hasText){
+        if (name.hasText && groupDescr.hasText && groupDescr.text != "Give your group a description. Tell VShooters why they should join your cool group!"){
             createBtn.isEnabled = true
             createBtn.alpha = 1.0
         }
@@ -123,26 +134,26 @@ class NewGroupViewController: UIViewController, UITextFieldDelegate, UITextViewD
     }
     
     @objc func textViewTapped(sender: NSNotification){
-        if(self.groupDescr.text == "Tell VShooters why they should join this group. Optional, but recommended!"){
+        if(self.groupDescr.text == "Give your group a description. Tell VShooters why they should join your cool group!"){
             groupDescr.text = ""
             groupDescr.textColor = .black
         }
     }
     
-    @objc func keyboardWillShow(notification: NSNotification) {
-        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
-            if self.view.frame.origin.y == 0 {
-                //keyboardSize.height
-                self.view.frame.origin.y -= 50
-            }
-        }
-    }
-    
-    @objc func keyboardWillHide(notification: NSNotification) {
-        if self.view.frame.origin.y != 0 {
-            self.view.frame.origin.y = 0
-        }
-    }
+//    @objc func keyboardWillShow(notification: NSNotification) {
+//        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
+//            if self.view.frame.origin.y == 0 {
+//                //keyboardSize.height
+//                self.view.frame.origin.y -= 50
+//            }
+//        }
+//    }
+//
+//    @objc func keyboardWillHide(notification: NSNotification) {
+//        if self.view.frame.origin.y != 0 {
+//            self.view.frame.origin.y = 0
+//        }
+//    }
     
     let ACCEPTABLE_CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_ "
     
@@ -159,7 +170,7 @@ class NewGroupViewController: UIViewController, UITextFieldDelegate, UITextViewD
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         let newText = (textView.text as NSString).replacingCharacters(in: range, with: text)
         let numberOfChars = newText.count
-        return numberOfChars < 100
+        return numberOfChars < 150
     }
     
     

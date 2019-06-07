@@ -24,7 +24,8 @@ class GroupsViewController: UIViewController, UITableViewDataSource, UITableView
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        if (mygroups.count == 0){
+        //DataReloadManager.shared.firstVC = self
+        if (SocketIOManager.sharedInstance.currUserObj.groups.count == 0){
             groupsTableView.isHidden = true
         }
         else {
@@ -34,6 +35,12 @@ class GroupsViewController: UIViewController, UITableViewDataSource, UITableView
         }
         
         
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        print("in view controller the number of groups in array")
+        print(SocketIOManager.sharedInstance.currUserObj.groups.count)
+        groupsTableView.reloadData()
     }
     
     @IBAction func showGroups(_ sender: Any) {
@@ -83,14 +90,14 @@ class GroupsViewController: UIViewController, UITableViewDataSource, UITableView
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
             
-            return self.mygroups.count
+            return SocketIOManager.sharedInstance.currUserObj.groups.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         print(indexPath.row)
         let cell = groupsTableView.dequeueReusableCell(withIdentifier: "MyGroupsCell") as! MyGroupsTableViewCell
     
-            cell.groupName.text = mygroups[indexPath.row].name
+            cell.groupName.text = SocketIOManager.sharedInstance.currUserObj.groups[indexPath.row].name
         
         return cell
     }
@@ -98,9 +105,9 @@ class GroupsViewController: UIViewController, UITableViewDataSource, UITableView
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         groupsTableView.deselectRow(at: indexPath, animated: true)
         
-        selectedGroup = mygroups[indexPath.row].name
-        selectedGroupDescr = mygroups[indexPath.row].description
-        selecterGroupCreator = mygroups[indexPath.row].creator
+        selectedGroup = SocketIOManager.sharedInstance.currUserObj.groups[indexPath.row].name
+        selectedGroupDescr = SocketIOManager.sharedInstance.currUserObj.groups[indexPath.row].description
+        selecterGroupCreator = SocketIOManager.sharedInstance.currUserObj.groups[indexPath.row].creator
         
         let newGroupString = selectedGroup.replacingOccurrences(of: " ", with: "%20")
         let currentCell = groupsTableView.cellForRow(at: indexPath) as! MyGroupsTableViewCell

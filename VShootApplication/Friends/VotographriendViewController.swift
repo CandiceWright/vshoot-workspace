@@ -139,6 +139,9 @@ class VotographriendViewController: UIViewController, UITableViewDataSource, UIT
             let picUrl = SocketIOManager.sharedInstance.currUserObj.friends[indexPath.row].imageUrl
             if (picUrl == "none"){
                 let noProfileImage: UIImage = UIImage(named: "profilepic_none")!
+                print("size: ")
+                print(cell.friendPic.frame.height)
+                print(cell.friendPic.frame.width)
                 cell.friendPic.image = noProfileImage
                 cell.friendPic.layer.cornerRadius = cell.friendPic.frame.height/2
                 cell.friendPic.clipsToBounds = true

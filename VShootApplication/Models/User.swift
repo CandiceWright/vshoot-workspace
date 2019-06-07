@@ -12,12 +12,13 @@ import UIKit
 class User {
     var username: String = ""
     var imageUrl: String
-    var image: UIImage? = nil
+    var image: UIImage? = UIImage(named: "profilepic_none")!
     //var image = UIImage()
     var vsPreference:String = ""
     //var isFriends: Bool
     var friends = [User]()
     var groups = [Group]()
+    var userId: String = ""
     
     init(username:String, imageUrl:String) {
         self.username = username
