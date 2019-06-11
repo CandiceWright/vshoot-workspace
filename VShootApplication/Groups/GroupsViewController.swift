@@ -44,47 +44,8 @@ class GroupsViewController: UIViewController, UITableViewDataSource, UITableView
     }
     
     @IBAction func showGroups(_ sender: Any) {
-        allgroups.removeAll()
-        //first make a get request to get all users
-        let geturl = SocketIOManager.sharedInstance.serverUrl + "/groups/all"
-        let url = URL(string: geturl)
-        Alamofire.request(url!)
-            .validate(statusCode: 200..<201)
-            .responseJSON{ (response) in
-                switch response.result {
-                case .success(let data):
-                    print(data)
-                    if let groupDict = data as? [Dictionary<String,String>]{
-                        //print(groupDict[0]["gName"])
-                        for i in 0..<groupDict.count {
-                            
-                            let newgroup = Group.init(name: groupDict[i]["gName"]!, creator: groupDict[i]["creator"]!, description: groupDict[i]["gDescription"]!)
-                            self.allgroups.append(newgroup)
-                        }
-                        self.performSegue(withIdentifier: "ShowAllGroupsSegue", sender: self)
-                    
-                    }
-                    else {
-                        print("cannot convert to dict")
-                        let alertController = UIAlertController(title: "Sorry!", message:
-                            "Looks like something went wrong. Please try again.", preferredStyle: UIAlertController.Style.alert)
-                        alertController.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default,handler: {(action) in }))
-                        
-                        self.present(alertController, animated: true, completion: nil)
-                    }
-                    
-                    
-                    
-                case .failure(let error):
-                    print("failure")
-                    print(error)
-                    let alertController = UIAlertController(title: "Sorry!", message:
-                        "Looks like something went wrong. Please try again.", preferredStyle: UIAlertController.Style.alert)
-                    alertController.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default,handler: {(action) in }))
-                    
-                    self.present(alertController, animated: true, completion: nil)
-                }
-        }
+        self.performSegue(withIdentifier: "ShowAllGroupsSegue", sender: self)
+
     }
     
     
@@ -109,84 +70,8 @@ class GroupsViewController: UIViewController, UITableViewDataSource, UITableView
         selectedGroupDescr = SocketIOManager.sharedInstance.currUserObj.groups[indexPath.row].description
         selecterGroupCreator = SocketIOManager.sharedInstance.currUserObj.groups[indexPath.row].creator
         
-        let newGroupString = selectedGroup.replacingOccurrences(of: " ", with: "%20")
-        let currentCell = groupsTableView.cellForRow(at: indexPath) as! MyGroupsTableViewCell
-        //check to see if they are apart of the group already
-        let geturl = SocketIOManager.sharedInstance.serverUrl + "/groups/members/" + SocketIOManager.sharedInstance.currUserObj.username + "/" + newGroupString
-        let url = URL(string: geturl)
-        Alamofire.request(url!)
-            .validate(statusCode: 200..<201)
-            .responseJSON{ (response) in
-                switch response.result {
-                case .success(let data):
-                    print(data)
-                    if let memberDict = data as? [Dictionary<String,String>]{
-                        if (memberDict.count == 0){
-                            //user is not in group
-                            self.inGroup = false
-                        }
-                        else {
-                            self.inGroup = true
-                        }
-                        //get group members
-                        let geturl = SocketIOManager.sharedInstance.serverUrl + "/groups/members/" + newGroupString
-                        let url = URL(string: geturl)
-                        Alamofire.request(url!)
-                            .validate(statusCode: 200..<201)
-                            .responseJSON{ (response) in
-                                switch response.result {
-                                case .success(let data):
-                                    print(data)
-                                    if let memberDict = data as? [Dictionary<String,String>]{
-                                        for i in 0..<memberDict.count {
-                                            let newUser = User.init(username: memberDict[i]["name"]!, imageUrl: memberDict[i]["image"]!)
-                                            self.members.append(newUser)
-                                        }
-                                        self.performSegue(withIdentifier: "ShowGroupDetailsFromMyGroups", sender: self)
-                                    }
-                                    else {
-                                        print("cant convert dictionary")
-                                        let alertController = UIAlertController(title: "Sorry!", message:
-                                            "Looks like something went wrong. Please try again.", preferredStyle: UIAlertController.Style.alert)
-                                        alertController.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default,handler: {(action) in }))
-                                        
-                                        self.present(alertController, animated: true, completion: nil)
-                                    }
-                                    
-                                    
-                                    
-                                case .failure(let error):
-                                    print("failure")
-                                    print(error)
-                                    let alertController = UIAlertController(title: "Sorry!", message:
-                                        "Looks like something went wrong. Please try again.", preferredStyle: UIAlertController.Style.alert)
-                                    alertController.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default,handler: {(action) in }))
-                                    
-                                    self.present(alertController, animated: true, completion: nil)
-                                }
-                        }
-                    }
-                    else {
-                        print("cant convert dictionary")
-                        let alertController = UIAlertController(title: "Sorry!", message:
-                            "Looks like something went wrong. Please try again.", preferredStyle: UIAlertController.Style.alert)
-                        alertController.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default,handler: {(action) in }))
-                        
-                        self.present(alertController, animated: true, completion: nil)
-                    }
-                    
-                    
-                    
-                case .failure(let error):
-                    print("failure")
-                    print(error)
-                    let alertController = UIAlertController(title: "Sorry!", message:
-                        "Looks like something went wrong. Please try again.", preferredStyle: UIAlertController.Style.alert)
-                    alertController.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default,handler: {(action) in }))
-                    
-                    self.present(alertController, animated: true, completion: nil)
-                }
-        }
+        self.performSegue(withIdentifier: "ShowGroupDetailsFromMyGroups", sender: self)
+        
     }
     
 
@@ -196,8 +81,8 @@ class GroupsViewController: UIViewController, UITableViewDataSource, UITableView
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if(segue.identifier == "ShowAllGroupsSegue"){
-            let allGroupsView = segue.destination as? AllGroupsViewController
-            allGroupsView?.allGroups = self.allgroups
+            //let allGroupsView = segue.destination as? AllGroupsViewController
+            //allGroupsView?.allGroups = self.allgroups
             
             
         }
@@ -206,9 +91,9 @@ class GroupsViewController: UIViewController, UITableViewDataSource, UITableView
             detailsView?.creator = self.selecterGroupCreator
             detailsView?.name = self.selectedGroup
             detailsView?.descr = self.selectedGroupDescr
-            detailsView?.inGroup = self.inGroup
+            detailsView?.inGroup = true
             detailsView?.fromAllGroups = false
-            detailsView?.members = self.members
+            //detailsView?.members = self.members
         }
     }
     

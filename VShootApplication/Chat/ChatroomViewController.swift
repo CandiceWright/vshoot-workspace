@@ -158,12 +158,13 @@ class ChatroomViewController: MSGMessengerViewController {
     }
     
     func showMessages(data: Dictionary<String, String>, completion: @escaping () -> ()){
+        print(data["sender"])
         var isSender = false;
         if (data["sender"] == SocketIOManager.sharedInstance.currUserObj.username){
             isSender = true
         }
         var profilePic: UIImage = UIImage()
-        if(data["userImage"]! == "none"){
+        if(data["senderImg"]! == "none"){
             profilePic = UIImage(named: "profilepic_none")!
             let chatUser = ChatUser(displayName: data["sender"]!, avatar: profilePic, avatarUrl: nil, isSender: isSender)
             let body: MSGMessageBody = .text(data["message"]!)
@@ -175,8 +176,9 @@ class ChatroomViewController: MSGMessengerViewController {
             completion()
         }
         else {
-            print("need to download pic")
-            ImageService.getImage(withURL: data["userImage"]!){ image in
+            print("need to download pic for chat")
+            print(data["senderImg"])
+            ImageService.getImage(withURL: data["senderImg"]!){ image in
                 print("got pic for msg")
                 profilePic = image!
                 let chatUser = ChatUser(displayName: data["sender"]!, avatar: profilePic, avatarUrl: nil, isSender: isSender)
@@ -243,7 +245,7 @@ class ChatroomViewController: MSGMessengerViewController {
         
         inputView.resignFirstResponder()
         
-        SocketIOManager.sharedInstance.sendMsg(username: SocketIOManager.sharedInstance.currUserObj.username, userImgUrl: SocketIOManager.sharedInstance.currUserObj.imageUrl, group: self.chatname, message: inputView.message, date: dateString)
+        SocketIOManager.sharedInstance.sendMsg(group: self.chatname, message: inputView.message, date: dateString)
         
     }
     

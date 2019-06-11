@@ -24,7 +24,7 @@ class ProfilePreferencesViewController: UIViewController {
         self.cancelBtn.layer.cornerRadius = CGFloat(Float(4.0))
         saveBtn.titleLabel?.adjustsFontSizeToFitWidth = true;
         cancelBtn.titleLabel?.adjustsFontSizeToFitWidth = true;
-        preferenceOptionsDropDown.optionArray = ["Only my Vriends", "Anyone"]
+        preferenceOptionsDropDown.optionArray = ["Only my Friends", "Anyone"]
         //Its Id Values and its optional
         preferenceOptionsDropDown.optionIds = [1,2]
         // The the Closure returns Selected Index and String
@@ -50,7 +50,7 @@ class ProfilePreferencesViewController: UIViewController {
         }
         print(SocketIOManager.sharedInstance.currUserObj.vsPreference)
         if (SocketIOManager.sharedInstance.currUserObj.vsPreference == "1"){
-            preferenceOptionsDropDown.text = "Only my Vriends"
+            preferenceOptionsDropDown.text = "Only my Friends"
         }
         else {
             preferenceOptionsDropDown.text = "Anyone"

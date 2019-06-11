@@ -16,8 +16,11 @@ class ImageService {
         //var request = URLRequest(url:myUrl)
         print("trying to download image")
         let url = URL(string: myUrl)
+        print(url)
         let dataTask = URLSession.shared.dataTask(with: url!){ data, url, error in
             var downloadedImage:UIImage?
+            print(data)
+            print(error)
             if let data = data {
                 print(myUrl)
                 downloadedImage = UIImage(data: data)

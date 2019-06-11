@@ -44,11 +44,92 @@ class GroupDetailsViewController: UIViewController, UITableViewDataSource, UITab
         self.chatBtn.layer.cornerRadius = CGFloat(Float(4.0))
         self.joinBtn.layer.cornerRadius = CGFloat(Float(4.0))
         
+        let newGroupString = name.replacingOccurrences(of: " ", with: "%20")
+        
+        //check to see if they are apart of the group already
+        let geturl = SocketIOManager.sharedInstance.serverUrl + "/groups/members/" + SocketIOManager.sharedInstance.currUserObj.userId + "/" + newGroupString
+        print(geturl)
+        let url = URL(string: geturl)
+        Alamofire.request(url!)
+            .validate(statusCode: 200..<201)
+            .responseJSON{ (response) in
+                switch response.result {
+                case .success(let data):
+                    print(data)
+                    if let memberDict = data as? [Dictionary<String,String>]{
+                        if (memberDict.count == 0){
+                            //user is not in group
+                            self.inGroup = false
+                        }
+                        else {
+                            self.inGroup = true
+                        }
+                        //get group members
+                        let geturl = SocketIOManager.sharedInstance.serverUrl + "/groups/members/" + newGroupString
+                        let url = URL(string: geturl)
+                        Alamofire.request(url!)
+                            .validate(statusCode: 200..<201)
+                            .responseJSON{ (response) in
+                                switch response.result {
+                                case .success(let data):
+                                    print(data)
+                                    if let memberDict = data as? [Dictionary<String,String>]{
+                                        for i in 0..<memberDict.count {
+                                            let newUser = User.init(username: memberDict[i]["name"]!, imageUrl: memberDict[i]["image"]!)
+                                            self.members.append(newUser)
+                                            self.membersTableView.reloadData()
+                                        }
+                                    }
+                                    else {
+                                        print("cant convert dictionary")
+                                        let alertController = UIAlertController(title: "Sorry!", message:
+                                            "Looks like something went wrong. Please try again.", preferredStyle: UIAlertController.Style.alert)
+                                        alertController.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default,handler: {(action) in }))
+                                        
+                                        self.present(alertController, animated: true, completion: nil)
+                                    }
+                                    
+                                    
+                                    
+                                case .failure(let error):
+                                    print("failure")
+                                    print(error)
+                                    let alertController = UIAlertController(title: "Sorry!", message:
+                                        "Looks like something went wrong. Please try again.", preferredStyle: UIAlertController.Style.alert)
+                                    alertController.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default,handler: {(action) in }))
+                                    
+                                    self.present(alertController, animated: true, completion: nil)
+                                }
+                        }
+                    }
+                    else {
+                        print("cant convert dictionary")
+                        let alertController = UIAlertController(title: "Sorry!", message:
+                            "Looks like something went wrong. Please try again.", preferredStyle: UIAlertController.Style.alert)
+                        alertController.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default,handler: {(action) in }))
+                        
+                        self.present(alertController, animated: true, completion: nil)
+                    }
+                    
+                    
+                    
+                case .failure(let error):
+                    print("failure")
+                    print(error)
+                    let alertController = UIAlertController(title: "Sorry!", message:
+                        "Looks like something went wrong. Please try again.", preferredStyle: UIAlertController.Style.alert)
+                    alertController.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default,handler: {(action) in }))
+                    
+                    self.present(alertController, animated: true, completion: nil)
+                }
+        }
+        
 
     }
     
     override func viewWillAppear(_ animated: Bool) {
         nameLabel.text = name
+        print("printing description")
         print(descr)
         groupDescr.text = descr
         gCreator.text = gCreator.text! + " " + creator
@@ -66,8 +147,8 @@ class GroupDetailsViewController: UIViewController, UITableViewDataSource, UITab
     
     @IBAction func joinGroup(_ sender: Any) {
         var posturl = SocketIOManager.sharedInstance.serverUrl + "/groups/members"
-        
-        let info: [String:Any] = ["username": SocketIOManager.sharedInstance.currUserObj.username as Any, "group": nameLabel.text as Any]
+        //was "username"
+        let info: [String:Any] = ["userId": SocketIOManager.sharedInstance.currUserObj.userId as Any, "group": nameLabel.text as Any]
         //"securityQuestion": self.question as Any, "securityAnswer": SQAnswer.text as Any
         do {
             let data = try JSONSerialization.data(withJSONObject: info, options: [])
@@ -118,7 +199,7 @@ class GroupDetailsViewController: UIViewController, UITableViewDataSource, UITab
         //make request to remove friend
         let posturl = SocketIOManager.sharedInstance.serverUrl + "/groups/members/leave"
         //let currU = SocketIOManager.sharedInstance.currUser
-        let currU = SocketIOManager.sharedInstance.currUserObj.username
+        let currUId = SocketIOManager.sharedInstance.currUserObj.userId
         let removedGroup = nameLabel.text
         var removedUserIndex = -1
         for i in 0..<SocketIOManager.sharedInstance.currUserObj.groups.count{
@@ -126,8 +207,8 @@ class GroupDetailsViewController: UIViewController, UITableViewDataSource, UITab
                 removedUserIndex = i
             }
         }
-        print("current logged in user: " + currU)
-        let info: [String:Any] = ["username": currU ,"groupname": removedGroup as Any]
+        print("current logged in user: " + currUId)
+        let info: [String:Any] = ["userId": currUId ,"groupname": removedGroup as Any]
         do {
             let data = try JSONSerialization.data(withJSONObject: info, options: [])
             dataString = String(data: data, encoding: .utf8)!

@@ -128,7 +128,7 @@ class NewVSInfoPopupViewController: UIViewController {
             let data = dataResponse[0] as! String
             print(data)
             SwiftSpinner.hide()
-            let alertController = UIAlertController(title: "Not Mutual Vriends.", message:
+            let alertController = UIAlertController(title: "Not Mutual Friends.", message:
                 data, preferredStyle: UIAlertController.Style.alert)
             alertController.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default,handler: {(action) in
             }))

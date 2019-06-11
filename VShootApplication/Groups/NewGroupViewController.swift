@@ -64,7 +64,7 @@ class NewGroupViewController: UIViewController, UITextFieldDelegate, UITextViewD
         if(self.groupDescr.text != "Give your group a description. Tell VShooters why they should join your cool group!"){
             descr = self.groupDescr.text
         }
-        let info: [String:Any] = ["creator": SocketIOManager.sharedInstance.currUserObj.username as Any, "gname": gName as Any, "descr": descr as Any]
+        let info: [String:Any] = ["creator": SocketIOManager.sharedInstance.currUserObj.userId as Any, "gname": gName as Any, "descr": descr as Any]
         //"securityQuestion": self.question as Any, "securityAnswer": SQAnswer.text as Any
         do {
             let data = try JSONSerialization.data(withJSONObject: info, options: [])
@@ -83,7 +83,7 @@ class NewGroupViewController: UIViewController, UITextFieldDelegate, UITextViewD
                 case .success(let data):
                     print(data)
                     if (data == "created group successfully"){
-                        let newGroup = Group.init(name: self.name.text!, creator: SocketIOManager.sharedInstance.currUserObj.username, description: descr)
+                        let newGroup = Group.init(name: gName, creator: SocketIOManager.sharedInstance.currUserObj.username, description: descr)
                         SocketIOManager.sharedInstance.currUserObj.groups.append(newGroup)
                         let alertController = UIAlertController(title: "Great!", message:
                             "Your group has been created! Start inviting vshooters now to build your photo buddy community.", preferredStyle: UIAlertController.Style.alert)

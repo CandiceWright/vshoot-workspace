@@ -54,10 +54,17 @@ class SocketIOManager: NSObject {
         
     }
     
-    func sendMsg(username: String, userImgUrl: String, group: String, message: String, date: String){
+    func sendMsg(group: String, message: String, date: String){
         var data = [String:Any]()
-        data["username"] = username
-        data["userImg"] = userImgUrl
+        data["username"] = SocketIOManager.sharedInstance.currUserObj.username
+        //data["userImg"] = userImgUrl
+        print("printing userID while sending new message")
+        print((SocketIOManager.sharedInstance.currUserObj.userId))
+        let id = Int(SocketIOManager.sharedInstance.currUserObj.userId)
+        //print(Int("4"))
+        print("printing converted id string")
+        print(id as Any)
+        data["userId"] = SocketIOManager.sharedInstance.currUserObj.userId
         data["group"] = group
         data["message"] = message
         data["date"] = date
@@ -211,7 +218,7 @@ class SocketIOManager: NSObject {
     }
     
     func loadGroups(username: String){
-        let geturl2 = SocketIOManager.sharedInstance.serverUrl + "/groups/users/" + username
+        let geturl2 = SocketIOManager.sharedInstance.serverUrl + "/groups/" + username
         let url = URL(string: geturl2)
         Alamofire.request(url!)
             .responseJSON{ (response) in
@@ -288,12 +295,16 @@ class SocketIOManager: NSObject {
         let url = URL(string: geturl)
         Alamofire.request(url!)
             .validate(statusCode: 200..<201)
-            .responseString{ (response) in
+            .responseJSON{ (response) in
                 switch response.result {
                 case .success(let data):
                     print(data)
-                    if let userId = data as? String {
-                        SocketIOManager.sharedInstance.currUserObj.userId = userId
+                    //if let userId = data as? String {
+                    if let idJson = data as? Dictionary<String,Int> {
+                        print("printing userid")
+                        print(idJson["userId"])
+                        SocketIOManager.sharedInstance.currUserObj.userId = String(idJson["userId"]!)
+                        print(SocketIOManager.sharedInstance.currUserObj.userId)
                         print("successfully got userid")
                     }
                     else {
