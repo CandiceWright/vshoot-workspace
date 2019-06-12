@@ -33,6 +33,7 @@ class GroupDetailsViewController: UIViewController, UITableViewDataSource, UITab
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.membersTableView.isHidden = true
         definesPresentationContext = true
         self.membersTableView.rowHeight = UITableView.automaticDimension
         self.membersTableView.estimatedRowHeight = 600
@@ -56,6 +57,7 @@ class GroupDetailsViewController: UIViewController, UITableViewDataSource, UITab
                 switch response.result {
                 case .success(let data):
                     print(data)
+                    self.membersTableView.isHidden = false
                     if let memberDict = data as? [Dictionary<String,String>]{
                         if (memberDict.count == 0){
                             //user is not in group

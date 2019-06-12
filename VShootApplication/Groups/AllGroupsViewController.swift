@@ -25,6 +25,7 @@ class AllGroupsViewController: UIViewController, UITableViewDataSource, UITableV
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.GroupsTableView.isHidden = true
         //print(allGroups.count)
         
 //        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
@@ -42,6 +43,7 @@ class AllGroupsViewController: UIViewController, UITableViewDataSource, UITableV
                 switch response.result {
                 case .success(let data):
                     print(data)
+                    self.GroupsTableView.isHidden = false
                     if let groupDict = data as? [Dictionary<String,String>]{
                         //print(groupDict[0]["gName"])
                         print(groupDict)
