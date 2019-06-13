@@ -65,9 +65,17 @@ class GroupsViewController: UIViewController, UITableViewDataSource, UITableView
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         groupsTableView.deselectRow(at: indexPath, animated: true)
-        
+        print("this is the current idex I am about to print: ")
+        print(indexPath.row)
+        print("this is the current size of the groups array")
+        print(SocketIOManager.sharedInstance.currUserObj.groups.count)
+        SocketIOManager.sharedInstance.currUserObj.groups[indexPath.row].printGroup()
+        //print("printing selected group info")
+        //print(SocketIOManager.sharedInstance.currUserObj.groups[indexPath.row])
         selectedGroup = SocketIOManager.sharedInstance.currUserObj.groups[indexPath.row].name
         selectedGroupDescr = SocketIOManager.sharedInstance.currUserObj.groups[indexPath.row].description
+        print("printing selected group description")
+        print(SocketIOManager.sharedInstance.currUserObj.groups[indexPath.row].description)
         selecterGroupCreator = SocketIOManager.sharedInstance.currUserObj.groups[indexPath.row].creator
         
         self.performSegue(withIdentifier: "ShowGroupDetailsFromMyGroups", sender: self)
@@ -91,6 +99,8 @@ class GroupsViewController: UIViewController, UITableViewDataSource, UITableView
             detailsView?.creator = self.selecterGroupCreator
             detailsView?.name = self.selectedGroup
             detailsView?.descr = self.selectedGroupDescr
+            print("printing description before segue to details")
+            print(self.selectedGroupDescr)
             detailsView?.inGroup = true
             detailsView?.fromAllGroups = false
             //detailsView?.members = self.members

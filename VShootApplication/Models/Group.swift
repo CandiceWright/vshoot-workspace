@@ -20,4 +20,11 @@ class Group {
         self.creator = creator
         self.description = description
     }
+    
+    func printGroup(){
+        print("Printing Group's content")
+        print(name)
+        print(creator)
+        print(description)
+    }
 }
