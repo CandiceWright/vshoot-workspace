@@ -1099,17 +1099,6 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5ir-EZ-nfd">
-                                <rect key="frame" x="21" y="136" width="125" height="30"/>
-                                <state key="normal" title="+ CREATE GROUP">
-                                    <color key="titleColor" red="0.19215686269999999" green="0.82352941180000006" blue="0.51372549020000002" alpha="1" colorSpace="calibratedRGB"/>
-                                </state>
-                                <connections>
-                                    <segue destination="S7Q-Jc-QWj" kind="popoverPresentation" popoverAnchorView="5ir-EZ-nfd" id="o3g-VJ-fXH">
-                                        <popoverArrowDirection key="popoverArrowDirection" up="YES" down="YES" left="YES" right="YES"/>
-                                    </segue>
-                                </connections>
-                            </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="AGx-nX-M0K">
                                 <rect key="frame" x="256" y="136" width="100" height="30"/>
                                 <state key="normal" title="JOIN GROUPS">
@@ -1169,10 +1158,20 @@
                                     <outlet property="delegate" destination="2uO-gR-bai" id="hnL-ka-Pfo"/>
                                 </connections>
                             </tableView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OlJ-2l-vxP">
+                                <rect key="frame" x="19" y="136" width="135" height="30"/>
+                                <state key="normal" title="+ CREATE GROUPS">
+                                    <color key="titleColor" red="0.19215686269999999" green="0.82352941180000006" blue="0.51372549020000002" alpha="1" colorSpace="calibratedRGB"/>
+                                </state>
+                                <connections>
+                                    <segue destination="S7Q-Jc-QWj" kind="popoverPresentation" popoverAnchorView="OlJ-2l-vxP" id="9Z8-yy-Ig5">
+                                        <popoverArrowDirection key="popoverArrowDirection" up="YES" down="YES" left="YES" right="YES"/>
+                                    </segue>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="5ir-EZ-nfd" firstAttribute="top" secondItem="6vc-IR-Byt" secondAttribute="top" constant="92" id="2ek-gC-PY7"/>
                             <constraint firstItem="gnb-Qm-25f" firstAttribute="top" secondItem="A8p-ae-kiz" secondAttribute="bottom" constant="13" id="4q1-UQ-Bap"/>
                             <constraint firstItem="6vc-IR-Byt" firstAttribute="trailing" secondItem="gnb-Qm-25f" secondAttribute="trailing" id="7Rx-Bt-Rvt"/>
                             <constraint firstItem="gnb-Qm-25f" firstAttribute="centerX" secondItem="ko5-tX-7r2" secondAttribute="centerX" id="7Xo-9q-xwp"/>
@@ -1180,9 +1179,10 @@
                             <constraint firstItem="6vc-IR-Byt" firstAttribute="trailing" secondItem="A8p-ae-kiz" secondAttribute="trailing" constant="125" id="K4p-cd-j70"/>
                             <constraint firstItem="AGx-nX-M0K" firstAttribute="top" secondItem="6vc-IR-Byt" secondAttribute="top" constant="92" id="VDI-xg-D03"/>
                             <constraint firstItem="6vc-IR-Byt" firstAttribute="bottom" secondItem="gnb-Qm-25f" secondAttribute="bottom" id="aKr-WD-il9"/>
-                            <constraint firstItem="5ir-EZ-nfd" firstAttribute="leading" secondItem="6vc-IR-Byt" secondAttribute="leading" constant="21" id="aZD-1h-ZYI"/>
+                            <constraint firstItem="OlJ-2l-vxP" firstAttribute="top" secondItem="6vc-IR-Byt" secondAttribute="top" constant="92" id="hYj-nm-NUs"/>
                             <constraint firstItem="gnb-Qm-25f" firstAttribute="leading" secondItem="6vc-IR-Byt" secondAttribute="leading" id="lCC-iq-La3"/>
                             <constraint firstItem="6vc-IR-Byt" firstAttribute="trailing" secondItem="AGx-nX-M0K" secondAttribute="trailing" constant="19" id="oQY-Ud-1pa"/>
+                            <constraint firstItem="OlJ-2l-vxP" firstAttribute="leading" secondItem="6vc-IR-Byt" secondAttribute="leading" constant="19" id="zfV-6O-yoe"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6vc-IR-Byt"/>
                     </view>
@@ -1538,7 +1538,7 @@
         <!--New Group View Controller-->
         <scene sceneID="lVK-lS-aoD">
             <objects>
-                <viewController id="S7Q-Jc-QWj" customClass="NewGroupViewController" customModule="VShootApplication" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="newGroupVC" id="S7Q-Jc-QWj" customClass="NewGroupViewController" customModule="VShootApplication" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="zEm-MS-AjU">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1675,6 +1675,18 @@
                                     <action selector="closeAddview:" destination="cgS-0J-GbY" eventType="touchUpInside" id="qiB-Hw-X38"/>
                                 </connections>
                             </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Add Friends" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="13" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Jvo-4d-0lY">
+                                <rect key="frame" x="22" y="126" width="117" height="23"/>
+                                <fontDescription key="fontDescription" name="Arial-BoldMT" family="Arial" pointSize="20"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Loading..." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ng1-vw-gtJ">
+                                <rect key="frame" x="141.66666666666666" y="395" width="92" height="22"/>
+                                <fontDescription key="fontDescription" name="ArialRoundedMTBold" family="Arial Rounded MT Bold" pointSize="19"/>
+                                <color key="textColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="9cR-Vd-64p">
                                 <rect key="frame" x="0.0" y="219" width="375" height="559"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -1722,17 +1734,13 @@
                                     <outlet property="delegate" destination="cgS-0J-GbY" id="cIi-DF-GAa"/>
                                 </connections>
                             </tableView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Add Friends" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="13" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Jvo-4d-0lY">
-                                <rect key="frame" x="22" y="126" width="117" height="23"/>
-                                <fontDescription key="fontDescription" name="Arial-BoldMT" family="Arial" pointSize="20"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="Gu9-tk-Uel" firstAttribute="top" secondItem="mYS-Gt-32a" secondAttribute="top" id="4Bi-zw-rvM"/>
+                            <constraint firstItem="Ng1-vw-gtJ" firstAttribute="centerY" secondItem="ZkR-9y-py4" secondAttribute="centerY" id="BbI-tt-Mpf"/>
                             <constraint firstItem="Gu9-tk-Uel" firstAttribute="leading" secondItem="9cR-Vd-64p" secondAttribute="leading" id="GIU-wr-MVY"/>
+                            <constraint firstItem="Ng1-vw-gtJ" firstAttribute="centerX" secondItem="ZkR-9y-py4" secondAttribute="centerX" id="IH8-Qe-9SK"/>
                             <constraint firstItem="9cR-Vd-64p" firstAttribute="centerX" secondItem="ZkR-9y-py4" secondAttribute="centerX" id="L8j-IE-SZm"/>
                             <constraint firstItem="m4x-xw-a3b" firstAttribute="trailing" secondItem="Jvo-4d-0lY" secondAttribute="trailing" constant="236" id="MsV-SM-PpW"/>
                             <constraint firstItem="9cR-Vd-64p" firstAttribute="trailing" secondItem="m4x-xw-a3b" secondAttribute="trailing" id="cif-lk-7SE"/>
@@ -3651,12 +3659,12 @@
         <segue reference="O1w-Jo-Bdo"/>
         <segue reference="i5Z-vj-CcE"/>
         <segue reference="Lt4-bW-JdQ"/>
-        <segue reference="ShK-hM-nrs"/>
-        <segue reference="btB-pE-CCS"/>
+        <segue reference="Fqc-7d-quI"/>
+        <segue reference="EnD-el-DWf"/>
         <segue reference="hUl-UN-0N5"/>
-        <segue reference="gg6-kk-YdA"/>
-        <segue reference="k8r-n4-3iG"/>
-        <segue reference="ifN-Zn-8Fu"/>
+        <segue reference="Lgx-tJ-ink"/>
+        <segue reference="kI0-Zs-NdU"/>
+        <segue reference="iWf-sx-leS"/>
         <segue reference="kmI-bJ-JBs"/>
     </inferredMetricsTieBreakers>
 </document>

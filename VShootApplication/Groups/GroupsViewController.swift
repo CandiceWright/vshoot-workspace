@@ -10,7 +10,7 @@ import UIKit
 import XLPagerTabStrip
 import Alamofire
 
-class GroupsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+class GroupsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UIPopoverPresentationControllerDelegate {
     var mygroups = SocketIOManager.sharedInstance.currUserObj.groups
     var selectedGroup:String = ""
     var selectedGroupDescr:String = ""
@@ -24,8 +24,9 @@ class GroupsViewController: UIViewController, UITableViewDataSource, UITableView
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        //DataReloadManager.shared.firstVC = self
+        DataReloadManager.shared.firstVC = self
         if (SocketIOManager.sharedInstance.currUserObj.groups.count == 0){
+            print("no groups")
             groupsTableView.isHidden = true
         }
         else {
@@ -47,7 +48,6 @@ class GroupsViewController: UIViewController, UITableViewDataSource, UITableView
         self.performSegue(withIdentifier: "ShowAllGroupsSegue", sender: self)
 
     }
-    
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
             

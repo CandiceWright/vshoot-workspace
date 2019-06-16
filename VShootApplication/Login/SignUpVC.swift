@@ -126,11 +126,6 @@ class SignUpVC: UIViewController {
         self.cancelButton.isEnabled = false
         self.signUpButton.isEnabled = false
             //save all info then segue to home
-//        var result = ""
-//        repeat {
-//            // Create a string with a random number 0...9999
-//            result = String(format:"%04d", arc4random_uniform(10000) )
-//        } while result.count < 4
         
             var geturl = SocketIOManager.sharedInstance.serverUrl + "/signup"
         self.usernameStr = ((self.username.text?.trimmingCharacters(in: .whitespaces))?.lowercased())!
@@ -164,16 +159,32 @@ class SignUpVC: UIViewController {
                         
                         else {
                             //notify the server to store relationship between this user and its socket
-                            SocketIOManager.sharedInstance.storeSocketRef(username: self.usernameStr, completion: {
+                            
+                            SocketIOManager.sharedInstance.establishConnection(username: self.usernameStr, fromLogin: true, completion: {
+                                print("friends loading complete")
                                 let token = data
                                 Auth.auth().signIn(withCustomToken: token, completion: {user, error in
                                     if let error = error {
                                         print("unable to sign in with error \(error)")
                                     }
                                 })
+                                UserDefaults.standard.set(self.usernameStr, forKey: "username")
+                                UserDefaults.standard.set(true, forKey: "UserLoggedIn")
                                 self.performSegue(withIdentifier: "segueToOnboard", sender: self)
-                                
-                            });
+                            })
+                            
+//                                SocketIOManager.sharedInstance.storeSocketRef(username: self.usernameStr, completion: {
+//                                let token = data
+//                                Auth.auth().signIn(withCustomToken: token, completion: {user, error in
+//                                    if let error = error {
+//                                        print("unable to sign in with error \(error)")
+//                                    }
+//                                })
+//                                UserDefaults.standard.set(self.usernameStr, forKey: "username")
+//                                UserDefaults.standard.set(true, forKey: "UserLoggedIn")
+//                                self.performSegue(withIdentifier: "segueToOnboard", sender: self)
+//
+//                            });
                         }
                         
                     case .failure(let error):

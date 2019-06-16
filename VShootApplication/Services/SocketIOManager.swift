@@ -14,10 +14,10 @@ class SocketIOManager: NSObject {
     var resetAck: SocketAckEmitter?
     //var serverUrl = "https://serve-thevshoot.com";
 
-    var serverUrl = "https://73b156b8.ngrok.io"
-
+    var serverUrl = "https://c5c871f8.ngrok.io"
+    var dataString: String = "";
     
-    let manager = SocketManager(socketURL: URL(string: "https://73b156b8.ngrok.io")!, config: [.log(false), .forcePolling(false), .reconnects(false)])
+    let manager = SocketManager(socketURL: URL(string: "https://c5c871f8.ngrok.io")!, config: [.log(false), .forcePolling(false), .reconnects(false)])
 
     //var name: String?
     //var resetAck: SocketAckEmitter?
@@ -26,6 +26,7 @@ class SocketIOManager: NSObject {
     //var currUserObj:MainUser = MainUser()
     var currUserObj:User = User(username: "",imageUrl: "")
     var vsRequestor:String = "";
+    var deviceToken = ""
     
     
     override init() {
@@ -68,6 +69,7 @@ class SocketIOManager: NSObject {
         data["group"] = group
         data["message"] = message
         data["date"] = date
+        data["userImg"] = SocketIOManager.sharedInstance.currUserObj.imageUrl
         let socketData = data.socketRepresentation()
         socket.emit("newMessage", socketData)
     }
@@ -140,6 +142,9 @@ class SocketIOManager: NSObject {
                             completion()
                         })
                     }
+                    else {
+                        completion()
+                    }
                 })
             }
         }
@@ -151,6 +156,9 @@ class SocketIOManager: NSObject {
                         print("friends loaded")
                         completion()
                     })
+                }
+                else {
+                    completion()
                 }
             })
         }
@@ -288,6 +296,7 @@ class SocketIOManager: NSObject {
                 }
         }
         self.getUserId(username: username)
+        self.storeDeviceToken()
     }
     
     func getUserId(username:String){
@@ -316,6 +325,40 @@ class SocketIOManager: NSObject {
                     print(error)
                     
                 }
+        }
+    }
+    
+    func storeDeviceToken(){
+        if(SocketIOManager.sharedInstance.deviceToken != ""){
+            var posturl = SocketIOManager.sharedInstance.serverUrl + "/users/devicetokens"
+            
+            let info: [String:Any] = ["username": SocketIOManager.sharedInstance.currUserObj.username as Any, "token": SocketIOManager.sharedInstance.deviceToken as Any]
+            //"securityQuestion": self.question as Any, "securityAnswer": SQAnswer.text as Any
+            do {
+                let data = try JSONSerialization.data(withJSONObject: info, options: [])
+                dataString = String(data: data, encoding: .utf8)!
+            } catch {
+                print("error")
+            }
+            
+            let url = URL(string: posturl);
+            
+            Alamofire.request(url!, method: .post, parameters: info, encoding: JSONEncoding.default, headers: ["Content-Type":"application/json"])
+                .validate(statusCode: 200..<201)
+                .responseString{ (response) in
+                    print(response)
+                    switch response.result {
+                    case .success(let data):
+                        print(data)
+                        
+                        
+                    case .failure(let error):
+                        print("failure")
+                        print(error)
+                        
+                        
+                    }
+            }
         }
     }
     

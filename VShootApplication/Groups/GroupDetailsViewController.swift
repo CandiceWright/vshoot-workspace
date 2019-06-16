@@ -93,7 +93,8 @@ class GroupDetailsViewController: UIViewController, UITableViewDataSource, UITab
         print("printing description")
         print(descr)
         groupDescr.text = descr
-        gCreator.text = gCreator.text! + " " + creator
+        //gCreator.text = gCreator.text! + " " + creator
+        gCreator.text = "Created By " + creator
         
         //print(inGroup)
         if (!inGroup){
@@ -136,7 +137,9 @@ class GroupDetailsViewController: UIViewController, UITableViewDataSource, UITab
                             self.joinBtn.isHidden = true
                             self.leaveBtn.isHidden = false
                             self.chatBtn.isHidden = false
-                            self.performSegue(withIdentifier: "BackToMyGroupsFromGroupDets", sender: self)
+                            self.members.append(SocketIOManager.sharedInstance.currUserObj)
+                            self.membersTableView.reloadData()
+                            //self.performSegue(withIdentifier: "BackToMyGroupsFromGroupDets", sender: self)
                         }))
                         
                         self.present(alertController, animated: true, completion: nil)

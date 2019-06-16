@@ -16,6 +16,7 @@ class ManageFriendshipsViewController: UIViewController {
     @IBOutlet weak var userImage: UIImageView!
     @IBOutlet weak var optionBtn: UIButton!
     //var friends = SocketIOManager.sharedInstance.currUserObj.friends
+    var selectedUser = User(username: "", imageUrl: "")
     var fromFriendsPage:Bool = false
     var currUser:String = ""
     var userImg:UIImage = UIImage()
@@ -55,11 +56,13 @@ class ManageFriendshipsViewController: UIViewController {
             //let currU = SocketIOManager.sharedInstance.currUser
             let currU = SocketIOManager.sharedInstance.currUserObj.username
             let addedUsername = username.text
-            var addedU:User = User(username: "",imageUrl: "")
-            for i in 0..<Users.count{
-                if (Users[i].username == addedUsername){
-                    addedU = Users[i]
+            if(!fromFriendsPage){
+                for i in 0..<Users.count{
+                    if (Users[i].username == addedUsername){
+                        self.selectedUser = Users[i]
+                    }
                 }
+
             }
             
             print("current logged in user: " + currU)
@@ -83,7 +86,7 @@ class ManageFriendshipsViewController: UIViewController {
                             print(data)
                             print("friends count before adding")
                             print(SocketIOManager.sharedInstance.currUserObj.friends.count)
-                            SocketIOManager.sharedInstance.currUserObj.friends.append(addedU);
+                            SocketIOManager.sharedInstance.currUserObj.friends.append(self.selectedUser);
                             print("friends count after adding")
                             print(SocketIOManager.sharedInstance.currUserObj.friends.count)
                             

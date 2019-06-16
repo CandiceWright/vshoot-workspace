@@ -29,6 +29,51 @@ class AddFriendsViewController: UIViewController, UISearchBarDelegate, UITableVi
         usersTable.estimatedRowHeight = 600
         cancelBtn.layer.borderColor =  UIColor.black.cgColor
         cancelBtn.layer.borderWidth = 0.2
+        usersTable.isHidden = true
+        
+        users.removeAll()
+        
+        //first get all users
+        let geturl = SocketIOManager.sharedInstance.serverUrl + "/users/"
+        let url = URL(string: geturl)
+        Alamofire.request(url!)
+            .validate(statusCode: 200..<201)
+            .responseJSON{ (response) in
+                switch response.result {
+                case .success(let data):
+                    print(data)
+                    if let usernameDict = data as? [Dictionary<String,String>]{
+                        print(usernameDict[0]["username"])
+                        self.usersTable.isHidden = false
+                        for i in 0..<usernameDict.count {
+                            
+                            let newUser = User.init(username: usernameDict[i]["username"]!, imageUrl: usernameDict[i]["profilePic"]!)
+                            self.users.append(newUser)
+                            self.usersTable.reloadData()
+                        }
+                        print(self.users[0].username)
+                    }
+                    else {
+                        print("cannot convert to dict")
+                        let alertController = UIAlertController(title: "Sorry!", message:
+                            "Looks like something went wrong. Please try again.", preferredStyle: UIAlertController.Style.alert)
+                        alertController.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default,handler: {(action) in }))
+                        
+                        self.present(alertController, animated: true, completion: nil)
+                    }
+                    
+                    
+                    
+                case .failure(let error):
+                    print("failure")
+                    print(error)
+                    let alertController = UIAlertController(title: "Sorry!", message:
+                        "Looks like something went wrong. Please try again.", preferredStyle: UIAlertController.Style.alert)
+                    alertController.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default,handler: {(action) in }))
+                    
+                    self.present(alertController, animated: true, completion: nil)
+                }
+        }
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

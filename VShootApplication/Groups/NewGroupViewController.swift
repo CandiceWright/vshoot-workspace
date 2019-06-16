@@ -10,12 +10,12 @@ import UIKit
 import Alamofire
 
 class NewGroupViewController: UIViewController, UITextFieldDelegate, UITextViewDelegate {
-
+    //var instanceofGroupsVC = GroupsViewController()
     var dataString: String = "";
     
     @IBOutlet weak var name: UITextField!
     @IBOutlet weak var groupDescr: UITextView!
-    
+
     @IBOutlet weak var createBtn: UIButton!
     @IBOutlet weak var cancelBtn: UIButton!
     
@@ -89,6 +89,7 @@ class NewGroupViewController: UIViewController, UITextFieldDelegate, UITextViewD
                             "Your group has been created! Start inviting vshooters now to build your photo buddy community.", preferredStyle: UIAlertController.Style.alert)
                         alertController.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default,handler: {(action) in
                             //DataReloadManager.shared.firstVC.groupsTableView.reloadData()
+                            DataReloadManager.shared.firstVC.groupsTableView.reloadData()
                             self.dismiss(animated: true, completion: nil) }))
                         
                         self.present(alertController, animated: true, completion: nil)

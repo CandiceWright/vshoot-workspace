@@ -15,6 +15,7 @@ class VotographriendViewController: UIViewController, UITableViewDataSource, UIT
     //need a list of friends from database
     //var friends = SocketIOManager.sharedInstance.currUserObj.friends
     var Users = [User]()
+    var selectedUser = User(username: "", imageUrl: "")
     var filteredArray = [User]()
     var searching = false
     var selectedUsername:String = ""
@@ -43,46 +44,6 @@ class VotographriendViewController: UIViewController, UITableViewDataSource, UIT
         //print(friends.count)
         friendTableView.reloadData()
         
-        Users.removeAll()
-        //first make a get request to get all users
-        let geturl = SocketIOManager.sharedInstance.serverUrl + "/users/"
-        let url = URL(string: geturl)
-        Alamofire.request(url!)
-            .validate(statusCode: 200..<201)
-            .responseJSON{ (response) in
-                switch response.result {
-                case .success(let data):
-                    print(data)
-                    if let usernameDict = data as? [Dictionary<String,String>]{
-                        print(usernameDict[0]["username"])
-                        for i in 0..<usernameDict.count {
-                            
-                            let newUser = User.init(username: usernameDict[i]["username"]!, imageUrl: usernameDict[i]["profilePic"]!)
-                            self.Users.append(newUser)
-                        }
-                        print(self.Users[0].username)
-                    }
-                    else {
-                        print("cannot convert to dict")
-                        let alertController = UIAlertController(title: "Sorry!", message:
-                            "Looks like something went wrong. Please try again.", preferredStyle: UIAlertController.Style.alert)
-                        alertController.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default,handler: {(action) in }))
-                        
-                        self.present(alertController, animated: true, completion: nil)
-                    }
-                    
-                    
-                    
-                case .failure(let error):
-                    print("failure")
-                    print(error)
-                    let alertController = UIAlertController(title: "Sorry!", message:
-                        "Looks like something went wrong. Please try again.", preferredStyle: UIAlertController.Style.alert)
-                    alertController.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default,handler: {(action) in }))
-                    
-                    self.present(alertController, animated: true, completion: nil)
-                }
-        }
         
     }
     
@@ -93,14 +54,14 @@ class VotographriendViewController: UIViewController, UITableViewDataSource, UIT
     
     @IBAction func addFriend(_ sender: Any) {
     
-        if (self.Users.count != 0){
+        //if (self.Users.count != 0){
             self.performSegue(withIdentifier: "addFriendSegue", sender: self)
-        }
-        else {
-            DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1), execute: {
-                self.performSegue(withIdentifier: "addFriendSegue", sender: self)
-            })
-        }
+        //}
+        //else {
+            //DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1), execute: {
+                //self.performSegue(withIdentifier: "addFriendSegue", sender: self)
+            //})
+        //}
 
         
     }
@@ -164,18 +125,13 @@ class VotographriendViewController: UIViewController, UITableViewDataSource, UIT
             let currentCell = friendTableView.cellForRow(at: indexPath) as! FriendTableViewCell
             if (currentCell.friendPic.image != nil){
                 selectedImg = currentCell.friendPic.image!
-                var areFriends = false
+                btnOpTxt = "Remove"
                 for i in 0..<SocketIOManager.sharedInstance.currUserObj.friends.count {
                     if (SocketIOManager.sharedInstance.currUserObj.friends[i].username == selectedUsername){
-                        areFriends = true
+                        selectedUser = SocketIOManager.sharedInstance.currUserObj.friends[i]
                     }
                 }
-                if (areFriends){
-                    btnOpTxt = "Remove"
-                }
-                else {
-                    btnOpTxt = "Add"
-                }
+
                 //also assign image
                 self.performSegue(withIdentifier: "manageFriendsFromListSegue", sender: self)
             }
@@ -188,19 +144,14 @@ class VotographriendViewController: UIViewController, UITableViewDataSource, UIT
             let currentCell = friendTableView.cellForRow(at: indexPath) as! FriendTableViewCell
             if(currentCell.friendPic.image != nil){
                 selectedImg = currentCell.friendPic.image!
-                var areFriends = false
+                btnOpTxt = "Remove"
+//                var areFriends = false
                 for i in 0..<SocketIOManager.sharedInstance.currUserObj.friends.count {
                     if (SocketIOManager.sharedInstance.currUserObj.friends[i].username == selectedUsername){
-                        areFriends = true
+                        selectedUser = SocketIOManager.sharedInstance.currUserObj.friends[i]
                     }
                 }
-                if (areFriends){
-                    btnOpTxt = "Remove"
-                }
-                else {
-                    btnOpTxt = "Add"
-                }
-                //also assign image
+
                 self.performSegue(withIdentifier: "manageFriendsFromListSegue", sender: self)
             }
             
@@ -245,14 +196,15 @@ class VotographriendViewController: UIViewController, UITableViewDataSource, UIT
             let addFriendVC = segue.destination as? AddFriendsViewController
             print("current size of users array before segue")
             print(Users.count)
-            addFriendVC?.users = self.Users
+            //addFriendVC?.users = self.Users
         }
         else if(segue.identifier == "manageFriendsFromListSegue"){
             let manageFriendshipVC = segue.destination as? ManageFriendshipsViewController
             manageFriendshipVC?.currUser = self.selectedUsername
             manageFriendshipVC?.opBtnTxt = self.btnOpTxt
             manageFriendshipVC?.userImg = selectedImg
-            manageFriendshipVC?.Users = self.Users
+            //manageFriendshipVC?.Users = self.Users
+            manageFriendshipVC?.selectedUser = self.selectedUser
             manageFriendshipVC?.fromFriendsPage = true
             //also set image
         }
