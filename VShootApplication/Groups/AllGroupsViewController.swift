@@ -50,6 +50,8 @@ class AllGroupsViewController: UIViewController, UITableViewDataSource, UITableV
                         for i in 0..<groupDict.count {
                             
                             let newgroup = Group.init(name: groupDict[i]["name"]!, creator: groupDict[i]["creator"]!, description: groupDict[i]["description"]!)
+                            print("printing a group that was added")
+                            newgroup.printGroup()
                             self.allGroups.append(newgroup)
                             self.GroupsTableView.reloadData()
                         }
@@ -139,8 +141,8 @@ class AllGroupsViewController: UIViewController, UITableViewDataSource, UITableV
             selectedGroup = allGroups[indexPath.row].name
             selectedGroupDescr = allGroups[indexPath.row].description
             selecterGroupCreator = allGroups[indexPath.row].creator
+            print("Creator is: " + selecterGroupCreator)
         }
-        
         //check if user is in group
         for i in 0..<SocketIOManager.sharedInstance.currUserObj.groups.count {
             print("'" + SocketIOManager.sharedInstance.currUserObj.groups[i].name + "'")

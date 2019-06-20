@@ -92,7 +92,7 @@ class InitiateVSViewController: UIViewController {
                             self.friends.append(friendDict[i]["username"]!)
                         }
                         if (self.friends.count == 0){ //no friends yet
-                            let alertController = UIAlertController(title: "It looks like you haven't added any phriends to have VShoots with yet. ", message:
+                            let alertController = UIAlertController(title: "It looks like you haven't added any friends to have VShoots with yet. ", message:
                                 nil, preferredStyle: UIAlertController.Style.alert)
                             alertController.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default,handler: {(action) in
                                  }))

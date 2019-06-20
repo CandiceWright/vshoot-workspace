@@ -90,6 +90,12 @@ class NewGroupViewController: UIViewController, UITextFieldDelegate, UITextViewD
                         alertController.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default,handler: {(action) in
                             //DataReloadManager.shared.firstVC.groupsTableView.reloadData()
                             DataReloadManager.shared.firstVC.groupsTableView.reloadData()
+                            if(DataReloadManager.shared.firstVC.groupsTableView.isHidden){
+                                DataReloadManager.shared.firstVC.groupsTableView.isHidden = false
+                                DataReloadManager.shared.firstVC.groupsTableView.rowHeight = UITableView.automaticDimension
+                                DataReloadManager.shared.firstVC.groupsTableView.estimatedRowHeight = 600
+                                DataReloadManager.shared.firstVC.groupsTableView.tableFooterView = UIView()
+                            }
                             self.dismiss(animated: true, completion: nil) }))
                         
                         self.present(alertController, animated: true, completion: nil)

@@ -173,18 +173,6 @@ class SignUpVC: UIViewController {
                                 self.performSegue(withIdentifier: "segueToOnboard", sender: self)
                             })
                             
-//                                SocketIOManager.sharedInstance.storeSocketRef(username: self.usernameStr, completion: {
-//                                let token = data
-//                                Auth.auth().signIn(withCustomToken: token, completion: {user, error in
-//                                    if let error = error {
-//                                        print("unable to sign in with error \(error)")
-//                                    }
-//                                })
-//                                UserDefaults.standard.set(self.usernameStr, forKey: "username")
-//                                UserDefaults.standard.set(true, forKey: "UserLoggedIn")
-//                                self.performSegue(withIdentifier: "segueToOnboard", sender: self)
-//
-//                            });
                         }
                         
                     case .failure(let error):

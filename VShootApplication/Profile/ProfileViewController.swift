@@ -313,12 +313,7 @@ class ProfileViewController: UIViewController {
     @objc func savePicUrltoDB(url:String){
         var geturl = SocketIOManager.sharedInstance.serverUrl + "/newProfilePic/"
         let info: [String:Any] = ["username": currUser as Any, "url": url as Any]
-//        do {
-//            let data = try JSONSerialization.data(withJSONObject: info, options: [])
-//            //dataString = String(data: data, encoding: .utf8)!
-//        } catch {
-//            print("error")
-//        }
+
         
         let url = URL(string: geturl);
         Alamofire.request(url!, method: .post, parameters: info, encoding: JSONEncoding.default, headers: ["Content-Type":"application/json"])
@@ -331,8 +326,33 @@ class ProfileViewController: UIViewController {
                         print("profile pic added successful")
                     
                 case .failure(let error):
-                    print("failure")
+                    print("failure trying to save pic to db")
                     print(error)
+                    //change profilepic in db to be none now that it is inconsistent with firebase
+                    var posturl = SocketIOManager.sharedInstance.serverUrl + "/newProfilePic/"
+                    let data: [String:Any] = ["username": self.currUser as Any, "url": "none" as Any]
+                    let url2 = URL(string: posturl);
+                    Alamofire.request(url2!, method: .post, parameters: data, encoding: JSONEncoding.default, headers: ["Content-Type":"application/json"])
+                        .validate(statusCode: 200..<201)
+                        .responseString{ (response) in
+                            print(response)
+                            switch response.result {
+                            case .success(let data):
+                                print(data)
+                                print("profile pic added successful")
+                                
+                            case .failure(let error):
+                                print("failure trying to change db to no pic")
+                                print(error)
+                                
+                                let alertController = UIAlertController(title: "Sorry!", message:
+                                    "Looks like something went wrong. Please try again.", preferredStyle: UIAlertController.Style.alert)
+                                alertController.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default,handler: {(action) in }))
+                                
+                                self.present(alertController, animated: true, completion: nil)
+                            }
+                    }
+                    
                     let alertController = UIAlertController(title: "Sorry!", message:
                         "Looks like something went wrong. Please try again.", preferredStyle: UIAlertController.Style.alert)
                     alertController.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default,handler: {(action) in }))

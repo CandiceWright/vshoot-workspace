@@ -26,14 +26,12 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
-        //self.UsernameField.layer.cornerRadius = CGFloat(Float(10.0))
-        //self.PasswordField.layer.cornerRadius = CGFloat(Float(10.0))
+        
         print("printing logged in status")
         //UserDefaults.standard.set(false, forKey: "UserLoggedIn")
         print(UserDefaults.standard.bool(forKey: "UserLoggedIn"))
         if(UserDefaults.standard.bool(forKey: "UserLoggedIn") == true){
-            //SwiftSpinner.show("One Sec! Automatically Logging You in...")
+            
             let username = UserDefaults.standard.string(forKey: "username")
             print("printing username is defaults")
             print(username)

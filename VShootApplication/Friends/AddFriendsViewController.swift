@@ -45,12 +45,38 @@ class AddFriendsViewController: UIViewController, UISearchBarDelegate, UITableVi
                     if let usernameDict = data as? [Dictionary<String,String>]{
                         print(usernameDict[0]["username"])
                         self.usersTable.isHidden = false
-                        for i in 0..<usernameDict.count {
-                            
-                            let newUser = User.init(username: usernameDict[i]["username"]!, imageUrl: usernameDict[i]["profilePic"]!)
-                            self.users.append(newUser)
-                            self.usersTable.reloadData()
+                        var idx:Int = 0
+                        while(idx != usernameDict.count){
+                            print("idx: ")
+                            print(idx)
+                            self.populateUser(data: usernameDict[idx], completion: {
+                                print("block complete")
+                                //idx += 1
+                            })
+                            idx += 1
                         }
+//                        for i in 0..<usernameDict.count {
+//                            print("username I am currently getting image for")
+//                            print(usernameDict[i]["username"]!)
+//                            let newUser = User.init(username: usernameDict[i]["username"]!, imageUrl: usernameDict[i]["profilePic"]!)
+//                            if (usernameDict[i]["profilePic"]! == "none"){
+//                                let noProfileImage: UIImage = UIImage(named: "profilepic_none")!
+//                                newUser.image = noProfileImage
+//                                self.users.append(newUser)
+//                                self.usersTable.reloadData()
+//
+//                            }
+//                            else {
+//                                ImageService.getImage(withURL: usernameDict[i]["profilePic"]!, completion: {image in
+//                                    print("got image")
+//                                    newUser.image = image
+//                                    self.users.append(newUser)
+//                                    self.usersTable.reloadData()
+//                                })
+//                            }
+//
+//                        }
+                        //self.usersTable.isHidden = false
                         print(self.users[0].username)
                     }
                     else {
@@ -76,6 +102,32 @@ class AddFriendsViewController: UIViewController, UISearchBarDelegate, UITableVi
         }
     }
     
+    func populateUser(data: Dictionary<String, String>, completion: @escaping () -> ()){
+        //for i in 0..<usernameDict.count {
+            print("username I am currently getting image for")
+            print(data["username"])
+            let newUser = User.init(username: data["username"]!, imageUrl: data["profilePic"]!)
+            if (data["profilePic"]! == "none"){
+                let noProfileImage: UIImage = UIImage(named: "profilepic_none")!
+                newUser.image = noProfileImage
+                self.users.append(newUser)
+                self.usersTable.reloadData()
+                completion()
+                
+            }
+            else {
+                ImageService.getImage(withURL: data["profilePic"]!, completion: {image in
+                    print("got image")
+                    newUser.image = image
+                    self.users.append(newUser)
+                    self.usersTable.reloadData()
+                    completion()
+                })
+            }
+            
+        //}
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if (searching){
             return filteredArray.count
@@ -91,33 +143,35 @@ class AddFriendsViewController: UIViewController, UISearchBarDelegate, UITableVi
         cell.delegate = self
         if (searching){
             cell.friendUsername.text = filteredArray[indexPath.row].username
-            let picUrl = filteredArray[indexPath.row].imageUrl
-            if (picUrl == "none"){
+            //let picUrl = filteredArray[indexPath.row].imageUrl
+            //if (picUrl == "none"){
                 let noProfileImage: UIImage = UIImage(named: "profilepic_none")!
-                cell.friendPic.image = noProfileImage
+                //cell.friendPic.image = noProfileImage
+            cell.friendPic.image = filteredArray[indexPath.row].image
                 cell.friendPic.layer.cornerRadius = cell.friendPic.frame.height/2
                 cell.friendPic.clipsToBounds = true
                 cell.friendPic.layer.masksToBounds = true
                 
-            }
-            else {
-                cell.setPic(url: picUrl)
-            }
+//            }
+//            else {
+//                cell.setPic(url: picUrl)
+//            }
         }
         else {
             cell.friendUsername.text = users[indexPath.row].username
             let picUrl = users[indexPath.row].imageUrl
-            if (picUrl == "none"){
+           // if (picUrl == "none"){
                 let noProfileImage: UIImage = UIImage(named: "profilepic_none")!
-                cell.friendPic.image = noProfileImage
+                //cell.friendPic.image = noProfileImage
+            cell.friendPic.image = users[indexPath.row].image
                 cell.friendPic.layer.cornerRadius = cell.friendPic.frame.height/2
                 cell.friendPic.clipsToBounds = true
                 cell.friendPic.layer.masksToBounds = true
-            }
-            else {
-                cell.setPic(url: picUrl)
-                
-            }
+            //}
+//            else {
+//                cell.setPic(url: picUrl)
+//
+//            }
         }
         
         return cell
