@@ -77,6 +77,7 @@ class GroupsViewController: UIViewController, UITableViewDataSource, UITableView
         print("printing selected group description")
         print(SocketIOManager.sharedInstance.currUserObj.groups[indexPath.row].description)
         selecterGroupCreator = SocketIOManager.sharedInstance.currUserObj.groups[indexPath.row].creator
+        //selecterGroupCreator = SocketIOManager.sharedInstance.currUserObj.username
         
         self.performSegue(withIdentifier: "ShowGroupDetailsFromMyGroups", sender: self)
         

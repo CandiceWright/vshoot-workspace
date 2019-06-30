@@ -157,6 +157,8 @@ class VmodelViewController: UIViewController {
         if (room != nil){
            self.room!.disconnect()
         }
+        
+        UserDefaults.standard.set(false, forKey: "freeTrialAvailable")
 
         //dismiss(animated: true, completion: nil)
         self.performSegue(withIdentifier: "backToTBFromVmodel", sender: self)
@@ -368,6 +370,7 @@ class VmodelViewController: UIViewController {
     
     @IBAction func disconnect(_ sender: Any) {
         self.room!.disconnect()
+        UserDefaults.standard.set(false, forKey: "freeTrialAvailable")
         logMessage(messageText: "Attempting to disconnect from room \(room!.name)")
         SocketIOManager.sharedInstance.endVShoot(vsId: self.vshootId, endInitiator: self.title!)
 //        let storyboard = UIStoryboard(name: "Main", bundle: nil);

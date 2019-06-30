@@ -89,6 +89,7 @@ class ProfileUsernameChangeViewController: UIViewController {
                         if (data == "username updated successfully"){
                             SocketIOManager.sharedInstance.currUserObj.username = username!
                             SocketIOManager.sharedInstance.currUser = username!
+                            UserDefaults.standard.set(username!, forKey: "username")
                             NotificationCenter.default.post(name: NSNotification.Name(rawValue: "refresh"), object: nil)
                             self.dismiss(animated: true, completion: nil)
                             

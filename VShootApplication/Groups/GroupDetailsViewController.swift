@@ -108,6 +108,7 @@ class GroupDetailsViewController: UIViewController, UITableViewDataSource, UITab
     }
     
     @IBAction func joinGroup(_ sender: Any) {
+        self.joinBtn.isEnabled = false
         var posturl = SocketIOManager.sharedInstance.serverUrl + "/groups/members"
         //was "username"
         let info: [String:Any] = ["userId": SocketIOManager.sharedInstance.currUserObj.userId as Any, "group": nameLabel.text as Any]
@@ -134,6 +135,7 @@ class GroupDetailsViewController: UIViewController, UITableViewDataSource, UITab
                         let alertController = UIAlertController(title: "Great!", message:
                             "You're In!", preferredStyle: UIAlertController.Style.alert)
                         alertController.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default,handler: {(action) in
+                            self.joinBtn.isEnabled = true
                             self.joinBtn.isHidden = true
                             self.leaveBtn.isHidden = false
                             self.chatBtn.isHidden = false
@@ -151,7 +153,9 @@ class GroupDetailsViewController: UIViewController, UITableViewDataSource, UITab
                     print(error)
                     let alertController = UIAlertController(title: "Sorry!", message:
                         "Looks like something went wrong. Please try again.", preferredStyle: UIAlertController.Style.alert)
-                    alertController.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default,handler: {(action) in }))
+                    alertController.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default,handler: {(action) in
+                        self.joinBtn.isEnabled = true
+                    }))
                     
                     self.present(alertController, animated: true, completion: nil)
                     
@@ -160,6 +164,7 @@ class GroupDetailsViewController: UIViewController, UITableViewDataSource, UITab
     }
     
     @IBAction func leaveGroup(_ sender: Any) {
+        self.leaveBtn.isEnabled = false
         //make request to remove friend
         let posturl = SocketIOManager.sharedInstance.serverUrl + "/groups/members/leave"
         //let currU = SocketIOManager.sharedInstance.currUser
@@ -195,7 +200,7 @@ class GroupDetailsViewController: UIViewController, UITableViewDataSource, UITab
                     SocketIOManager.sharedInstance.currUserObj.groups.remove(at: removedUserIndex);
                     print("groups count after removing")
                     print(SocketIOManager.sharedInstance.currUserObj.friends.count)
-                    
+                    self.leaveBtn.isEnabled = true
                     self.leaveBtn.isHidden = true
                     self.chatBtn.isHidden = true
                     self.joinBtn.isHidden = false
@@ -220,7 +225,9 @@ class GroupDetailsViewController: UIViewController, UITableViewDataSource, UITab
                     
                     let alertController = UIAlertController(title: "Sorry!", message:
                         "Looks like something went wrong. Please try again.", preferredStyle: UIAlertController.Style.alert)
-                    alertController.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default,handler: {(action) in }))
+                    alertController.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default,handler: {(action) in
+                        self.leaveBtn.isEnabled = true
+                    }))
                     
                     self.present(alertController, animated: true, completion: nil)
                 }

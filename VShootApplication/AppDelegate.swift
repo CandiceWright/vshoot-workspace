@@ -21,6 +21,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         print("I am in app  delegate")
         //SocketIOManager.sharedInstance.establishConnection()
         FirebaseApp.configure()
+        IAPService.shared.getProducts()
+        IAPService.shared.restore()
         
         // Define the custom actions.
         let acceptAction = UNNotificationAction(identifier: "ACCEPT_ACTION",
@@ -35,10 +37,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                                    intentIdentifiers: [],
                                    hiddenPreviewsBodyPlaceholder: "",
                                    options: .customDismissAction)
+        // Define the custom actions.
+        let viewAction = UNNotificationAction(identifier: "ACCEPT_ACTION",
+                                                title: "Accept",
+                                                options: .foreground)
+
+        // Define the notification type
+        let MsgCat = UNNotificationCategory(identifier: "New_Msg",
+                                                  actions: [viewAction],
+                                                  intentIdentifiers: [],
+                                                  hiddenPreviewsBodyPlaceholder: "",
+                                                  options: .customDismissAction)
         let center = UNUserNotificationCenter.current()
         center.delegate = self
         center.requestAuthorization(options: [.badge, .alert, .sound], completionHandler: {(granted, error) in })
-        center.setNotificationCategories([vshootReqCat])
+        center.setNotificationCategories([vshootReqCat, MsgCat])
         application.registerForRemoteNotifications()
         return true
     }
@@ -92,6 +105,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         }
         let token = tokenParts.joined()
         print("Device Token: \(token)")
+        
+        //store with socket io manager, but also store in db
+        SocketIOManager.sharedInstance.deviceToken = token
+        
         //let deviceTokenString = deviceToken.reduce("", {$0 + String(format: "%02X", $1)})
         //print("success in registering for remote notifications with token \(deviceTokenString)")
         

@@ -124,7 +124,7 @@ class ChatroomViewController: MSGMessengerViewController {
                         while(idx != messageDict.count){
                             print("idx: ")
                             print(idx)
-                            self.showMessages(data: messageDict[idx], completion: {
+                            self.showMessages(id: idx, data: messageDict[idx], completion: {
                                 print("block complete")
                                 //idx += 1
                             })
@@ -157,7 +157,7 @@ class ChatroomViewController: MSGMessengerViewController {
         
     }
     
-    func showMessages(data: Dictionary<String, String>, completion: @escaping () -> ()){
+    func showMessages(id: Int, data: Dictionary<String, String>, completion: @escaping () -> ()){
         print(data["sender"])
         var isSender = false;
         if (data["sender"] == SocketIOManager.sharedInstance.currUserObj.username){
@@ -168,7 +168,7 @@ class ChatroomViewController: MSGMessengerViewController {
             profilePic = UIImage(named: "profilepic_none")!
             let chatUser = ChatUser(displayName: data["sender"]!, avatar: profilePic, avatarUrl: nil, isSender: isSender)
             let body: MSGMessageBody = .text(data["message"]!)
-            let message = MSGMessage(id: 1, body: body, user: chatUser, sentAt: Date())
+            let message = MSGMessage(id: id, body: body, user: chatUser, sentAt: Date())
             print("adding message")
             print(data["message"]!)
             self.messages.append([message])
@@ -183,7 +183,7 @@ class ChatroomViewController: MSGMessengerViewController {
                 profilePic = image!
                 let chatUser = ChatUser(displayName: data["sender"]!, avatar: profilePic, avatarUrl: nil, isSender: isSender)
                 let body: MSGMessageBody = .text(data["message"]!)
-                let message = MSGMessage(id: 1, body: body, user: chatUser, sentAt: Date())
+                let message = MSGMessage(id: id, body: body, user: chatUser, sentAt: Date())
                 print("adding message")
                 print(data["message"]!)
                 self.messages.append([message])

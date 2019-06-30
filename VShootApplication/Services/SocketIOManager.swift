@@ -27,6 +27,7 @@ class SocketIOManager: NSObject {
     var currUserObj:User = User(username: "",imageUrl: "")
     var vsRequestor:String = "";
     var deviceToken = ""
+    var purchases = Dictionary<String,Bool>()
     
     
     override init() {
@@ -170,6 +171,8 @@ class SocketIOManager: NSObject {
     
     func loadFriends(username: String, completion: @escaping () -> ()) {
         let currUser = SocketIOManager.sharedInstance.currUser
+        //let currUser = currUserObj.username
+        print("getting friends for " + currUser)
         let geturl = SocketIOManager.sharedInstance.serverUrl + "/friends/" + currUser
         let url = URL(string: geturl)
         Alamofire.request(url!)
@@ -275,14 +278,16 @@ class SocketIOManager: NSObject {
                             SocketIOManager.sharedInstance.currUserObj.imageUrl = picurl
                             //download this pic
                             ImageService.getImage(withURL: picurl){ image in
-                                SocketIOManager.sharedInstance.currUserObj.image = image
+                                //SocketIOManager.sharedInstance.currUserObj.image = image
+                                self.currUserObj.image = image
                             }
                         }
                         else {
                             print("no profile pic")
                             SocketIOManager.sharedInstance.currUserObj.imageUrl = "none"
                             let noProfileImage: UIImage = UIImage(named: "profilepic_none")!
-                                SocketIOManager.sharedInstance.currUserObj.image = noProfileImage
+                                //SocketIOManager.sharedInstance.currUserObj.image = noProfileImage
+                            self.currUserObj.image = noProfileImage
                         }
                     }
                     else {
@@ -364,9 +369,11 @@ class SocketIOManager: NSObject {
     
     func storeSocketRef(username: String, completion: @escaping () -> ()) {
         print("trying to store reference")
-        currUserObj.username = username
-        self.currUser = username;
-        currUserObj.image = nil
+        //currUserObj.username = username
+        SocketIOManager.sharedInstance.currUserObj.username = username
+        //self.currUser = username;
+        SocketIOManager.sharedInstance.currUser = username
+        //currUserObj.image = nil
         print("username passed to storeSocketRef " + username)
         socket.emit("join", username);
         completion()
