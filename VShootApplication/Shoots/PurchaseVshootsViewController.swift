@@ -12,10 +12,12 @@ class PurchaseVshootsViewController: UIViewController {
 
     @IBOutlet weak var purchaseBtn: UIButton!
     @IBOutlet weak var cancelBtn: UIButton!
+    @IBOutlet weak var pView: UIView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.purchaseBtn.layer.cornerRadius = CGFloat(Float(4.0))
+        self.purchaseBtn.layer.cornerRadius = CGFloat(Float(6.0))
+        self.pView.layer.cornerRadius = CGFloat(Float(7.0))
         IAPService.shared.purchaseController = self
     }
     

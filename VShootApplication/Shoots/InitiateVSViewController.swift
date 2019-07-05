@@ -26,6 +26,8 @@ class InitiateVSViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        //UserDefaults.standard.removeObject(forKey: "freeTrialAvailable")
+        
         if(UserDefaults.standard.object(forKey: "freeTrialAvailable") == nil){
             startVSButton.setTitle("Try Your First VShoot Free!", for: UIControl.State.normal)
             
@@ -78,7 +80,7 @@ class InitiateVSViewController: UIViewController {
     }
     
     @IBAction func startVS(_ sender: Any) {
-        if (SocketIOManager.sharedInstance.purchases.keys.contains("com.thevshoot.vshootapp.vshootfuncpurchase") || UserDefaults.standard.object(forKey: "freeTrialAvailable") == nil){ //it is purchased
+        if (SocketIOManager.sharedInstance.purchases.keys.contains("com.thevshoot.vshootapp.vshootfuncpurchase") || UserDefaults.standard.object(forKey: "freeTrialAvailable") == nil){ //it is purchased or free trial
             //populate friends list
             self.friends.removeAll()
             let currUser = SocketIOManager.sharedInstance.currUser
