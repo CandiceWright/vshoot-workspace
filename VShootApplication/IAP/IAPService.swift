@@ -8,10 +8,11 @@
 
 import Foundation
 import StoreKit
+import Alamofire
 
 class IAPService: NSObject {
     private override init() {}
-    
+    var dataString = ""
     static let shared = IAPService()
     var products = [SKProduct]()
     var paymentQueue = SKPaymentQueue.default()
@@ -39,6 +40,34 @@ class IAPService: NSObject {
     
     func addPurchase(prodID: String){
         SocketIOManager.sharedInstance.purchases[prodID] =  true
+        //record purchase in db
+        var posturl = SocketIOManager.sharedInstance.serverUrl + "/vshoots/purchases"
+        
+        let info: [String:Any] = ["username": SocketIOManager.sharedInstance.currUserObj.username as Any]
+        
+        do {
+            let data = try JSONSerialization.data(withJSONObject: info, options: [])
+            dataString = String(data: data, encoding: .utf8)!
+        } catch {
+            print("error")
+        }
+        
+        let url = URL(string: posturl);
+        
+        Alamofire.request(url!, method: .post, parameters: info, encoding: JSONEncoding.default, headers: ["Content-Type":"application/json"])
+            .validate(statusCode: 200..<201)
+            .responseString{ (response) in
+                print(response)
+                switch response.result {
+                case .success(let data):
+                    print("successfully recorded purchase")
+                    
+                case .failure(let error):
+                    print("failure")
+                    print(error)
+                    
+                }
+        }
     }
 }
 
