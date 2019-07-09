@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>917669705814-vlboerh97u6d5e7foi98rvvd8j5r81q8.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.917669705814-vlboerh97u6d5e7foi98rvvd8j5r81q8</string>
+	<key>API_KEY</key>
+	<string>AIzaSyCNbPHgOOT9MkA9KvU8tB-Ep87j5XvTmkw</string>
+	<key>GCM_SENDER_ID</key>
+	<string>917669705814</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.thevshoot.vshootapp</string>
+	<key>PROJECT_ID</key>
+	<string>vs-app-5ce8f</string>
+	<key>STORAGE_BUCKET</key>
+	<string>vs-app-5ce8f.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:917669705814:ios:cd50ee97f27f2013</string>
+	<key>DATABASE_URL</key>
+	<string>https://vs-app-5ce8f.firebaseio.com</string>
+</dict>
+</plist>
