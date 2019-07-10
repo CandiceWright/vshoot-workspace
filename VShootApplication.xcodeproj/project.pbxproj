@@ -143,7 +143,7 @@
 		384CBE63210CF2E800E26A0C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		384CBE74210D891A00E26A0C /* HomeScreenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreenViewController.swift; sourceTree = "<group>"; };
 		384CBE76210DFDD300E26A0C /* SignUpVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpVC.swift; sourceTree = "<group>"; };
-		384FCB6C225332B200BF8DEB /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
+		384FCB6C225332B200BF8DEB /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		3860143C21C4D84B001CD36E /* ManageFriendshipsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageFriendshipsViewController.swift; sourceTree = "<group>"; };
 		3864480F21BDB52E0021F86E /* VotographriendViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VotographriendViewController.swift; sourceTree = "<group>"; };
 		3864481121BDB6F00021F86E /* FriendTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendTableViewCell.swift; sourceTree = "<group>"; };
