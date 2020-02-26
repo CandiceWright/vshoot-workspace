@@ -27,7 +27,7 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        print("printing logged in status")
+        //print("printing logged in status")
         //UserDefaults.standard.set(false, forKey: "UserLoggedIn")
         print(UserDefaults.standard.bool(forKey: "UserLoggedIn"))
         if(UserDefaults.standard.bool(forKey: "UserLoggedIn") == true){
