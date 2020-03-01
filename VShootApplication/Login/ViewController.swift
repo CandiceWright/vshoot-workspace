@@ -28,7 +28,7 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         
         //print("printing logged in status")
-        //UserDefaults.standard.set(false, forKey: "UserLoggedIn")
+        UserDefaults.standard.set(false, forKey: "UserLoggedIn")
         print(UserDefaults.standard.bool(forKey: "UserLoggedIn"))
         if(UserDefaults.standard.bool(forKey: "UserLoggedIn") == true){
             
@@ -199,9 +199,9 @@ class ViewController: UIViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if (segue.identifier == "segueToHomeFromLogin"){
             let barViewControllers = segue.destination as! UITabBarController
-            barViewControllers.selectedIndex = 1
+            barViewControllers.selectedIndex = 0
             
-             let VSViewController = barViewControllers.viewControllers?[1] as! InitiateVSViewController
+             let VSViewController = barViewControllers.viewControllers?[0] as! InitiateVSViewController
             VSViewController.username = UsernameField.text!
 //            let FriendsViewController = barViewControllers.viewControllers?[0] as! FriendsViewController
 //            FriendsViewController.username = UsernameField.text!

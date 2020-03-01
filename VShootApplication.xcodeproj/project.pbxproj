@@ -44,6 +44,7 @@
 		3827894E22C85F0C005E4E70 /* PurchaseVshootsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3827894D22C85F0C005E4E70 /* PurchaseVshootsViewController.swift */; };
 		382F3E87221CC7270065F62C /* InformationResetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 382F3E86221CC7270065F62C /* InformationResetViewController.swift */; };
 		382F3E89221CD33E0065F62C /* UsernameRecoveryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 382F3E88221CD33E0065F62C /* UsernameRecoveryViewController.swift */; };
+		382F985A240B46F7005F9E2C /* VShootOptionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 382F9859240B46F7005F9E2C /* VShootOptionViewController.swift */; };
 		384024A122A8AEE4004CD06E /* DataReloadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 384024A022A8AEE4004CD06E /* DataReloadManager.swift */; };
 		3840ED68216F400700E003CA /* SocketIOManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3840ED67216F400700E003CA /* SocketIOManager.swift */; };
 		384CBE4D210CF2E700E26A0C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 384CBE4C210CF2E700E26A0C /* AppDelegate.swift */; };
@@ -129,6 +130,7 @@
 		3827894D22C85F0C005E4E70 /* PurchaseVshootsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchaseVshootsViewController.swift; sourceTree = "<group>"; };
 		382F3E86221CC7270065F62C /* InformationResetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InformationResetViewController.swift; sourceTree = "<group>"; };
 		382F3E88221CD33E0065F62C /* UsernameRecoveryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsernameRecoveryViewController.swift; sourceTree = "<group>"; };
+		382F9859240B46F7005F9E2C /* VShootOptionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VShootOptionViewController.swift; sourceTree = "<group>"; };
 		384024A022A8AEE4004CD06E /* DataReloadManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataReloadManager.swift; sourceTree = "<group>"; };
 		3840ED67216F400700E003CA /* SocketIOManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocketIOManager.swift; sourceTree = "<group>"; };
 		384CBE49210CF2E700E26A0C /* VShootApplication.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VShootApplication.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -276,6 +278,7 @@
 				381A608821F6AFE5001F2C8C /* VSShootEntranceViewController.swift */,
 				3867BD9921F4FC240054DB60 /* PhotoProcessingViewController.swift */,
 				3827894D22C85F0C005E4E70 /* PurchaseVshootsViewController.swift */,
+				382F9859240B46F7005F9E2C /* VShootOptionViewController.swift */,
 			);
 			path = Shoots;
 			sourceTree = "<group>";
@@ -477,7 +480,7 @@
 				TargetAttributes = {
 					384CBE48210CF2E700E26A0C = {
 						CreatedOnToolsVersion = 9.2;
-						LastSwiftMigration = 1000;
+						LastSwiftMigration = 1130;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
@@ -493,7 +496,7 @@
 					};
 					384CBE5C210CF2E800E26A0C = {
 						CreatedOnToolsVersion = 9.2;
-						LastSwiftMigration = 1000;
+						LastSwiftMigration = 1130;
 						ProvisioningStyle = Automatic;
 						TestTargetID = 384CBE48210CF2E700E26A0C;
 					};
@@ -631,6 +634,7 @@
 				382596EE21E44ED300008311 /* MainUser.swift in Sources */,
 				38053982229F906F0009CD49 /* MyGroupsTableViewCell.swift in Sources */,
 				3821E8202217560900636034 /* WalkthroughContentViewController.swift in Sources */,
+				382F985A240B46F7005F9E2C /* VShootOptionViewController.swift in Sources */,
 				388F36A92180010000C9C306 /* VmodelViewController.swift in Sources */,
 				3805397E22991E6B0009CD49 /* GroupTableViewCell.swift in Sources */,
 				384CBE4F210CF2E700E26A0C /* ViewController.swift in Sources */,
@@ -858,7 +862,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.thevshoot.vshootapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
@@ -881,7 +885,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.thevshoot.vshootapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
@@ -897,7 +901,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = wright.candice.VShootApplicationTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/VShootApplication.app/VShootApplication";
 			};
@@ -914,7 +918,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = wright.candice.VShootApplicationTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/VShootApplication.app/VShootApplication";
 			};
