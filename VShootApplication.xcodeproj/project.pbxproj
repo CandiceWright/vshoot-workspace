@@ -45,6 +45,10 @@
 		382F3E87221CC7270065F62C /* InformationResetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 382F3E86221CC7270065F62C /* InformationResetViewController.swift */; };
 		382F3E89221CD33E0065F62C /* UsernameRecoveryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 382F3E88221CD33E0065F62C /* UsernameRecoveryViewController.swift */; };
 		382F985A240B46F7005F9E2C /* VShootOptionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 382F9859240B46F7005F9E2C /* VShootOptionViewController.swift */; };
+		382F985C240C0B5B005F9E2C /* VModelProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 382F985B240C0B5B005F9E2C /* VModelProfileViewController.swift */; };
+		382F985E240C0BE3005F9E2C /* VotographerProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 382F985D240C0BE3005F9E2C /* VotographerProfileViewController.swift */; };
+		382F9862240C10A6005F9E2C /* NavModelProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 382F9861240C10A6005F9E2C /* NavModelProfileViewController.swift */; };
+		382F9864240C111B005F9E2C /* NavVotographerProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 382F9863240C111B005F9E2C /* NavVotographerProfileViewController.swift */; };
 		384024A122A8AEE4004CD06E /* DataReloadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 384024A022A8AEE4004CD06E /* DataReloadManager.swift */; };
 		3840ED68216F400700E003CA /* SocketIOManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3840ED67216F400700E003CA /* SocketIOManager.swift */; };
 		384CBE4D210CF2E700E26A0C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 384CBE4C210CF2E700E26A0C /* AppDelegate.swift */; };
@@ -131,6 +135,10 @@
 		382F3E86221CC7270065F62C /* InformationResetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InformationResetViewController.swift; sourceTree = "<group>"; };
 		382F3E88221CD33E0065F62C /* UsernameRecoveryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsernameRecoveryViewController.swift; sourceTree = "<group>"; };
 		382F9859240B46F7005F9E2C /* VShootOptionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VShootOptionViewController.swift; sourceTree = "<group>"; };
+		382F985B240C0B5B005F9E2C /* VModelProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VModelProfileViewController.swift; sourceTree = "<group>"; };
+		382F985D240C0BE3005F9E2C /* VotographerProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VotographerProfileViewController.swift; sourceTree = "<group>"; };
+		382F9861240C10A6005F9E2C /* NavModelProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavModelProfileViewController.swift; sourceTree = "<group>"; };
+		382F9863240C111B005F9E2C /* NavVotographerProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavVotographerProfileViewController.swift; sourceTree = "<group>"; };
 		384024A022A8AEE4004CD06E /* DataReloadManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataReloadManager.swift; sourceTree = "<group>"; };
 		3840ED67216F400700E003CA /* SocketIOManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocketIOManager.swift; sourceTree = "<group>"; };
 		384CBE49210CF2E700E26A0C /* VShootApplication.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VShootApplication.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -261,7 +269,6 @@
 				3864481321BE59090021F86E /* AddFriendsViewController.swift */,
 				3864481A21BF79B20021F86E /* AddFriendTableViewCell.swift */,
 				3860143C21C4D84B001CD36E /* ManageFriendshipsViewController.swift */,
-				3805396B2293AD9F0009CD49 /* ParentViewController.swift */,
 				3805396F2293C8C10009CD49 /* NavFriendsViewController.swift */,
 				38053971229674090009CD49 /* NavGroupsViewController.swift */,
 			);
@@ -307,6 +314,11 @@
 				381C936A21E273FC001CECC2 /* ProfileViewController.swift */,
 				3817570F21FC529200797C4B /* ProfilePreferencesViewController.swift */,
 				3817571121FC66C400797C4B /* VSPreferenceHelpViewController.swift */,
+				382F985B240C0B5B005F9E2C /* VModelProfileViewController.swift */,
+				382F985D240C0BE3005F9E2C /* VotographerProfileViewController.swift */,
+				3805396B2293AD9F0009CD49 /* ParentViewController.swift */,
+				382F9861240C10A6005F9E2C /* NavModelProfileViewController.swift */,
+				382F9863240C111B005F9E2C /* NavVotographerProfileViewController.swift */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -642,6 +654,7 @@
 				381C936721D5E52D001CECC2 /* InitiateVSViewController.swift in Sources */,
 				3817571021FC529200797C4B /* ProfilePreferencesViewController.swift in Sources */,
 				3805396C2293AD9F0009CD49 /* ParentViewController.swift in Sources */,
+				382F9862240C10A6005F9E2C /* NavModelProfileViewController.swift in Sources */,
 				380539802299A6C60009CD49 /* GroupDetailsViewController.swift in Sources */,
 				3805397C229919280009CD49 /* Group.swift in Sources */,
 				384CBE4D210CF2E700E26A0C /* AppDelegate.swift in Sources */,
@@ -662,10 +675,12 @@
 				388D9C50223EC21E00B4D905 /* AboutVSViewController.swift in Sources */,
 				3840ED68216F400700E003CA /* SocketIOManager.swift in Sources */,
 				3805396E2293B77C0009CD49 /* GroupsViewController.swift in Sources */,
+				382F985C240C0B5B005F9E2C /* VModelProfileViewController.swift in Sources */,
 				388F36AE218009E400C9C306 /* SettingsTableViewController.swift in Sources */,
 				3821E82622175D4D00636034 /* WalkthroughViewController.swift in Sources */,
 				3821E822221756F400636034 /* WalkthroughPageViewController.swift in Sources */,
 				3864481B21BF79B20021F86E /* AddFriendTableViewCell.swift in Sources */,
+				382F9864240C111B005F9E2C /* NavVotographerProfileViewController.swift in Sources */,
 				3827894A22BE9F24005E4E70 /* IAPProduct.swift in Sources */,
 				3864481421BE59090021F86E /* AddFriendsViewController.swift in Sources */,
 				38053974229675FD0009CD49 /* GroupsTableViewController.swift in Sources */,
@@ -683,6 +698,7 @@
 				3817570E21FC22AF00797C4B /* ModalListener.swift in Sources */,
 				388F36AF218009E400C9C306 /* Settings.swift in Sources */,
 				382F3E89221CD33E0065F62C /* UsernameRecoveryViewController.swift in Sources */,
+				382F985E240C0BE3005F9E2C /* VotographerProfileViewController.swift in Sources */,
 				380539702293C8C10009CD49 /* NavFriendsViewController.swift in Sources */,
 				380539782297B9B00009CD49 /* NewGroupViewController.swift in Sources */,
 				38053984229F9F480009CD49 /* GroupMemberTableViewCell.swift in Sources */,
