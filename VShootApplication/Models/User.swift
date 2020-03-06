@@ -19,6 +19,7 @@ class User {
     var friends = [User]()
     var groups = [Group]()
     var userId: String = ""
+    var vshoots:[VShoot] = [VShoot]()
     //var userId = 0
     
     init(username:String, imageUrl:String) {

@@ -34,8 +34,12 @@ class ProfileViewController: UIViewController {
         //make profile pic round
         //profilePic.layer.borderColor = UIColor.black.cgColor
         
+        //we should already have an image
+        self.profilePic.image = SocketIOManager.sharedInstance.currUserObj.image
         self.profilePic.layer.cornerRadius = self.profilePic.frame.height/2
         self.profilePic.clipsToBounds = true
+        print(self.profilePic.frame.height);
+        print(self.profilePic.frame.width);
         
         //allow image to be clickable
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(changeProfilePic))
@@ -57,196 +61,51 @@ class ProfileViewController: UIViewController {
         self.currUser = SocketIOManager.sharedInstance.currUser
         self.username.text = currUser
         
+        //get userId incase they wwant to change their profile pic
         if(SocketIOManager.sharedInstance.currUserObj.userId == ""){
-            print("need to get userID")
-            let geturl = SocketIOManager.sharedInstance.serverUrl + "/user/" + currUser
-            let url = URL(string: geturl)
-            Alamofire.request(url!)
-                .validate(statusCode: 200..<201)
-                .responseString{ (response) in
-                    switch response.result {
-                    case .success(let data):
-                        print(data)
-                        if let userId = data as? String {
-                            SocketIOManager.sharedInstance.currUserObj.userId = userId
-                            print("successfully got userid")
-                        }
-                        else {
-                            print("cant convert userId")
-                            
-                            let alertController = UIAlertController(title: "Sorry!", message:
-                                "Looks like something went wrong. Please try again.", preferredStyle: UIAlertController.Style.alert)
-                            alertController.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default,handler: {(action) in }))
-                            
-                            self.present(alertController, animated: true, completion: nil)
-                        }
-                        
-                    case .failure(let error):
-                        print("error")
-                        print(error)
-                        let alertController = UIAlertController(title: "Sorry!", message:
-                            "Looks like something went wrong. Please try again.", preferredStyle: UIAlertController.Style.alert)
-                        alertController.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default,handler: {(action) in }))
-                        
-                        self.present(alertController, animated: true, completion: nil)
-                        
-                    }
+            if (UserDefaults.standard.string(forKey: "userId") != nil){
+                SocketIOManager.sharedInstance.currUserObj.userId = UserDefaults.standard.string(forKey: "userId")!
+                
             }
-        }
-        
-        if (SocketIOManager.sharedInstance.currUserObj.image == nil){
-            //get userId for profile picture
-            print("need to get image")
-            
-            let geturl2 = SocketIOManager.sharedInstance.serverUrl + "/user/profilePic/" + self.currUser
-            let url2 = URL(string: geturl2)
-            Alamofire.request(url2!)
-                .validate(statusCode: 200..<201)
-                .responseString{ (response) in
-                    print(response)
-                    switch response.result {
-                    case .success(let data):
-                        print("successfully got image url")
-                        print(data)
-                        if let picurl = data as? String {
-                            print(picurl)
-                            if (picurl != "no profile pic"){
-                                //download this pic
-                                ImageService.getImage(withURL: picurl){ image in
-                                    self.profilePic.image = image
-                                    
-                                    self.profilePic.layer.cornerRadius = self.profilePic.frame.height/2
-                                    self.profilePic.clipsToBounds = true
-                                    print(self.profilePic.frame.height);
-                                    print(self.profilePic.frame.width);
-                                    SocketIOManager.sharedInstance.currUserObj.image = image
-                                }
+            else {
+                //need to get userId from server
+                print("need to get userID")
+                let geturl = SocketIOManager.sharedInstance.serverUrl + "/user/" + currUser
+                let url = URL(string: geturl)
+                Alamofire.request(url!)
+                    .validate(statusCode: 200..<201)
+                    .responseString{ (response) in
+                        switch response.result {
+                        case .success(let data):
+                            print(data)
+                            if let userId = data as? String {
+                               print("successfully got userid")
+                             SocketIOManager.sharedInstance.currUserObj.userId = userId
+                             UserDefaults.standard.set(userId, forKey: "userId")
                             }
                             else {
-                                print("no profile pic")
-                                let noProfileImage: UIImage = UIImage(named: "profilepic_none")!
-                                self.profilePic.image = noProfileImage
-                                self.profilePic.layer.cornerRadius = self.profilePic.frame.height/2
-                                self.profilePic.clipsToBounds = true
+                                print("cant convert userId")
                                 
-                                print(self.profilePic.frame.height);
-                                print(self.profilePic.frame.width);
-                                SocketIOManager.sharedInstance.currUserObj.image = noProfileImage
+                                let alertController = UIAlertController(title: "Sorry!", message:
+                                    "Looks like something went wrong. Please try again.", preferredStyle: UIAlertController.Style.alert)
+                                alertController.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default,handler: {(action) in }))
+                                
+                                self.present(alertController, animated: true, completion: nil)
                             }
-                        }
-                        else {
-                            print("cant convert")
+                            
+                        case .failure(let error):
+                            print("error")
+                            print(error)
                             let alertController = UIAlertController(title: "Sorry!", message:
                                 "Looks like something went wrong. Please try again.", preferredStyle: UIAlertController.Style.alert)
                             alertController.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default,handler: {(action) in }))
                             
                             self.present(alertController, animated: true, completion: nil)
+                            
                         }
-                        
-                        
-                    case .failure(let error):
-                        
-                        print(error)
-                        let alertController = UIAlertController(title: "Sorry!", message:
-                            "Looks like something went wrong. Please try again.", preferredStyle: UIAlertController.Style.alert)
-                        alertController.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default,handler: {(action) in }))
-                        
-                        self.present(alertController, animated: true, completion: nil)
-                    }
+                }
             }
-            
-//            let geturl = SocketIOManager.sharedInstance.serverUrl + "/user/" + currUser
-//            let url = URL(string: geturl)
-//            Alamofire.request(url!)
-//                .validate(statusCode: 200..<201)
-//                .responseString{ (response) in
-//                    switch response.result {
-//                    case .success(let data):
-//                        print(data)
-//                        if let userId = data as? String {
-//                            self.userId = userId
-//                            print("successfully got userid")
-//                            print(self.userId)
-//                            //get profile pic url
-//                            let geturl2 = SocketIOManager.sharedInstance.serverUrl + "/user/profilePic/" + self.currUser
-//                            let url2 = URL(string: geturl2)
-//                            Alamofire.request(url2!)
-//                                .validate(statusCode: 200..<201)
-//                                .responseString{ (response) in
-//                                    print(response)
-//                                    switch response.result {
-//                                    case .success(let data):
-//                                        print("successfully got image url")
-//                                        print(data)
-//                                        if let picurl = data as? String {
-//                                            print(picurl)
-//                                            if (picurl != "no profile pic"){
-//                                                //download this pic
-//                                                ImageService.getImage(withURL: picurl){ image in
-//                                                    self.profilePic.image = image
-//
-//                                                    self.profilePic.layer.cornerRadius = self.profilePic.frame.height/2
-//                                                    self.profilePic.clipsToBounds = true
-//                                                    print(self.profilePic.frame.height);
-//                                                    print(self.profilePic.frame.width);
-//                                                    SocketIOManager.sharedInstance.currUserObj.image = image
-//                                                }
-//                                            }
-//                                            else {
-//                                                print("no profile pic")
-//                                                let noProfileImage: UIImage = UIImage(named: "profilepic_none")!
-//                                                self.profilePic.image = noProfileImage
-//                                                self.profilePic.layer.cornerRadius = self.profilePic.frame.height/2
-//                                                self.profilePic.clipsToBounds = true
-//
-//                                                print(self.profilePic.frame.height);
-//                                                print(self.profilePic.frame.width);
-//                                                SocketIOManager.sharedInstance.currUserObj.image = noProfileImage
-//                                            }
-//                                        }
-//                                        else {
-//                                            print("cant convert")
-//                                            let alertController = UIAlertController(title: "Sorry!", message:
-//                                                "Looks like something went wrong. Please try again.", preferredStyle: UIAlertController.Style.alert)
-//                                            alertController.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default,handler: {(action) in }))
-//
-//                                            self.present(alertController, animated: true, completion: nil)
-//                                        }
-//
-//
-//                                    case .failure(let error):
-//
-//                                        print(error)
-//                                        let alertController = UIAlertController(title: "Sorry!", message:
-//                                            "Looks like something went wrong. Please try again.", preferredStyle: UIAlertController.Style.alert)
-//                                        alertController.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default,handler: {(action) in }))
-//
-//                                        self.present(alertController, animated: true, completion: nil)
-//                                    }
-//                            }
-//                        }
-//                        else {
-//                            print("cant convert")
-//                        }
-//
-//                    case .failure(let error):
-//                        print(error)
-//                        let alertController = UIAlertController(title: "Sorry!", message:
-//                            "Looks like something went wrong. Please try again.", preferredStyle: UIAlertController.Style.alert)
-//                        alertController.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default,handler: {(action) in }))
-//
-//                        self.present(alertController, animated: true, completion: nil)
-//                    }
-//            }
-        }
-        else {
-            //we already have an image
-            print("image already saved")
-            self.profilePic.image = SocketIOManager.sharedInstance.currUserObj.image
-            self.profilePic.layer.cornerRadius = self.profilePic.frame.height/2
-            self.profilePic.clipsToBounds = true
-            print(self.profilePic.frame.height);
-            print(self.profilePic.frame.width);
+           
         }
         
     }
@@ -390,6 +249,7 @@ class ProfileViewController: UIViewController {
                 print(stringUrl)
                 self.downloadUrl = stringUrl
                 self.savePicUrltoDB(url: stringUrl)
+                UserDefaults.standard.set(stringUrl, forKey: "profilepicurl")
             }
         }
     }

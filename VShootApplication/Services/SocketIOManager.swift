@@ -163,9 +163,6 @@ class SocketIOManager: NSObject {
                 }
             })
         }
-        
-        
-
 
     }
     
@@ -213,7 +210,7 @@ class SocketIOManager: NSObject {
                                     print(error)
                                 }
                         }
-                        self.loadGroups(username: username)
+//                        self.loadGroups(username: username)
                         
                     }
                     else {

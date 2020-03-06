@@ -49,6 +49,7 @@
 		382F985E240C0BE3005F9E2C /* VotographerProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 382F985D240C0BE3005F9E2C /* VotographerProfileViewController.swift */; };
 		382F9862240C10A6005F9E2C /* NavModelProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 382F9861240C10A6005F9E2C /* NavModelProfileViewController.swift */; };
 		382F9864240C111B005F9E2C /* NavVotographerProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 382F9863240C111B005F9E2C /* NavVotographerProfileViewController.swift */; };
+		382F9868240F3643005F9E2C /* VShoot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 382F9867240F3643005F9E2C /* VShoot.swift */; };
 		384024A122A8AEE4004CD06E /* DataReloadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 384024A022A8AEE4004CD06E /* DataReloadManager.swift */; };
 		3840ED68216F400700E003CA /* SocketIOManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3840ED67216F400700E003CA /* SocketIOManager.swift */; };
 		384CBE4D210CF2E700E26A0C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 384CBE4C210CF2E700E26A0C /* AppDelegate.swift */; };
@@ -80,6 +81,7 @@
 		388F36B0218009E400C9C306 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 388F36AD218009E400C9C306 /* Utils.swift */; };
 		388F36B221810E7400C9C306 /* VotographerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 388F36B121810E7400C9C306 /* VotographerViewController.swift */; };
 		388F36B42181627100C9C306 /* PhotoCaptureProcessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 388F36B32181627100C9C306 /* PhotoCaptureProcessor.swift */; };
+		38FAB04D2411AB550031BF52 /* VShootCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38FAB04C2411AB550031BF52 /* VShootCollectionViewCell.swift */; };
 		38FD20232200A7BA00E54A2C /* VShootGuideViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38FD20222200A7BA00E54A2C /* VShootGuideViewController.swift */; };
 		38FEC5CB21F99B340023156A /* PasswordResetUsernameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38FEC5CA21F99B340023156A /* PasswordResetUsernameViewController.swift */; };
 		38FEC5CD21F9A3D90023156A /* PasswordResetSecurityQuestionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38FEC5CC21F9A3D90023156A /* PasswordResetSecurityQuestionViewController.swift */; };
@@ -139,6 +141,7 @@
 		382F985D240C0BE3005F9E2C /* VotographerProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VotographerProfileViewController.swift; sourceTree = "<group>"; };
 		382F9861240C10A6005F9E2C /* NavModelProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavModelProfileViewController.swift; sourceTree = "<group>"; };
 		382F9863240C111B005F9E2C /* NavVotographerProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavVotographerProfileViewController.swift; sourceTree = "<group>"; };
+		382F9867240F3643005F9E2C /* VShoot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VShoot.swift; sourceTree = "<group>"; };
 		384024A022A8AEE4004CD06E /* DataReloadManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataReloadManager.swift; sourceTree = "<group>"; };
 		3840ED67216F400700E003CA /* SocketIOManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocketIOManager.swift; sourceTree = "<group>"; };
 		384CBE49210CF2E700E26A0C /* VShootApplication.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VShootApplication.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -176,6 +179,7 @@
 		388F36B32181627100C9C306 /* PhotoCaptureProcessor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoCaptureProcessor.swift; sourceTree = "<group>"; };
 		38DED96621B6603C00D83CEC /* WebRTC.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebRTC.framework; path = Carthage/Build/iOS/WebRTC.framework; sourceTree = "<group>"; };
 		38EEE18A227FC92500A370A3 /* VShootApplication.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = VShootApplication.entitlements; sourceTree = "<group>"; };
+		38FAB04C2411AB550031BF52 /* VShootCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VShootCollectionViewCell.swift; sourceTree = "<group>"; };
 		38FD20222200A7BA00E54A2C /* VShootGuideViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VShootGuideViewController.swift; sourceTree = "<group>"; };
 		38FEC5CA21F99B340023156A /* PasswordResetUsernameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordResetUsernameViewController.swift; sourceTree = "<group>"; };
 		38FEC5CC21F9A3D90023156A /* PasswordResetSecurityQuestionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordResetSecurityQuestionViewController.swift; sourceTree = "<group>"; };
@@ -319,6 +323,7 @@
 				3805396B2293AD9F0009CD49 /* ParentViewController.swift */,
 				382F9861240C10A6005F9E2C /* NavModelProfileViewController.swift */,
 				382F9863240C111B005F9E2C /* NavVotographerProfileViewController.swift */,
+				38FAB04C2411AB550031BF52 /* VShootCollectionViewCell.swift */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -403,6 +408,7 @@
 				3864481821BE646E0021F86E /* User.swift */,
 				3817570D21FC22AF00797C4B /* ModalListener.swift */,
 				3805397B229919280009CD49 /* Group.swift */,
+				382F9867240F3643005F9E2C /* VShoot.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -644,6 +650,7 @@
 			files = (
 				3805397A2299187B0009CD49 /* AllGroupsViewController.swift in Sources */,
 				382596EE21E44ED300008311 /* MainUser.swift in Sources */,
+				382F9868240F3643005F9E2C /* VShoot.swift in Sources */,
 				38053982229F906F0009CD49 /* MyGroupsTableViewCell.swift in Sources */,
 				3821E8202217560900636034 /* WalkthroughContentViewController.swift in Sources */,
 				382F985A240B46F7005F9E2C /* VShootOptionViewController.swift in Sources */,
@@ -708,6 +715,7 @@
 				38FEC5CD21F9A3D90023156A /* PasswordResetSecurityQuestionViewController.swift in Sources */,
 				38053972229674090009CD49 /* NavGroupsViewController.swift in Sources */,
 				3864481221BDB6F00021F86E /* FriendTableViewCell.swift in Sources */,
+				38FAB04D2411AB550031BF52 /* VShootCollectionViewCell.swift in Sources */,
 				382596F021E7298100008311 /* ProfileUsernameChangeViewController.swift in Sources */,
 				388D9C55223F6A8800B4D905 /* PrivacyPolicyViewController.swift in Sources */,
 				381A608921F6AFE6001F2C8C /* VSShootEntranceViewController.swift in Sources */,
