@@ -240,16 +240,17 @@ class AddFriendsViewController: UIViewController, UISearchBarDelegate, UITableVi
     @IBAction func closeAddview(_ sender: Any) {
         //dismiss(animated: true, completion: nil)
         //self.performSegue(withIdentifier: "backToFriendsList", sender: self)
-        print(self.navigationController?.viewControllers.count)
-        for controller in self.navigationController!.viewControllers as Array {
-            print(controller.title!)
-            if controller.title == "friendList" {
-            //if controller.isKind(of: VotographerViewController) {
-           print("found view controller to pop")
-            self.navigationController!.popToViewController(controller, animated: true)
-                break
-            }
-        }
+        _ = self.navigationController?.popViewController(animated: true)
+//        print(self.navigationController?.viewControllers.count)
+//        for controller in self.navigationController!.viewControllers as Array {
+//            print(controller.title!)
+//            if controller.title == "friendList" {
+//            //if controller.isKind(of: VotographerViewController) {
+//           print("found view controller to pop")
+//            self.navigationController!.popToViewController(controller, animated: true)
+//                break
+//            }
+//        }
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {

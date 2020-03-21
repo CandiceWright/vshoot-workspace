@@ -60,6 +60,7 @@
 		384CBE62210CF2E800E26A0C /* VShootApplicationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 384CBE61210CF2E800E26A0C /* VShootApplicationTests.swift */; };
 		384CBE75210D891A00E26A0C /* HomeScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 384CBE74210D891A00E26A0C /* HomeScreenViewController.swift */; };
 		384CBE77210DFDD300E26A0C /* SignUpVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 384CBE76210DFDD300E26A0C /* SignUpVC.swift */; };
+		384CC3AC242336F400A5061B /* PhotoeditingHomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 384CC3AB242336F400A5061B /* PhotoeditingHomeViewController.swift */; };
 		384FCB6D225332B200BF8DEB /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 384FCB6C225332B200BF8DEB /* GoogleService-Info.plist */; };
 		3860143D21C4D84B001CD36E /* ManageFriendshipsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3860143C21C4D84B001CD36E /* ManageFriendshipsViewController.swift */; };
 		3864481021BDB52E0021F86E /* VotographriendViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3864480F21BDB52E0021F86E /* VotographriendViewController.swift */; };
@@ -156,6 +157,7 @@
 		384CBE63210CF2E800E26A0C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		384CBE74210D891A00E26A0C /* HomeScreenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreenViewController.swift; sourceTree = "<group>"; };
 		384CBE76210DFDD300E26A0C /* SignUpVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpVC.swift; sourceTree = "<group>"; };
+		384CC3AB242336F400A5061B /* PhotoeditingHomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoeditingHomeViewController.swift; sourceTree = "<group>"; };
 		384FCB6C225332B200BF8DEB /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		3860143C21C4D84B001CD36E /* ManageFriendshipsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageFriendshipsViewController.swift; sourceTree = "<group>"; };
 		3864480F21BDB52E0021F86E /* VotographriendViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VotographriendViewController.swift; sourceTree = "<group>"; };
@@ -371,6 +373,7 @@
 		384CBE4B210CF2E700E26A0C /* VShootApplication */ = {
 			isa = PBXGroup;
 			children = (
+				384CC3AA2423369800A5061B /* Photoediting */,
 				3827894822BE9E85005E4E70 /* IAP */,
 				3805398522A0EA640009CD49 /* Chat */,
 				380539762297B5FB0009CD49 /* Groups */,
@@ -400,6 +403,14 @@
 				384CBE63210CF2E800E26A0C /* Info.plist */,
 			);
 			path = VShootApplicationTests;
+			sourceTree = "<group>";
+		};
+		384CC3AA2423369800A5061B /* Photoediting */ = {
+			isa = PBXGroup;
+			children = (
+				384CC3AB242336F400A5061B /* PhotoeditingHomeViewController.swift */,
+			);
+			path = Photoediting;
 			sourceTree = "<group>";
 		};
 		3864481521BE623C0021F86E /* Models */ = {
@@ -713,6 +724,7 @@
 				388F36B0218009E400C9C306 /* Utils.swift in Sources */,
 				3867BD9A21F4FC240054DB60 /* PhotoProcessingViewController.swift in Sources */,
 				38FEC5CD21F9A3D90023156A /* PasswordResetSecurityQuestionViewController.swift in Sources */,
+				384CC3AC242336F400A5061B /* PhotoeditingHomeViewController.swift in Sources */,
 				38053972229674090009CD49 /* NavGroupsViewController.swift in Sources */,
 				3864481221BDB6F00021F86E /* FriendTableViewCell.swift in Sources */,
 				38FAB04D2411AB550031BF52 /* VShootCollectionViewCell.swift in Sources */,

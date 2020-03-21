@@ -51,6 +51,9 @@ class VotographriendViewController: UIViewController, UITableViewDataSource, UIT
         self.navigationController?.dismiss(animated: true, completion: nil)
         friendTableView.reloadData()
     }
+    @IBAction func close(_ sender: Any) {
+        _ = self.navigationController?.popViewController(animated: true)
+    }
     
     @IBAction func addFriend(_ sender: Any) {
     

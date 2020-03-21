@@ -25,6 +25,9 @@ class VShootOptionViewController: UIViewController {
         self.VSFriendBtn.layer.cornerRadius = CGFloat(Float(10.0))
     }
     
+    @IBAction func cancel(_ sender: Any) {
+        dismiss(animated: true, completion: nil)
+    }
     @IBAction func StartVSwithOnDemandPhotographer(_ sender: Any) {
     }
     
@@ -88,14 +91,18 @@ class VShootOptionViewController: UIViewController {
     }
     
     
-    /*
+    
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // Get the new view controller using segue.destination.
         // Pass the selected object to the new view controller.
+        let destinationVC:NewVSInfoPopupViewController = segue.destination as! NewVSInfoPopupViewController
+        
+        destinationVC.username = SocketIOManager.sharedInstance.currUser
+        destinationVC.friends = self.friends
     }
-    */
+    
 
 }

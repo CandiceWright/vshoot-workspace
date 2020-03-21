@@ -22,8 +22,8 @@ class VModelProfileViewController: UIViewController, UICollectionViewDelegate, U
     var vshoots:[VShoot] = [VShoot]()
     
     var screenSize: CGRect!
-    var screenWidth: CGFloat!
-    var screenHeight: CGFloat!
+    var cvWidth: CGFloat!
+    var cvHeight: CGFloat!
     
     
     @IBOutlet weak var VShootsCV: UICollectionView!
@@ -37,13 +37,13 @@ class VModelProfileViewController: UIViewController, UICollectionViewDelegate, U
 
         self.profilePic.layer.cornerRadius = self.profilePic.frame.height/2
         self.profilePic.clipsToBounds = true
-        
-        screenSize = UIScreen.main.bounds
-        screenWidth = screenSize.width
-        screenHeight = screenSize.height
+        self.numFriendsLabel.isUserInteractionEnabled = true
+
+        cvWidth = VShootsCV.frame.size.width
+        cvHeight = VShootsCV.frame.size.height
         let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
 //        layout.sectionInset = UIEdgeInsets(top: 20, left: 0, bottom: 10, right: 0)
-        layout.itemSize = CGSize(width: screenWidth/3, height: screenWidth/2)
+        layout.itemSize = CGSize(width: (cvWidth - 10)/2, height: (cvWidth - 10)/2)
         //height: screenWidth/3
         layout.minimumInteritemSpacing = 0
         layout.minimumLineSpacing = 0
@@ -55,6 +55,8 @@ class VModelProfileViewController: UIViewController, UICollectionViewDelegate, U
         getProfilePic()
         getFriends(completion: {
             self.numFriendsLabel.text = String(SocketIOManager.sharedInstance.currUserObj.friends.count)
+            let friendstap = UITapGestureRecognizer(target: self, action: #selector(VModelProfileViewController.FriendsTapFunction))
+            self.numFriendsLabel.addGestureRecognizer(friendstap)
         })
         getVShoots(completion: {
             self.numVshootsLabel.text = String(self.vshoots.count)
@@ -81,6 +83,8 @@ class VModelProfileViewController: UIViewController, UICollectionViewDelegate, U
                     SocketIOManager.sharedInstance.currUserObj.username = ""
                     SocketIOManager.sharedInstance.currUserObj.imageUrl = ""
                     SocketIOManager.sharedInstance.currUserObj.friends.removeAll()
+                    
+                    SocketIOManager.sharedInstance.currUserObj.image = nil
                     UserDefaults.standard.set("", forKey: "username")
                     UserDefaults.standard.set(false, forKey: "UserLoggedIn")
                     
@@ -122,6 +126,10 @@ class VModelProfileViewController: UIViewController, UICollectionViewDelegate, U
         vshoots.append(vshoot6)
         
         completion()
+    }
+    
+    @objc func FriendsTapFunction() {
+        performSegue(withIdentifier: "ToFriendsSegue", sender: self)
     }
     
     func getFriends(completion: @escaping () -> ()){

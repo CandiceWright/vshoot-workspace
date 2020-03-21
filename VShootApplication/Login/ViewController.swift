@@ -95,6 +95,7 @@ class ViewController: UIViewController {
     
     
     @IBAction func Login(_ sender: Any) {
+        print("login button pressed")
         self.LoginButton.isEnabled = false
         self.signUpButton.isEnabled = false
             var geturl = SocketIOManager.sharedInstance.serverUrl + "/login/"
@@ -199,9 +200,9 @@ class ViewController: UIViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if (segue.identifier == "segueToHomeFromLogin"){
             let barViewControllers = segue.destination as! UITabBarController
-            barViewControllers.selectedIndex = 0
+            barViewControllers.selectedIndex = 1
             
-             let VSViewController = barViewControllers.viewControllers?[0] as! InitiateVSViewController
+             let VSViewController = barViewControllers.viewControllers?[1] as! InitiateVSViewController
             VSViewController.username = UsernameField.text!
 //            let FriendsViewController = barViewControllers.viewControllers?[0] as! FriendsViewController
 //            FriendsViewController.username = UsernameField.text!

@@ -34,8 +34,10 @@ class InitiateVSViewController: UIViewController {
             startVSButton.setTitle("Try Your First VShoot Free!", for: UIControl.State.normal)
             
         }
-        print("printing friends count")
-        print(SocketIOManager.sharedInstance.currUserObj.friends.count)
+        self.startVSButton.isHidden = true
+        getFriends(completion: {
+            self.startVSButton.isHidden = false
+        })
         // Do any additional setup after loading the view.
         
         self.startVSButton.layer.cornerRadius = CGFloat(Float(10.0))
@@ -83,7 +85,64 @@ class InitiateVSViewController: UIViewController {
     
     
     
-    
+    func getFriends(completion: @escaping () -> ()){
+        let currUser = SocketIOManager.sharedInstance.currUser
+                //let currUser = currUserObj.username
+                print("getting friends for " + currUser)
+                let geturl = SocketIOManager.sharedInstance.serverUrl + "/friends/" + currUser
+                let url = URL(string: geturl)
+                Alamofire.request(url!)
+                    .responseJSON{ (response) in
+                        switch response.result {
+                        case .success(let data):
+                            print(data)
+                            if let friendDict = data as? [Dictionary<String,String>]{
+                                print("successfully converted friend response")
+                                //change result to an array of friends like you did with the array of users in addFriend
+                                SocketIOManager.sharedInstance.currUserObj.friends.removeAll()
+                                for i in 0..<friendDict.count {
+                                    let newUser = User.init(username: friendDict[i]["username"]!, imageUrl: friendDict[i]["pic"]!)
+                                    self.friends.append(friendDict[i]["username"]!)
+                                    SocketIOManager.sharedInstance.currUserObj.friends.append(newUser)
+                                }
+                                print("done adding friends")
+                                print(SocketIOManager.sharedInstance.currUserObj.friends.count)
+                                //now get vsPreference
+                                let geturl2 = SocketIOManager.sharedInstance.serverUrl + "/user/preference/" + currUser
+                                let url = URL(string: geturl2)
+                                Alamofire.request(url!)
+                                    .responseString{ (response) in
+                                        switch response.result {
+                                        case .success(let data):
+                                            print(data)
+                                            if (data != "failed to get preference"){
+                                                print("successfully got preference")
+                                                SocketIOManager.sharedInstance.currUserObj.vsPreference = data
+                                                print(SocketIOManager.sharedInstance.currUserObj.vsPreference)
+                            completion()
+                                            }
+                                            else {
+                                                print("could not convert vs preference")
+                                            }
+                                            
+                                            
+                                        case .failure(let error):
+                                            print(error)
+                                        }
+                                }
+                                
+                            }
+                            else {
+                                print("couldnt convert friends")
+                            }
+                            
+                        case .failure(let error):
+                            print(error)
+                        }
+                        
+                        
+                }
+    }
     
     
     func acceptVSRequest() {

@@ -120,47 +120,14 @@ class ProfileViewController: UIViewController {
     @IBAction func changeemail(_ sender: Any) {
     }
     
+    @IBAction func close(_ sender: Any) {
+        _ = self.navigationController?.popViewController(animated: true)
+    }
+    
     @objc func changeProfilePic(){
         self.present(imagePicker, animated: true, completion: nil)
     }
     
-    @IBAction func logout(_ sender: Any) {
-        print("logging out")
-        var posturl = SocketIOManager.sharedInstance.serverUrl + "/logout"
-        let info: [String:Any] = ["username": currUser as Any]
-        
-        let url = URL(string: posturl);
-        Alamofire.request(url!, method: .post, parameters: info, encoding: JSONEncoding.default, headers: ["Content-Type":"application/json"])
-            .validate(statusCode: 200..<201)
-            .responseString{ (response) in
-                print(response)
-                switch response.result {
-                case .success(let data):
-                    print(data)
-                        print("logout successful")
-                    SocketIOManager.sharedInstance.currUser = ""
-                    SocketIOManager.sharedInstance.currUserObj.username = ""
-                    SocketIOManager.sharedInstance.currUserObj.imageUrl = ""
-                    SocketIOManager.sharedInstance.currUserObj.friends.removeAll()
-                    UserDefaults.standard.set("", forKey: "username")
-                    UserDefaults.standard.set(false, forKey: "UserLoggedIn")
-                        //SocketIOManager.sharedInstance.closeConnection()
-                        self.performSegue(withIdentifier: "logoutSegue", sender: self)
-                        
-                    
-                    
-                    
-                case .failure(let error):
-                    print("failure")
-                    print(error)
-                    let alertController = UIAlertController(title: "Sorry!", message:
-                        "Looks like something went wrong. Please try again.", preferredStyle: UIAlertController.Style.alert)
-                    alertController.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default,handler: {(action) in }))
-                    
-                    self.present(alertController, animated: true, completion: nil)
-                }
-        }
-    }
     
     @objc func refreshlbl(notification: NSNotification) {
         
