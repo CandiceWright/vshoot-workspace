@@ -61,6 +61,9 @@
 		384CBE75210D891A00E26A0C /* HomeScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 384CBE74210D891A00E26A0C /* HomeScreenViewController.swift */; };
 		384CBE77210DFDD300E26A0C /* SignUpVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 384CBE76210DFDD300E26A0C /* SignUpVC.swift */; };
 		384CC3AC242336F400A5061B /* PhotoeditingHomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 384CC3AB242336F400A5061B /* PhotoeditingHomeViewController.swift */; };
+		384CC3DC2426ACB500A5061B /* Telecine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 384CC3DA2426ACB400A5061B /* Telecine.swift */; };
+		384CC3DD2426ACB500A5061B /* ReplayKitVideoSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 384CC3DB2426ACB500A5061B /* ReplayKitVideoSource.swift */; };
+		384CC3F42426CC4F00A5061B /* ExampleReplayKitAudioCapturer.m in Sources */ = {isa = PBXBuildFile; fileRef = 384CC3F32426CC4F00A5061B /* ExampleReplayKitAudioCapturer.m */; };
 		384FCB6D225332B200BF8DEB /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 384FCB6C225332B200BF8DEB /* GoogleService-Info.plist */; };
 		3860143D21C4D84B001CD36E /* ManageFriendshipsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3860143C21C4D84B001CD36E /* ManageFriendshipsViewController.swift */; };
 		3864481021BDB52E0021F86E /* VotographriendViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3864480F21BDB52E0021F86E /* VotographriendViewController.swift */; };
@@ -158,6 +161,12 @@
 		384CBE74210D891A00E26A0C /* HomeScreenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreenViewController.swift; sourceTree = "<group>"; };
 		384CBE76210DFDD300E26A0C /* SignUpVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpVC.swift; sourceTree = "<group>"; };
 		384CC3AB242336F400A5061B /* PhotoeditingHomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoeditingHomeViewController.swift; sourceTree = "<group>"; };
+		384CC3D92426AC9900A5061B /* ReplayKitExample-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ReplayKitExample-Bridging-Header.h"; sourceTree = "<group>"; };
+		384CC3DA2426ACB400A5061B /* Telecine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Telecine.swift; sourceTree = "<group>"; };
+		384CC3DB2426ACB500A5061B /* ReplayKitVideoSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReplayKitVideoSource.swift; sourceTree = "<group>"; };
+		384CC3F12426CC4D00A5061B /* VShootApplication-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "VShootApplication-Bridging-Header.h"; sourceTree = "<group>"; };
+		384CC3F22426CC4F00A5061B /* ExampleReplayKitAudioCapturer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ExampleReplayKitAudioCapturer.h; sourceTree = "<group>"; };
+		384CC3F32426CC4F00A5061B /* ExampleReplayKitAudioCapturer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ExampleReplayKitAudioCapturer.m; sourceTree = "<group>"; };
 		384FCB6C225332B200BF8DEB /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		3860143C21C4D84B001CD36E /* ManageFriendshipsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageFriendshipsViewController.swift; sourceTree = "<group>"; };
 		3864480F21BDB52E0021F86E /* VotographriendViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VotographriendViewController.swift; sourceTree = "<group>"; };
@@ -284,6 +293,11 @@
 		3817570921FB0A1B00797C4B /* Shoots */ = {
 			isa = PBXGroup;
 			children = (
+				384CC3F22426CC4F00A5061B /* ExampleReplayKitAudioCapturer.h */,
+				384CC3F32426CC4F00A5061B /* ExampleReplayKitAudioCapturer.m */,
+				384CC3DB2426ACB500A5061B /* ReplayKitVideoSource.swift */,
+				384CC3DA2426ACB400A5061B /* Telecine.swift */,
+				384CC3D92426AC9900A5061B /* ReplayKitExample-Bridging-Header.h */,
 				381C936621D5E52D001CECC2 /* InitiateVSViewController.swift */,
 				388F36B121810E7400C9C306 /* VotographerViewController.swift */,
 				388E0940216B429000EB2C29 /* NewVSInfoPopupViewController.swift */,
@@ -292,6 +306,7 @@
 				3867BD9921F4FC240054DB60 /* PhotoProcessingViewController.swift */,
 				3827894D22C85F0C005E4E70 /* PurchaseVshootsViewController.swift */,
 				382F9859240B46F7005F9E2C /* VShootOptionViewController.swift */,
+				384CC3F12426CC4D00A5061B /* VShootApplication-Bridging-Header.h */,
 			);
 			path = Shoots;
 			sourceTree = "<group>";
@@ -596,7 +611,7 @@
 			files = (
 			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-VShootApplication/Pods-VShootApplication-frameworks.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-VShootApplication/Pods-VShootApplication-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
 				"${BUILT_PRODUCTS_DIR}/AlamofireSwiftyJSON/AlamofireSwiftyJSON.framework",
 				"${BUILT_PRODUCTS_DIR}/GTMSessionFetcher/GTMSessionFetcher.framework",
@@ -631,7 +646,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-VShootApplication/Pods-VShootApplication-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-VShootApplication/Pods-VShootApplication-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		F93E33D0D118BB1F89CCCEF0 /* [CP] Check Pods Manifest.lock */ = {
@@ -662,11 +677,13 @@
 				3805397A2299187B0009CD49 /* AllGroupsViewController.swift in Sources */,
 				382596EE21E44ED300008311 /* MainUser.swift in Sources */,
 				382F9868240F3643005F9E2C /* VShoot.swift in Sources */,
+				384CC3F42426CC4F00A5061B /* ExampleReplayKitAudioCapturer.m in Sources */,
 				38053982229F906F0009CD49 /* MyGroupsTableViewCell.swift in Sources */,
 				3821E8202217560900636034 /* WalkthroughContentViewController.swift in Sources */,
 				382F985A240B46F7005F9E2C /* VShootOptionViewController.swift in Sources */,
 				388F36A92180010000C9C306 /* VmodelViewController.swift in Sources */,
 				3805397E22991E6B0009CD49 /* GroupTableViewCell.swift in Sources */,
+				384CC3DC2426ACB500A5061B /* Telecine.swift in Sources */,
 				384CBE4F210CF2E700E26A0C /* ViewController.swift in Sources */,
 				382596F221E7327500008311 /* ProfileEmailChangeViewController.swift in Sources */,
 				381C936721D5E52D001CECC2 /* InitiateVSViewController.swift in Sources */,
@@ -700,6 +717,7 @@
 				3864481B21BF79B20021F86E /* AddFriendTableViewCell.swift in Sources */,
 				382F9864240C111B005F9E2C /* NavVotographerProfileViewController.swift in Sources */,
 				3827894A22BE9F24005E4E70 /* IAPProduct.swift in Sources */,
+				384CC3DD2426ACB500A5061B /* ReplayKitVideoSource.swift in Sources */,
 				3864481421BE59090021F86E /* AddFriendsViewController.swift in Sources */,
 				38053974229675FD0009CD49 /* GroupsTableViewController.swift in Sources */,
 				3817571221FC66C400797C4B /* VSPreferenceHelpViewController.swift in Sources */,
@@ -885,6 +903,7 @@
 			baseConfigurationReference = 5DD4D5DD122DE1A6390D7502 /* Pods-VShootApplication.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = VShootApplication/VShootApplication.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = KVWT85GL72;
@@ -898,6 +917,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.thevshoot.vshootapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "VShootApplication/Shoots/VShootApplication-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -908,6 +929,7 @@
 			baseConfigurationReference = 39B94D694910EE865D9DB457 /* Pods-VShootApplication.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = VShootApplication/VShootApplication.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = KVWT85GL72;
@@ -921,6 +943,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.thevshoot.vshootapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "VShootApplication/Shoots/VShootApplication-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};

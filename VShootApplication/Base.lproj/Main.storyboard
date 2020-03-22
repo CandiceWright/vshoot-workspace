@@ -720,16 +720,16 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Vmodel Video View" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ehd-4l-YQm">
-                                <rect key="frame" x="35" y="44" width="291" height="21"/>
+                                <rect key="frame" x="35" y="44" width="291" height="20"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <nil key="textColor"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KRV-5w-Csa" customClass="TVIVideoView">
-                                <rect key="frame" x="0.0" y="81" width="375" height="612"/>
+                                <rect key="frame" x="0.0" y="80" width="375" height="613"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YmA-Ip-QJE">
-                                        <rect key="frame" x="303" y="530" width="50" height="59"/>
+                                        <rect key="frame" x="303" y="531" width="50" height="59"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="50" id="5vG-0R-2Bf"/>
                                             <constraint firstAttribute="height" constant="59" id="moW-EG-10K"/>
@@ -740,10 +740,22 @@
                                             <action selector="toggleCam:" destination="OtV-7X-mhZ" eventType="touchUpInside" id="gm9-Yc-WCo"/>
                                         </connections>
                                     </button>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Testing" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mKc-qw-hRj">
+                                        <rect key="frame" x="123" y="281" width="129" height="51"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="51" id="U82-fb-DFR"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="system" pointSize="42"/>
+                                        <color key="textColor" red="0.19215686269999999" green="0.82352941180000006" blue="0.51372549020000002" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
+                                    <constraint firstItem="mKc-qw-hRj" firstAttribute="centerX" secondItem="KRV-5w-Csa" secondAttribute="centerX" id="JHA-oD-t3L"/>
+                                    <constraint firstItem="mKc-qw-hRj" firstAttribute="top" secondItem="KRV-5w-Csa" secondAttribute="top" constant="281" id="UVh-qU-zkI"/>
                                     <constraint firstAttribute="trailing" secondItem="YmA-Ip-QJE" secondAttribute="trailing" constant="22" id="Wyv-my-dUe"/>
+                                    <constraint firstItem="mKc-qw-hRj" firstAttribute="centerY" secondItem="KRV-5w-Csa" secondAttribute="centerY" id="bFW-k1-2yA"/>
                                     <constraint firstAttribute="bottom" secondItem="YmA-Ip-QJE" secondAttribute="bottom" constant="23" id="d0G-yJ-LZc"/>
                                 </constraints>
                             </view>
@@ -859,7 +871,7 @@
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Votographer Video View" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rht-nf-yA5">
                                 <rect key="frame" x="77" y="43" width="185" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <nil key="textColor"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wj1-CY-jYU">
@@ -2046,7 +2058,7 @@
                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
                                 <connections>
-                                    <segue destination="Awl-hH-fsc" kind="presentation" modalPresentationStyle="fullScreen" id="OjS-4Y-J8K"/>
+                                    <action selector="ToVShootOps:" destination="We4-Xz-rDB" eventType="touchUpInside" id="U9i-XY-QYi"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="infoLight" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nAX-TD-EX6">
@@ -2079,6 +2091,7 @@
                         <outlet property="startVSButton" destination="x73-l9-Ljo" id="Sx9-Nz-e5a"/>
                         <segue destination="OtV-7X-mhZ" kind="show" identifier="segueToVmodelVideoViewFromVSView" animates="NO" id="k8r-n4-3iG"/>
                         <segue destination="tCB-qP-t2m" kind="show" identifier="segueToVotographerVideoViewFromVSView" animates="NO" id="gg6-kk-YdA"/>
+                        <segue destination="Awl-hH-fsc" kind="presentation" identifier="ToVSOptionsSegue" modalPresentationStyle="fullScreen" id="LZ3-VD-c0C"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="vbT-qw-BeF" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -2941,7 +2954,7 @@
                                         <fragment content="Terms of Use">
                                             <attributes>
                                                 <color key="NSColor" red="0.19215686269999999" green="0.82352941180000006" blue="0.51372549020000002" alpha="1" colorSpace="calibratedRGB"/>
-                                                <font key="NSFont" metaFont="menu" size="11"/>
+                                                <font key="NSFont" metaFont="label" size="11"/>
                                             </attributes>
                                         </fragment>
                                     </attributedString>
@@ -4015,9 +4028,9 @@
         <segue reference="ShK-hM-nrs"/>
         <segue reference="btB-pE-CCS"/>
         <segue reference="SS1-3b-KVf"/>
-        <segue reference="gg6-kk-YdA"/>
-        <segue reference="k8r-n4-3iG"/>
-        <segue reference="iWf-sx-leS"/>
+        <segue reference="ydK-7P-Ukb"/>
+        <segue reference="Nkn-xq-bMA"/>
+        <segue reference="ifN-Zn-8Fu"/>
         <segue reference="GtO-aM-FZM"/>
     </inferredMetricsTieBreakers>
 </document>

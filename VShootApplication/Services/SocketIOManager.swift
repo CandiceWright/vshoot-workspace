@@ -26,6 +26,7 @@ class SocketIOManager: NSObject {
     var currUser: String = "";
     //var currUserObj:MainUser = MainUser()
     var currUserObj:User = User(username: "",imageUrl: "")
+    var loadedFriends:Bool = false
     var vsRequestor:String = "";
     var deviceToken = ""
     var purchases = Dictionary<String,Bool>()

@@ -53,11 +53,19 @@ class VModelProfileViewController: UIViewController, UICollectionViewDelegate, U
         self.usernameLabel.text = currUser
         print(SocketIOManager.sharedInstance.currUserObj.vshoots)
         getProfilePic()
-        getFriends(completion: {
+        if (!SocketIOManager.sharedInstance.loadedFriends){
+            getFriends(completion: {
+                self.numFriendsLabel.text = String(SocketIOManager.sharedInstance.currUserObj.friends.count)
+                let friendstap = UITapGestureRecognizer(target: self, action: #selector(VModelProfileViewController.FriendsTapFunction))
+                self.numFriendsLabel.addGestureRecognizer(friendstap)
+            })
+        }
+        else {
             self.numFriendsLabel.text = String(SocketIOManager.sharedInstance.currUserObj.friends.count)
             let friendstap = UITapGestureRecognizer(target: self, action: #selector(VModelProfileViewController.FriendsTapFunction))
             self.numFriendsLabel.addGestureRecognizer(friendstap)
-        })
+        }
+        
         getVShoots(completion: {
             self.numVshootsLabel.text = String(self.vshoots.count)
             self.VShootsCV.reloadData()

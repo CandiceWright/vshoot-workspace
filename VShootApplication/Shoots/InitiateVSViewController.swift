@@ -34,10 +34,14 @@ class InitiateVSViewController: UIViewController {
             startVSButton.setTitle("Try Your First VShoot Free!", for: UIControl.State.normal)
             
         }
-        self.startVSButton.isHidden = true
-        getFriends(completion: {
-            self.startVSButton.isHidden = false
-        })
+        if (!SocketIOManager.sharedInstance.loadedFriends){
+            self.startVSButton.isHidden = true
+            getFriends(completion: {
+                self.startVSButton.isHidden = false
+                SocketIOManager.sharedInstance.loadedFriends = true
+            })
+        }
+        
         // Do any additional setup after loading the view.
         
         self.startVSButton.layer.cornerRadius = CGFloat(Float(10.0))
@@ -83,6 +87,9 @@ class InitiateVSViewController: UIViewController {
         performSegue(withIdentifier: "toAboutVS", sender: self)
     }
     
+    @IBAction func ToVShootOps(_ sender: Any) {
+        performSegue(withIdentifier: "ToVSOptionsSegue", sender: self)
+    }
     
     
     func getFriends(completion: @escaping () -> ()){
@@ -178,11 +185,11 @@ class InitiateVSViewController: UIViewController {
             destinationController.roomName = self.roomName
         }
             
-        else if (segue.identifier == "newVSPopup") {
-            let destinationVC:NewVSInfoPopupViewController = segue.destination as! NewVSInfoPopupViewController
+        else if (segue.identifier == "ToVSOptionsSegue") {
+            let destinationVC:VShootOptionViewController = segue.destination as! VShootOptionViewController
             print("username before I segue " + username)
             //destinationVC.username = username
-            destinationVC.username = SocketIOManager.sharedInstance.currUser
+            //destinationVC.username = SocketIOManager.sharedInstance.currUser
             destinationVC.friends = self.friends
         }
     }
