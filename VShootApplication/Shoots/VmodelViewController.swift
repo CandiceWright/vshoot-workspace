@@ -183,6 +183,8 @@ class VmodelViewController: UIViewController {
                 print("Screen capture stop error: ", error as Any)
             } else {
                 print("Screen capture stopped.")
+                self.videoSource = nil
+                self.screenTrack = nil
             }
         }
         
@@ -405,12 +407,16 @@ class VmodelViewController: UIViewController {
     // MARK: IBActions
     
     @IBAction func disconnect(_ sender: Any) {
-        self.room!.disconnect()
+        if (room != nil){
+            self.room!.disconnect()
+        }
         recorder.stopCapture { (captureError) in
             if let error = captureError {
                 print("Screen capture stop error: ", error as Any)
             } else {
                 print("Screen capture stopped.")
+                self.videoSource = nil
+                self.screenTrack = nil
             }
         }
         UserDefaults.standard.set(false, forKey: "freeTrialAvailable")
