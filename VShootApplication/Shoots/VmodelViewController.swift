@@ -168,14 +168,15 @@ class VmodelViewController: UIViewController {
 //            self.present(alertController, animated: true, completion: nil)
         }
         
-        //self.connect()
-        self.prepareLocalMedia()
+        self.connect()
+        //self.prepareLocalMedia()
     }
     
     /* This function handles the case where the votographer opts to cancel the vshoot */
     func disconnectOnServerRequest(){
         if (room != nil){
            self.room!.disconnect()
+            logMessage(messageText: "Attempting to disconnect from room \(room!.name)")
         }
         recorder.stopCapture { (captureError) in
             if let error = captureError {
@@ -341,7 +342,7 @@ class VmodelViewController: UIViewController {
         self.view.addConstraint(height)
     }
     
-    func connect(encodingParameters: EncodingParameters) {
+    func connect() {
         // Configure access token either from server or manually.
         // If the default wasn't changed, try fetching from server.
         print("I am in connect function for vmodel")
@@ -356,13 +357,14 @@ class VmodelViewController: UIViewController {
         }
         
         // Prepare local media which we will share with Room Participants.
-        //self.prepareLocalMedia()
+        self.prepareLocalMedia()
         
         // Preparing the connect options with the access token that we fetched (or hardcoded).
         let connectOptions = ConnectOptions.init(token: accessToken) { (builder) in
             
             // Use the local media that we prepared earlier.
-            builder.audioTracks = [LocalAudioTrack()!]
+            //builder.audioTracks = [LocalAudioTrack()!]
+            builder.audioTracks = self.localAudioTrack != nil ? [self.localAudioTrack!] : [LocalAudioTrack]()
 
             if let videoTrack = self.screenTrack {
                 print("successfully made screentrack the videotrack")
@@ -380,12 +382,12 @@ class VmodelViewController: UIViewController {
             }
             
             // Use the preferred encoding parameters
-            builder.encodingParameters = encodingParameters
+            //builder.encodingParameters = encodingParameters
             
 //            // Use the preferred encoding parameters
-//            if let encodingParameters = Settings.shared.getEncodingParameters() {
-//                builder.encodingParameters = encodingParameters
-//            }
+            if let encodingParameters = Settings.shared.getEncodingParameters() {
+                builder.encodingParameters = encodingParameters
+            }
             
             // The name of the Room where the Client will attempt to connect to. Please note that if you pass an empty
             // Room `name`, the Client will create one for you. You can get the name or sid from any connected Room.
@@ -425,18 +427,7 @@ class VmodelViewController: UIViewController {
     @IBAction func toggleMic(_ sender: Any) {
         print("trying to toggle mic")
         //print(self.localAudioTrack)
-//        if (recorder.isMicrophoneEnabled == true){
-//            recorder.isMicrophoneEnabled = false
-//            let soundoff: UIImage = UIImage(named: "soundoff")!
-//            self.micButton.imageView?.image = soundoff
-//            self.micButton.setImage(soundoff, for: .normal)
-//        }
-//        else {
-//            recorder.isMicrophoneEnabled = true
-//            let soundon: UIImage = UIImage(named: "soundon")!
-//            //self.micButton.imageView?.image = soundon
-//            self.micButton.setImage(soundon, for: .normal)
-//        }
+
                 if (self.localAudioTrack != nil) {
                     print("found audio that is ")
                     print(self.localAudioTrack?.isEnabled)
@@ -608,7 +599,7 @@ class VmodelViewController: UIViewController {
                 print("Screen capture error: ", error as Any)
             } else {
                 print("Screen capture started.")
-                self.connect(encodingParameters: encodingParams)
+                //self.connect(encodingParameters: encodingParams)
             }
         }
     }

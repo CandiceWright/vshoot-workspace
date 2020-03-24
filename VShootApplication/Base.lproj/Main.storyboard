@@ -400,7 +400,7 @@
             <objects>
                 <viewController modalPresentationStyle="fullScreen" id="Ut0-KK-Bjj" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="e0Y-KQ-Aiw">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="758"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <viewLayoutGuide key="safeArea" id="SEx-BA-AEG"/>
@@ -725,40 +725,6 @@
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KRV-5w-Csa" customClass="TVIVideoView">
-                                <rect key="frame" x="0.0" y="80" width="375" height="613"/>
-                                <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YmA-Ip-QJE">
-                                        <rect key="frame" x="303" y="531" width="50" height="59"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" constant="50" id="5vG-0R-2Bf"/>
-                                            <constraint firstAttribute="height" constant="59" id="moW-EG-10K"/>
-                                        </constraints>
-                                        <state key="normal" title="FlipCam" image="flipCam"/>
-                                        <connections>
-                                            <action selector="flipcam:" destination="OtV-7X-mhZ" eventType="touchUpInside" id="c2f-Tc-vQQ"/>
-                                            <action selector="toggleCam:" destination="OtV-7X-mhZ" eventType="touchUpInside" id="gm9-Yc-WCo"/>
-                                        </connections>
-                                    </button>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Testing" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mKc-qw-hRj">
-                                        <rect key="frame" x="123" y="281" width="129" height="51"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="51" id="U82-fb-DFR"/>
-                                        </constraints>
-                                        <fontDescription key="fontDescription" type="system" pointSize="42"/>
-                                        <color key="textColor" red="0.19215686269999999" green="0.82352941180000006" blue="0.51372549020000002" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                </subviews>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <constraints>
-                                    <constraint firstItem="mKc-qw-hRj" firstAttribute="centerX" secondItem="KRV-5w-Csa" secondAttribute="centerX" id="JHA-oD-t3L"/>
-                                    <constraint firstItem="mKc-qw-hRj" firstAttribute="top" secondItem="KRV-5w-Csa" secondAttribute="top" constant="281" id="UVh-qU-zkI"/>
-                                    <constraint firstAttribute="trailing" secondItem="YmA-Ip-QJE" secondAttribute="trailing" constant="22" id="Wyv-my-dUe"/>
-                                    <constraint firstItem="mKc-qw-hRj" firstAttribute="centerY" secondItem="KRV-5w-Csa" secondAttribute="centerY" id="bFW-k1-2yA"/>
-                                    <constraint firstAttribute="bottom" secondItem="YmA-Ip-QJE" secondAttribute="bottom" constant="23" id="d0G-yJ-LZc"/>
-                                </constraints>
-                            </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PrS-6o-NgG">
                                 <rect key="frame" x="22" y="715" width="56" height="60"/>
                                 <constraints>
@@ -770,13 +736,13 @@
                                 </connections>
                             </button>
                             <imageView opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="GalleryImg" translatesAutoresizingMaskIntoConstraints="NO" id="IXY-II-Zx5">
-                                <rect key="frame" x="295" y="719" width="61" height="55"/>
+                                <rect key="frame" x="314.33333333333331" y="719" width="41.666666666666686" height="55"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="55" id="jZz-tg-D40"/>
                                 </constraints>
                             </imageView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="L3c-RP-zwD">
-                                <rect key="frame" x="109" y="720" width="157" height="48"/>
+                                <rect key="frame" x="109.00000000000001" y="720" width="176.33333333333337" height="48"/>
                                 <color key="backgroundColor" red="0.46274509800000002" green="0.82745098039999998" blue="0.59999999999999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="48" id="E3h-1Y-vJE"/>
@@ -789,15 +755,21 @@
                                     <action selector="disconnect:" destination="OtV-7X-mhZ" eventType="touchUpInside" id="G1f-gL-RDC"/>
                                 </connections>
                             </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Testing" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1mK-rZ-Ayg">
+                                <rect key="frame" x="138" y="390" width="84" height="33"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="27"/>
+                                <color key="textColor" red="0.19215686269999999" green="0.82352941180000006" blue="0.51372549020000002" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="PrS-6o-NgG" firstAttribute="leading" secondItem="YLC-k3-Mmu" secondAttribute="leading" constant="22" id="1Hf-8a-wa7"/>
                             <constraint firstItem="Ehd-4l-YQm" firstAttribute="leading" secondItem="YLC-k3-Mmu" secondAttribute="leading" constant="35" id="1VK-rf-oeA"/>
-                            <constraint firstItem="KRV-5w-Csa" firstAttribute="top" secondItem="Ehd-4l-YQm" secondAttribute="bottom" constant="16" id="8sX-PM-q3k"/>
                             <constraint firstItem="IXY-II-Zx5" firstAttribute="leading" secondItem="L3c-RP-zwD" secondAttribute="trailing" constant="29" id="Cqf-xm-HMq"/>
-                            <constraint firstItem="PrS-6o-NgG" firstAttribute="top" secondItem="KRV-5w-Csa" secondAttribute="bottom" constant="22" id="LiL-GT-m73"/>
-                            <constraint firstItem="KRV-5w-Csa" firstAttribute="leading" secondItem="YLC-k3-Mmu" secondAttribute="leading" id="OEg-Qg-tii"/>
+                            <constraint firstItem="1mK-rZ-Ayg" firstAttribute="leading" secondItem="YLC-k3-Mmu" secondAttribute="leading" constant="138" id="EKp-yy-qmq"/>
+                            <constraint firstItem="1mK-rZ-Ayg" firstAttribute="centerX" secondItem="Ehd-4l-YQm" secondAttribute="centerX" id="HXW-Jr-ufJ"/>
+                            <constraint firstItem="1mK-rZ-Ayg" firstAttribute="centerY" secondItem="jnA-T8-XoT" secondAttribute="centerY" id="KNR-xN-aNo"/>
                             <constraint firstItem="PrS-6o-NgG" firstAttribute="top" secondItem="IXY-II-Zx5" secondAttribute="top" constant="-4" id="Rxb-bJ-s3r"/>
                             <constraint firstItem="YLC-k3-Mmu" firstAttribute="trailing" secondItem="Ehd-4l-YQm" secondAttribute="trailing" constant="49" id="W7L-qT-CBb"/>
                             <constraint firstItem="L3c-RP-zwD" firstAttribute="bottom" secondItem="YLC-k3-Mmu" secondAttribute="bottom" constant="-10" id="ewi-Nb-YY5"/>
@@ -806,8 +778,6 @@
                             <constraint firstItem="IXY-II-Zx5" firstAttribute="trailing" secondItem="jnA-T8-XoT" secondAttribute="trailingMargin" constant="-3" id="pBk-Vg-Kym"/>
                             <constraint firstItem="L3c-RP-zwD" firstAttribute="leading" secondItem="PrS-6o-NgG" secondAttribute="trailing" constant="31" id="sDe-AD-5TL"/>
                             <constraint firstItem="Ehd-4l-YQm" firstAttribute="top" secondItem="YLC-k3-Mmu" secondAttribute="top" id="sYz-JQ-tFU"/>
-                            <constraint firstItem="YLC-k3-Mmu" firstAttribute="trailing" secondItem="KRV-5w-Csa" secondAttribute="trailing" id="sx2-Iz-lGu"/>
-                            <constraint firstItem="KRV-5w-Csa" firstAttribute="centerX" secondItem="L3c-RP-zwD" secondAttribute="centerX" id="ucj-Yw-ioT"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="YLC-k3-Mmu"/>
                     </view>
@@ -817,7 +787,6 @@
                         <outlet property="disconnectButton" destination="L3c-RP-zwD" id="1bg-Ue-XhS"/>
                         <outlet property="messageLabel" destination="Ehd-4l-YQm" id="4G8-kT-3Ow"/>
                         <outlet property="micButton" destination="PrS-6o-NgG" id="tTw-dy-ecK"/>
-                        <outlet property="previewView" destination="KRV-5w-Csa" id="1oL-On-jro"/>
                         <segue destination="l4r-Io-QuE" kind="presentation" identifier="backToTBFromVmodel" modalPresentationStyle="fullScreen" id="ifN-Zn-8Fu"/>
                     </connections>
                 </viewController>
@@ -2045,11 +2014,11 @@
             <objects>
                 <viewController storyboardIdentifier="VSHome" title="initiateVS" modalPresentationStyle="fullScreen" id="We4-Xz-rDB" customClass="InitiateVSViewController" customModule="VShootApplication" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="diI-pc-N8o">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="758"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="InitiateVS-background" translatesAutoresizingMaskIntoConstraints="NO" id="gai-To-AbT">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="729"/>
+                                <rect key="frame" x="0.0" y="-44" width="375" height="719"/>
                             </imageView>
                             <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="x73-l9-Ljo">
                                 <rect key="frame" x="47" y="312" width="280" height="50"/>
@@ -3066,14 +3035,14 @@
             <objects>
                 <viewController modalPresentationStyle="fullScreen" id="6CF-qt-neY" customClass="ParentViewController" customModule="VShootApplication" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="tCb-4n-Oys">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="758"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="HQM-hq-dzn">
-                                <rect key="frame" x="0.0" y="44" width="375" height="734"/>
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="724"/>
                             </scrollView>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="iB3-GL-tNv" customClass="ButtonBarView" customModule="XLPagerTabStrip">
-                                <rect key="frame" x="0.0" y="44" width="375" height="64"/>
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="64"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="64" id="LBJ-1J-ID2"/>
@@ -4014,7 +3983,6 @@
         <image name="captureButton" width="100" height="100"/>
         <image name="edit pencil" width="512" height="512"/>
         <image name="flashOff" width="100" height="100"/>
-        <image name="flipCam" width="100" height="100"/>
         <image name="line" width="166.66667175292969" height="166.66667175292969"/>
         <image name="profileIcon" width="40" height="40"/>
         <image name="profilepic_none" width="100" height="100"/>
@@ -4028,9 +3996,9 @@
         <segue reference="ShK-hM-nrs"/>
         <segue reference="btB-pE-CCS"/>
         <segue reference="SS1-3b-KVf"/>
-        <segue reference="ydK-7P-Ukb"/>
+        <segue reference="gg6-kk-YdA"/>
         <segue reference="Nkn-xq-bMA"/>
-        <segue reference="ifN-Zn-8Fu"/>
+        <segue reference="pWC-Xa-Mvn"/>
         <segue reference="GtO-aM-FZM"/>
     </inferredMetricsTieBreakers>
 </document>
