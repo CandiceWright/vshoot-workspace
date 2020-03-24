@@ -177,6 +177,13 @@ class VmodelViewController: UIViewController {
         if (room != nil){
            self.room!.disconnect()
         }
+        recorder.stopCapture { (captureError) in
+            if let error = captureError {
+                print("Screen capture stop error: ", error as Any)
+            } else {
+                print("Screen capture stopped.")
+            }
+        }
         
         UserDefaults.standard.set(false, forKey: "freeTrialAvailable")
 
@@ -397,7 +404,6 @@ class VmodelViewController: UIViewController {
     
     @IBAction func disconnect(_ sender: Any) {
         self.room!.disconnect()
-        let recorder = RPScreenRecorder.shared()
         recorder.stopCapture { (captureError) in
             if let error = captureError {
                 print("Screen capture stop error: ", error as Any)
