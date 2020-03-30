@@ -53,11 +53,6 @@ class VmodelViewController: UIViewController {
     // An application has a much higher memory limit than an extension. You may choose to deliver full sized buffers instead.
     static let kDownscaleBuffers = false
 
-//    // Broadcast state. Our extension will capture samples from ReplayKit, and publish them in a Room.
-//    var broadcastController: RPBroadcastController?
-//
-//    static let kBroadcastExtensionBundleId = "com.thevshoot.vshootapp.BroadcastVideoExtension"
-//    static let kBroadcastExtensionSetupUiBundleId = "com.thevshoot.vshootapp.BroadcastVideoExtensionSetupUI"
     
     // MARK: UI Element Outlets and handles
     
@@ -68,6 +63,10 @@ class VmodelViewController: UIViewController {
     @IBOutlet weak var disconnectButton: UIButton!
     @IBOutlet weak var messageLabel: UILabel!
     @IBOutlet weak var soundButtonIV: UIImageView!
+    @IBOutlet weak var camPreview: UIView!
+    
+    @IBOutlet weak var isoSlider: UISlider!
+    
     
     //@IBOutlet weak var roomTextField: UITextField!
     //@IBOutlet weak var roomLine: UIView!
@@ -80,9 +79,39 @@ class VmodelViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         print(roomName)
+        
+        if PlatformUtils.isSimulator {
+            self.previewView.removeFromSuperview()
+        }
+        
+        self.messageLabel.adjustsFontSizeToFitWidth = true;
+        self.messageLabel.minimumScaleFactor = 0.75;
+        self.disconnectButton.layer.cornerRadius = CGFloat(Float(8.0))
+        
+        // Disconnect and mic button will be displayed when the Client is connected to a Room.
+        self.disconnectButton.isHidden = true
+        self.micButton.isHidden = true
+        
+        //camera setup
+        self.setupCaptureSession()
+        self.setupDevice()
+        self.setupInputOutput()
+        self.cameraPreviewLayer = AVCaptureVideoPreviewLayer(session: captureSession)
+        self.captureSession.startRunning()
+        self.cameraPreviewLayer?.videoGravity = AVLayerVideoGravity.resizeAspectFill
+        self.cameraPreviewLayer?.connection?.videoOrientation = .portrait
+        camPreview.layer.insertSublayer(self.cameraPreviewLayer!, at: 0)
+        self.cameraPreviewLayer?.frame = camPreview.frame
+        //view.layer.insertSublayer(self.cameraPreviewLayer!, at: 0)
+        //self.cameraPreviewLayer?.frame = view.frame
+        
+        self.isoSlider.minimumValue = (self.currentDevice?.activeFormat.minISO)!
+        self.isoSlider.maximumValue = (self.currentDevice?.activeFormat.maxISO)!
+        
         let tap = UITapGestureRecognizer(target: self, action: #selector(VmodelViewController.showPhotoMsg))
         capturedImage.isUserInteractionEnabled = true
         self.capturedImage.addGestureRecognizer(tap)
+        
         SocketIOManager.sharedInstance.socket.on("VShootEnded"){ dataResults, ack in
             let alertController = UIAlertController(title: "The Votographer has ended the VShoot", message:
                 nil, preferredStyle: UIAlertController.Style.alert)
@@ -92,58 +121,15 @@ class VmodelViewController: UIViewController {
             
             
         }
-        //self.title = "QuickStart"
-        self.messageLabel.adjustsFontSizeToFitWidth = true;
-        self.messageLabel.minimumScaleFactor = 0.75;
-        self.disconnectButton.layer.cornerRadius = CGFloat(Float(8.0))
         
-        if PlatformUtils.isSimulator {
-            self.previewView.removeFromSuperview()
-        }
-        
-        // Disconnect and mic button will be displayed when the Client is connected to a Room.
-        self.disconnectButton.isHidden = true
-        self.micButton.isHidden = true
-        
-        
-        self.setupCaptureSession()
-        self.setupDevice()
-        self.setupInputOutput()
-        self.cameraPreviewLayer = AVCaptureVideoPreviewLayer(session: captureSession)
-        //self.captureSession.startRunning()
         SocketIOManager.sharedInstance.socket.on("takephoto") { dataArray, ack in
             print("just got notified to take photo")
             //self.localVideoTrack?.isEnabled = false;
             
-            
-            //first stop video call
-            //start camera session of your own
+            //get the settings for what the picture should be taken with
             let data = dataArray[0] as! Dictionary<String,AnyObject>
             let flash = data["flashSetting"] as! Bool
-            self.captureSession.startRunning();
             self.takePhoto(flashSet: flash)
-            
-//            DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2), execute: {
-//                self.takePhoto(flashSet: flash)
-//            })
-            
-//                self.camera?.stopCapture(completion: { (error) in
-//                    self.localVideoTrack = nil
-//                    //self.localVideoTrack?.isEnabled = false
-//                    self.camera = nil
-//
-//                    // It is safe to init and start your own AVCaptureSession.
-//                    self.captureSession.startRunning()
-//                    DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(3), execute: {
-//                        // Put your code which should be executed with a delay here
-//                        print("about to take photo")
-//                        self.takePhoto(flashSet: flash)
-//                        //start camera back up
-//
-//
-//                    })
-//
-//                })
         }
         
         SocketIOManager.sharedInstance.socket.on("votographerInBackground"){ dataResults, ack in
@@ -172,238 +158,6 @@ class VmodelViewController: UIViewController {
         //self.prepareLocalMedia()
     }
     
-    /* This function handles the case where the votographer opts to cancel the vshoot */
-    func disconnectOnServerRequest(){
-        if (room != nil){
-           self.room!.disconnect()
-            logMessage(messageText: "Attempting to disconnect from room \(room!.name)")
-        }
-        recorder.stopCapture { (captureError) in
-            if let error = captureError {
-                print("Screen capture stop error: ", error as Any)
-            } else {
-                print("Screen capture stopped.")
-                self.videoSource = nil
-                self.screenTrack = nil
-            }
-        }
-        
-        UserDefaults.standard.set(false, forKey: "freeTrialAvailable")
-
-        //dismiss(animated: true, completion: nil)
-        self.performSegue(withIdentifier: "backToTBFromVmodel", sender: self)
-        
-    }
-    
-    func disconnectWhileWaiting(){
-        if (room != nil){
-            self.room!.disconnect()
-        }
-        
-        SocketIOManager.sharedInstance.endVShoot(vsId: self.vshootId, endInitiator: self.title!)
-        
-        self.performSegue(withIdentifier: "backToTBFromVmodel", sender: self)
-    }
-    
-    func waitForVotographer(){
-        //show a spinner
-        self.showSpinner(receiver: "votographer")
-    }
-    
-    func showSpinner(receiver:String){
-        SwiftSpinner.show("Waiting for " + receiver + " to return...").addTapHandler({
-            SwiftSpinner.hide()
-            let alertController = UIAlertController(title: "Are you ", message: "Are you sure you want to cancel?", preferredStyle: UIAlertController.Style.alert)
-            alertController.addAction(UIAlertAction(title: "Yes", style: UIAlertAction.Style.default,handler: {(action) in
-                //SwiftSpinner.hide()
-                self.disconnectWhileWaiting()
-                
-            }))
-            alertController.addAction(UIAlertAction(title: "No", style: UIAlertAction.Style.default,handler: {(action) in
-                self.showSpinner(receiver: receiver)
-                
-                
-            }))
-            
-            self.present(alertController, animated: true, completion: nil)
-        }, subtitle: "Tired of waiting? Tap screen to end vshoot!")
-    }
-    
-    @objc func showPhotoMsg(){
-        print("in photo msg func")
-        let alertController = UIAlertController(title: "View New Photos", message:
-            "Go to your iphone photo library to view your new photos. You will be able to talk to the votographer while you're out of the app. When back, the video will resume.", preferredStyle: UIAlertController.Style.alert)
-        alertController.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default,handler: {(action) in }))
-        self.present(alertController, animated: true, completion: nil)
-    }
-    
-    func takePhoto(flashSet:Bool) {
-        do {
-            try currentDevice?.lockForConfiguration()
-        } catch {
-            //do things here
-        }
-        
-        //currentDevice?.exposureMode = .autoExpose
-        currentDevice?.exposureMode = .continuousAutoExposure
-        currentDevice?.unlockForConfiguration()
-        photoOutput.isHighResolutionCaptureEnabled = true
-        let photoSettings = AVCapturePhotoSettings()
-        //photoSettings.isAutoStillImageStabilizationEnabled = true
-        photoSettings.isHighResolutionPhotoEnabled = true
-        if (flashSet){
-            photoSettings.flashMode = .on
-        }
-        print("printing capture session status")
-        print(self.captureSession.isRunning)
-        if (self.captureSession.isRunning){
-            self.photoOutput?.capturePhoto(with: photoSettings, delegate: self)
-        }
-    }
-    
-    
-    func setupCaptureSession() {
-        self.captureSession.sessionPreset = AVCaptureSession.Preset.photo
-    }
-    
-    func setupDevice() {
-        let deviceDiscoverySession = AVCaptureDevice.DiscoverySession(deviceTypes: [AVCaptureDevice.DeviceType.builtInWideAngleCamera], mediaType: AVMediaType.video, position: AVCaptureDevice.Position.unspecified)
-        let devices = deviceDiscoverySession.devices
-
-        for device in devices {
-            if device.position == AVCaptureDevice.Position.back {
-                backCamera = device
-            } else if device.position == AVCaptureDevice.Position.front {
-                frontCamera = device
-            }
-        }
-        currentDevice = backCamera
-        
-        
-    }
-    
-    func setupInputOutput() {
-        do {
-            let captureDeviceInput = try AVCaptureDeviceInput(device: currentDevice!)
-            self.captureSession.addInput(captureDeviceInput)
-            photoOutput = AVCapturePhotoOutput()
-            photoOutput!.setPreparedPhotoSettingsArray([AVCapturePhotoSettings(format: [AVVideoCodecKey : AVVideoCodecType.jpeg])], completionHandler: nil)
-            self.captureSession.addOutput(photoOutput!)
-            
-            
-        } catch {
-            print(error)
-        }
-    }
-    
-    override var prefersHomeIndicatorAutoHidden: Bool {
-        return self.room != nil
-    }
-    
-    func setupRemoteVideoView() {
-        // Creating `TVIVideoView` programmatically
-        self.remoteView = VideoView.init(frame: CGRect.zero, delegate:self)
-        
-        self.view.insertSubview(self.remoteView!, at: 0)
-        
-        // `TVIVideoView` supports scaleToFill, scaleAspectFill and scaleAspectFit
-        // scaleAspectFit is the default mode when you create `TVIVideoView` programmatically.
-        self.remoteView!.contentMode = .scaleAspectFit;
-        
-        let centerX = NSLayoutConstraint(item: self.remoteView!,
-                                         attribute: NSLayoutConstraint.Attribute.centerX,
-                                         relatedBy: NSLayoutConstraint.Relation.equal,
-                                         toItem: self.view,
-                                         attribute: NSLayoutConstraint.Attribute.centerX,
-                                         multiplier: 1,
-                                         constant: 0);
-        self.view.addConstraint(centerX)
-        let centerY = NSLayoutConstraint(item: self.remoteView!,
-                                         attribute: NSLayoutConstraint.Attribute.centerY,
-                                         relatedBy: NSLayoutConstraint.Relation.equal,
-                                         toItem: self.view,
-                                         attribute: NSLayoutConstraint.Attribute.centerY,
-                                         multiplier: 1,
-                                         constant: 0);
-        self.view.addConstraint(centerY)
-        let width = NSLayoutConstraint(item: self.remoteView!,
-                                       attribute: NSLayoutConstraint.Attribute.width,
-                                       relatedBy: NSLayoutConstraint.Relation.equal,
-                                       toItem: self.view,
-                                       attribute: NSLayoutConstraint.Attribute.width,
-                                       multiplier: 1,
-                                       constant: 0);
-        self.view.addConstraint(width)
-        let height = NSLayoutConstraint(item: self.remoteView!,
-                                        attribute: NSLayoutConstraint.Attribute.height,
-                                        relatedBy: NSLayoutConstraint.Relation.equal,
-                                        toItem: self.view,
-                                        attribute: NSLayoutConstraint.Attribute.height,
-                                        multiplier: 1,
-                                        constant: 0);
-        self.view.addConstraint(height)
-    }
-    
-    func connect() {
-        // Configure access token either from server or manually.
-        // If the default wasn't changed, try fetching from server.
-        print("I am in connect function for vmodel")
-        if (accessToken == "TWILIO_ACCESS_TOKEN") {
-            do {
-                accessToken = try TokenUtils.fetchToken(url: tokenUrl)
-            } catch {
-                let message = "Failed to fetch access token"
-                logMessage(messageText: message)
-                return
-            }
-        }
-        
-        // Prepare local media which we will share with Room Participants.
-        self.prepareLocalMedia()
-        
-        // Preparing the connect options with the access token that we fetched (or hardcoded).
-        let connectOptions = ConnectOptions.init(token: accessToken) { (builder) in
-            
-            // Use the local media that we prepared earlier.
-            //builder.audioTracks = [LocalAudioTrack()!]
-            builder.audioTracks = self.localAudioTrack != nil ? [self.localAudioTrack!] : [LocalAudioTrack]()
-
-            if let videoTrack = self.screenTrack {
-                print("successfully made screentrack the videotrack")
-                builder.videoTracks = [videoTrack]
-            }
-            
-            // Use the preferred audio codec
-            if let preferredAudioCodec = Settings.shared.audioCodec {
-                builder.preferredAudioCodecs = [preferredAudioCodec]
-            }
-            
-            // Use the preferred video codec
-            if let preferredVideoCodec = Settings.shared.videoCodec {
-                builder.preferredVideoCodecs = [preferredVideoCodec]
-            }
-            
-            // Use the preferred encoding parameters
-            //builder.encodingParameters = encodingParameters
-            
-//            // Use the preferred encoding parameters
-            if let encodingParameters = Settings.shared.getEncodingParameters() {
-                builder.encodingParameters = encodingParameters
-            }
-            
-            // The name of the Room where the Client will attempt to connect to. Please note that if you pass an empty
-            // Room `name`, the Client will create one for you. You can get the name or sid from any connected Room.
-            builder.roomName = self.roomName
-        }
-        
-        // Connect to the Room using the options we provided.
-        room = TwilioVideoSDK.connect(options: connectOptions, delegate: self)
-        
-        logMessage(messageText: "Attempting to connect to room \(String(describing: self.roomName))")
-        
-        self.showRoomUI(inRoom: true)
-        //self.dismissKeyboard()
-    }
     // MARK: IBActions
     
     @IBAction func disconnect(_ sender: Any) {
@@ -456,9 +210,6 @@ class VmodelViewController: UIViewController {
                 }
     }
     
-    
-    
-    
     @IBAction func toggleCam(_ sender: Any) {
         var newDevice: AVCaptureDevice?
         
@@ -481,8 +232,374 @@ class VmodelViewController: UIViewController {
         }
     }
     
+    @IBAction func changeISO(_ sender: UISlider) {
+        print(self.isoSlider.value);
+        self.updateExposure(isoValue: self.isoSlider.value)
+    }
+    
+    
+    
+    func updateExposure(isoValue: Float){
+        do {
+            try currentDevice?.lockForConfiguration()
+        } catch {
+                   //do things here
+        }
+        self.currentDevice?.setExposureModeCustom(duration: AVCaptureDevice.currentExposureDuration, iso: isoValue, completionHandler: nil)
+        self.currentDevice?.unlockForConfiguration()
+    }
+    
+    
+    func setupCaptureSession() {
+        self.captureSession.sessionPreset = AVCaptureSession.Preset.photo
+    }
+        
+        func setupDevice() {
+            let deviceDiscoverySession = AVCaptureDevice.DiscoverySession(deviceTypes: [AVCaptureDevice.DeviceType.builtInWideAngleCamera], mediaType: AVMediaType.video, position: AVCaptureDevice.Position.unspecified)
+            let devices = deviceDiscoverySession.devices
+
+            for device in devices {
+                if device.position == AVCaptureDevice.Position.back {
+                    backCamera = device
+                } else if device.position == AVCaptureDevice.Position.front {
+                    frontCamera = device
+                }
+            }
+            currentDevice = backCamera
+            
+            
+        }
+        
+        func setupInputOutput() {
+            do {
+                let captureDeviceInput = try AVCaptureDeviceInput(device: currentDevice!)
+                self.captureSession.addInput(captureDeviceInput)
+                photoOutput = AVCapturePhotoOutput()
+                photoOutput!.setPreparedPhotoSettingsArray([AVCapturePhotoSettings(format: [AVVideoCodecKey : AVVideoCodecType.jpeg])], completionHandler: nil)
+                self.captureSession.addOutput(photoOutput!)
+                
+                
+            } catch {
+                print(error)
+            }
+        }
+    
+    func takePhoto(flashSet:Bool) {
+        do {
+            try currentDevice?.lockForConfiguration()
+        } catch {
+            //do things here
+        }
+        
+        //currentDevice?.exposureMode = .autoExpose
+        //currentDevice?.exposureMode = .continuousAutoExposure
+        
+        currentDevice?.exposureMode = .custom
+        currentDevice?.unlockForConfiguration()
+        photoOutput.isHighResolutionCaptureEnabled = true
+        let photoSettings = AVCapturePhotoSettings()
+        //photoSettings.isAutoStillImageStabilizationEnabled = true
+        photoSettings.isHighResolutionPhotoEnabled = true
+        if (flashSet){
+            photoSettings.flashMode = .on
+        }
+        print("printing capture session status")
+        print(self.captureSession.isRunning)
+        if (self.captureSession.isRunning){
+            self.photoOutput?.capturePhoto(with: photoSettings, delegate: self)
+        }
+    }
+        
+        @objc func showPhotoMsg(){
+            print("in photo msg func")
+            let alertController = UIAlertController(title: "View New Photos", message:
+                "Go to your iphone photo library to view your new photos. You will be able to talk to the votographer while you're out of the app. When back, the video will resume.", preferredStyle: UIAlertController.Style.alert)
+            alertController.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default,handler: {(action) in }))
+            self.present(alertController, animated: true, completion: nil)
+        }
+        
+        /* This function handles the case where the votographer opts to cancel the vshoot */
+        func disconnectOnServerRequest(){
+            if (room != nil){
+               self.room!.disconnect()
+                logMessage(messageText: "Attempting to disconnect from room \(room!.name)")
+            }
+            recorder.stopCapture { (captureError) in
+                if let error = captureError {
+                    print("Screen capture stop error: ", error as Any)
+                } else {
+                    print("Screen capture stopped.")
+                    self.videoSource = nil
+                    self.screenTrack = nil
+                }
+            }
+            
+            UserDefaults.standard.set(false, forKey: "freeTrialAvailable")
+
+            //dismiss(animated: true, completion: nil)
+            self.performSegue(withIdentifier: "backToTBFromVmodel", sender: self)
+            
+        }
+        
+        func disconnectWhileWaiting(){
+            if (room != nil){
+                self.room!.disconnect()
+            }
+            
+            SocketIOManager.sharedInstance.endVShoot(vsId: self.vshootId, endInitiator: self.title!)
+            
+            self.performSegue(withIdentifier: "backToTBFromVmodel", sender: self)
+        }
+        
+        func waitForVotographer(){
+            //show a spinner
+            self.showSpinner(receiver: "votographer")
+        }
+        
+        func showSpinner(receiver:String){
+            SwiftSpinner.show("Waiting for " + receiver + " to return...").addTapHandler({
+                SwiftSpinner.hide()
+                let alertController = UIAlertController(title: "Are you ", message: "Are you sure you want to cancel?", preferredStyle: UIAlertController.Style.alert)
+                alertController.addAction(UIAlertAction(title: "Yes", style: UIAlertAction.Style.default,handler: {(action) in
+                    //SwiftSpinner.hide()
+                    self.disconnectWhileWaiting()
+                    
+                }))
+                alertController.addAction(UIAlertAction(title: "No", style: UIAlertAction.Style.default,handler: {(action) in
+                    self.showSpinner(receiver: receiver)
+                    
+                    
+                }))
+                
+                self.present(alertController, animated: true, completion: nil)
+            }, subtitle: "Tired of waiting? Tap screen to end vshoot!")
+        }
+        
+        override var prefersHomeIndicatorAutoHidden: Bool {
+            return self.room != nil
+        }
+        
+        func setupRemoteVideoView() {
+            // Creating `TVIVideoView` programmatically
+            self.remoteView = VideoView.init(frame: CGRect.zero, delegate:self)
+            
+            self.view.insertSubview(self.remoteView!, at: 0)
+            
+            // `TVIVideoView` supports scaleToFill, scaleAspectFill and scaleAspectFit
+            // scaleAspectFit is the default mode when you create `TVIVideoView` programmatically.
+            self.remoteView!.contentMode = .scaleAspectFit;
+            
+            let centerX = NSLayoutConstraint(item: self.remoteView!,
+                                             attribute: NSLayoutConstraint.Attribute.centerX,
+                                             relatedBy: NSLayoutConstraint.Relation.equal,
+                                             toItem: self.view,
+                                             attribute: NSLayoutConstraint.Attribute.centerX,
+                                             multiplier: 1,
+                                             constant: 0);
+            self.view.addConstraint(centerX)
+            let centerY = NSLayoutConstraint(item: self.remoteView!,
+                                             attribute: NSLayoutConstraint.Attribute.centerY,
+                                             relatedBy: NSLayoutConstraint.Relation.equal,
+                                             toItem: self.view,
+                                             attribute: NSLayoutConstraint.Attribute.centerY,
+                                             multiplier: 1,
+                                             constant: 0);
+            self.view.addConstraint(centerY)
+            let width = NSLayoutConstraint(item: self.remoteView!,
+                                           attribute: NSLayoutConstraint.Attribute.width,
+                                           relatedBy: NSLayoutConstraint.Relation.equal,
+                                           toItem: self.view,
+                                           attribute: NSLayoutConstraint.Attribute.width,
+                                           multiplier: 1,
+                                           constant: 0);
+            self.view.addConstraint(width)
+            let height = NSLayoutConstraint(item: self.remoteView!,
+                                            attribute: NSLayoutConstraint.Attribute.height,
+                                            relatedBy: NSLayoutConstraint.Relation.equal,
+                                            toItem: self.view,
+                                            attribute: NSLayoutConstraint.Attribute.height,
+                                            multiplier: 1,
+                                            constant: 0);
+            self.view.addConstraint(height)
+        }
+        
+        func connect() {
+            // Configure access token either from server or manually.
+            // If the default wasn't changed, try fetching from server.
+            print("I am in connect function for vmodel")
+            if (accessToken == "TWILIO_ACCESS_TOKEN") {
+                do {
+                    accessToken = try TokenUtils.fetchToken(url: tokenUrl)
+                } catch {
+                    let message = "Failed to fetch access token"
+                    logMessage(messageText: message)
+                    return
+                }
+            }
+            
+            // Prepare local media which we will share with Room Participants.
+            self.prepareLocalMedia()
+            
+            // Preparing the connect options with the access token that we fetched (or hardcoded).
+            let connectOptions = ConnectOptions.init(token: accessToken) { (builder) in
+                
+                // Use the local media that we prepared earlier.
+                //builder.audioTracks = [LocalAudioTrack()!]
+                builder.audioTracks = self.localAudioTrack != nil ? [self.localAudioTrack!] : [LocalAudioTrack]()
+
+                if let videoTrack = self.screenTrack {
+                    print("successfully made screentrack the videotrack")
+                    builder.videoTracks = [videoTrack]
+                }
+                
+                // Use the preferred audio codec
+                if let preferredAudioCodec = Settings.shared.audioCodec {
+                    builder.preferredAudioCodecs = [preferredAudioCodec]
+                }
+                
+                // Use the preferred video codec
+                if let preferredVideoCodec = Settings.shared.videoCodec {
+                    builder.preferredVideoCodecs = [preferredVideoCodec]
+                }
+                
+                // Use the preferred encoding parameters
+                //builder.encodingParameters = encodingParameters
+                
+    //            // Use the preferred encoding parameters
+                if let encodingParameters = Settings.shared.getEncodingParameters() {
+                    builder.encodingParameters = encodingParameters
+                }
+                
+                // The name of the Room where the Client will attempt to connect to. Please note that if you pass an empty
+                // Room `name`, the Client will create one for you. You can get the name or sid from any connected Room.
+                builder.roomName = self.roomName
+            }
+            
+            // Connect to the Room using the options we provided.
+            room = TwilioVideoSDK.connect(options: connectOptions, delegate: self)
+            
+            logMessage(messageText: "Attempting to connect to room \(String(describing: self.roomName))")
+            
+            self.showRoomUI(inRoom: true)
+            //self.dismissKeyboard()
+        }
+        
+        func prepareLocalMedia() {
+                print("I am preparing local media in vmodel")
+                // We will share local audio and video when we connect to the Room.
+                
+        //        // Create an audio track.
+                if (localAudioTrack == nil) {
+                    print("adding audio")
+                    localAudioTrack = LocalAudioTrack.init(options: nil, enabled: true, name: "Microphone")
+
+                    if (localAudioTrack == nil) {
+                        logMessage(messageText: "Failed to create audio track")
+                    }
+                }
+        //
+        //        // Create a video track which captures from the camera.
+        //        if (localVideoTrack == nil) {
+        //            self.startPreview()
+        //        }
+                
+                // Start recording the screen.
+                //let recorder = RPScreenRecorder.shared()
+                recorder.isMicrophoneEnabled = false
+                recorder.isCameraEnabled = false
+
+                // The source produces either downscaled buffers with smoother motion, or an HD screen recording.
+                let options = VmodelViewController.kDownscaleBuffers ? ReplayKitVideoSource.TelecineOptions.p60to24or25or30 : ReplayKitVideoSource.TelecineOptions.disabled
+                videoSource = ReplayKitVideoSource(isScreencast: !VmodelViewController.kDownscaleBuffers,
+                                                   telecineOptions: options)
+
+                screenTrack = LocalVideoTrack(source: videoSource!,
+                                              enabled: true,
+                                              name: "Screen")
+
+                let videoCodec = Settings.shared.videoCodec ?? Vp8Codec()!
+                let (encodingParams, outputFormat) = ReplayKitVideoSource.getParametersForUseCase(codec: videoCodec,
+                                                                                                  isScreencast: !VmodelViewController.kDownscaleBuffers,
+                                                                                               telecineOptions:options)
+                videoSource?.requestOutputFormat(outputFormat)
+
+                recorder.startCapture(handler: { (sampleBuffer, type, error) in
+                    if error != nil {
+                        print("Capture error: ", error as Any)
+                        return
+                    }
+
+                    switch type {
+                    case RPSampleBufferType.video:
+                        self.videoSource?.processFrame(sampleBuffer: sampleBuffer)
+                        break
+                    case RPSampleBufferType.audioApp:
+                        break
+                    case RPSampleBufferType.audioMic:
+                        // We use `TVIDefaultAudioDevice` to capture and playback audio for conferencing.
+                        break
+                    }
+
+
+                }) { (error) in
+                    if error != nil {
+                        print("Screen capture error: ", error as Any)
+                    } else {
+                        print("Screen capture started.")
+                        //self.connect(encodingParameters: encodingParams)
+                    }
+                }
+            }
     
     // MARK: Private
+    
+    @objc func flipCamera() {
+        var newDevice: AVCaptureDevice?
+        
+        if let camera = self.camera, let captureDevice = camera.device {
+            if captureDevice.position == .front {
+                newDevice = CameraSource.captureDevice(position: .back)
+            } else {
+                newDevice = CameraSource.captureDevice(position: .front)
+            }
+            
+            if let newDevice = newDevice {
+                camera.selectCaptureDevice(newDevice) { (captureDevice, videoFormat, error) in
+                    if let error = error {
+                        self.logMessage(messageText: "Error selecting capture device.\ncode = \((error as NSError).code) error = \(error.localizedDescription)")
+                    } else {
+                        self.previewView.shouldMirror = (captureDevice.position == .front)
+                    }
+                }
+            }
+        }
+    }
+    
+    // Update our UI based upon if we are in a Room or not
+    func showRoomUI(inRoom: Bool) {
+        //self.connectButton.isHidden = inRoom
+        //self.roomTextField.isHidden = inRoom
+        //self.roomLine.isHidden = inRoom
+        //self.roomLabel.isHidden = inRoom
+        self.micButton.isHidden = !inRoom
+        self.disconnectButton.isHidden = !inRoom
+        self.navigationController?.setNavigationBarHidden(inRoom, animated: true)
+        UIApplication.shared.isIdleTimerDisabled = inRoom
+        
+        // Show / hide the automatic home indicator on modern iPhones.
+        if #available(iOS 11.0, *) {
+            self.setNeedsUpdateOfHomeIndicatorAutoHidden()
+        }
+        
+        //print("I am done with connect function in vmodel")
+    }
+    
+//    @objc func dismissKeyboard() {
+//        if (self.roomTextField.isFirstResponder) {
+//            self.roomTextField.resignFirstResponder()
+//        }
+//    }
+    
     func startPreview() {
         print("I am starting preview in vmodel")
         if PlatformUtils.isSimulator {
@@ -520,120 +637,6 @@ class VmodelViewController: UIViewController {
             self.logMessage(messageText:"No front or back capture device found!")
         }
     }
-    
-    @objc func flipCamera() {
-        var newDevice: AVCaptureDevice?
-        
-        if let camera = self.camera, let captureDevice = camera.device {
-            if captureDevice.position == .front {
-                newDevice = CameraSource.captureDevice(position: .back)
-            } else {
-                newDevice = CameraSource.captureDevice(position: .front)
-            }
-            
-            if let newDevice = newDevice {
-                camera.selectCaptureDevice(newDevice) { (captureDevice, videoFormat, error) in
-                    if let error = error {
-                        self.logMessage(messageText: "Error selecting capture device.\ncode = \((error as NSError).code) error = \(error.localizedDescription)")
-                    } else {
-                        self.previewView.shouldMirror = (captureDevice.position == .front)
-                    }
-                }
-            }
-        }
-    }
-    
-    func prepareLocalMedia() {
-        print("I am preparing local media in vmodel")
-        // We will share local audio and video when we connect to the Room.
-        
-//        // Create an audio track.
-        if (localAudioTrack == nil) {
-            print("adding audio")
-            localAudioTrack = LocalAudioTrack.init(options: nil, enabled: true, name: "Microphone")
-
-            if (localAudioTrack == nil) {
-                logMessage(messageText: "Failed to create audio track")
-            }
-        }
-//
-//        // Create a video track which captures from the camera.
-//        if (localVideoTrack == nil) {
-//            self.startPreview()
-//        }
-        
-        // Start recording the screen.
-        //let recorder = RPScreenRecorder.shared()
-        recorder.isMicrophoneEnabled = false
-        recorder.isCameraEnabled = false
-
-        // The source produces either downscaled buffers with smoother motion, or an HD screen recording.
-        let options = VmodelViewController.kDownscaleBuffers ? ReplayKitVideoSource.TelecineOptions.p60to24or25or30 : ReplayKitVideoSource.TelecineOptions.disabled
-        videoSource = ReplayKitVideoSource(isScreencast: !VmodelViewController.kDownscaleBuffers,
-                                           telecineOptions: options)
-
-        screenTrack = LocalVideoTrack(source: videoSource!,
-                                      enabled: true,
-                                      name: "Screen")
-
-        let videoCodec = Settings.shared.videoCodec ?? Vp8Codec()!
-        let (encodingParams, outputFormat) = ReplayKitVideoSource.getParametersForUseCase(codec: videoCodec,
-                                                                                          isScreencast: !VmodelViewController.kDownscaleBuffers,
-                                                                                       telecineOptions:options)
-        videoSource?.requestOutputFormat(outputFormat)
-
-        recorder.startCapture(handler: { (sampleBuffer, type, error) in
-            if error != nil {
-                print("Capture error: ", error as Any)
-                return
-            }
-
-            switch type {
-            case RPSampleBufferType.video:
-                self.videoSource?.processFrame(sampleBuffer: sampleBuffer)
-                break
-            case RPSampleBufferType.audioApp:
-                break
-            case RPSampleBufferType.audioMic:
-                // We use `TVIDefaultAudioDevice` to capture and playback audio for conferencing.
-                break
-            }
-
-
-        }) { (error) in
-            if error != nil {
-                print("Screen capture error: ", error as Any)
-            } else {
-                print("Screen capture started.")
-                //self.connect(encodingParameters: encodingParams)
-            }
-        }
-    }
-    
-    // Update our UI based upon if we are in a Room or not
-    func showRoomUI(inRoom: Bool) {
-        //self.connectButton.isHidden = inRoom
-        //self.roomTextField.isHidden = inRoom
-        //self.roomLine.isHidden = inRoom
-        //self.roomLabel.isHidden = inRoom
-        self.micButton.isHidden = !inRoom
-        self.disconnectButton.isHidden = !inRoom
-        self.navigationController?.setNavigationBarHidden(inRoom, animated: true)
-        UIApplication.shared.isIdleTimerDisabled = inRoom
-        
-        // Show / hide the automatic home indicator on modern iPhones.
-        if #available(iOS 11.0, *) {
-            self.setNeedsUpdateOfHomeIndicatorAutoHidden()
-        }
-        
-        //print("I am done with connect function in vmodel")
-    }
-    
-//    @objc func dismissKeyboard() {
-//        if (self.roomTextField.isFirstResponder) {
-//            self.roomTextField.resignFirstResponder()
-//        }
-//    }
     
     func logMessage(messageText: String) {
         NSLog(messageText)
@@ -856,11 +859,11 @@ extension VmodelViewController: AVCapturePhotoCaptureDelegate {
             self.capturedImage.image = UIImage(data: imageData)
             UIImageWriteToSavedPhotosAlbum(UIImage(data: imageData)!, nil, nil, nil)
             
-            self.captureSession.stopRunning()
+            //self.captureSession.stopRunning()
 //            DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1), execute: {
 //                self.connect()
 //            })
-            self.localVideoTrack?.isEnabled = true;
+            //self.localVideoTrack?.isEnabled = true;
         }
         else {
             print(error as Any)

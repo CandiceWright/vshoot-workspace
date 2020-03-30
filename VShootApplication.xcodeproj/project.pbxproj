@@ -64,6 +64,7 @@
 		384CC3DC2426ACB500A5061B /* Telecine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 384CC3DA2426ACB400A5061B /* Telecine.swift */; };
 		384CC3DD2426ACB500A5061B /* ReplayKitVideoSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 384CC3DB2426ACB500A5061B /* ReplayKitVideoSource.swift */; };
 		384CC3F42426CC4F00A5061B /* ExampleReplayKitAudioCapturer.m in Sources */ = {isa = PBXBuildFile; fileRef = 384CC3F32426CC4F00A5061B /* ExampleReplayKitAudioCapturer.m */; };
+		384CC3F6242B2B2300A5061B /* VotographerBasicViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 384CC3F5242B2B2300A5061B /* VotographerBasicViewController.swift */; };
 		384FCB6D225332B200BF8DEB /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 384FCB6C225332B200BF8DEB /* GoogleService-Info.plist */; };
 		3860143D21C4D84B001CD36E /* ManageFriendshipsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3860143C21C4D84B001CD36E /* ManageFriendshipsViewController.swift */; };
 		3864481021BDB52E0021F86E /* VotographriendViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3864480F21BDB52E0021F86E /* VotographriendViewController.swift */; };
@@ -167,6 +168,7 @@
 		384CC3F12426CC4D00A5061B /* VShootApplication-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "VShootApplication-Bridging-Header.h"; sourceTree = "<group>"; };
 		384CC3F22426CC4F00A5061B /* ExampleReplayKitAudioCapturer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ExampleReplayKitAudioCapturer.h; sourceTree = "<group>"; };
 		384CC3F32426CC4F00A5061B /* ExampleReplayKitAudioCapturer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ExampleReplayKitAudioCapturer.m; sourceTree = "<group>"; };
+		384CC3F5242B2B2300A5061B /* VotographerBasicViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VotographerBasicViewController.swift; sourceTree = "<group>"; };
 		384FCB6C225332B200BF8DEB /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		3860143C21C4D84B001CD36E /* ManageFriendshipsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageFriendshipsViewController.swift; sourceTree = "<group>"; };
 		3864480F21BDB52E0021F86E /* VotographriendViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VotographriendViewController.swift; sourceTree = "<group>"; };
@@ -293,6 +295,7 @@
 		3817570921FB0A1B00797C4B /* Shoots */ = {
 			isa = PBXGroup;
 			children = (
+				384CC3F7242B318E00A5061B /* Camera */,
 				384CC3F22426CC4F00A5061B /* ExampleReplayKitAudioCapturer.h */,
 				384CC3F32426CC4F00A5061B /* ExampleReplayKitAudioCapturer.m */,
 				384CC3DB2426ACB500A5061B /* ReplayKitVideoSource.swift */,
@@ -307,6 +310,7 @@
 				3827894D22C85F0C005E4E70 /* PurchaseVshootsViewController.swift */,
 				382F9859240B46F7005F9E2C /* VShootOptionViewController.swift */,
 				384CC3F12426CC4D00A5061B /* VShootApplication-Bridging-Header.h */,
+				384CC3F5242B2B2300A5061B /* VotographerBasicViewController.swift */,
 			);
 			path = Shoots;
 			sourceTree = "<group>";
@@ -426,6 +430,13 @@
 				384CC3AB242336F400A5061B /* PhotoeditingHomeViewController.swift */,
 			);
 			path = Photoediting;
+			sourceTree = "<group>";
+		};
+		384CC3F7242B318E00A5061B /* Camera */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Camera;
 			sourceTree = "<group>";
 		};
 		3864481521BE623C0021F86E /* Models */ = {
@@ -691,6 +702,7 @@
 				3805396C2293AD9F0009CD49 /* ParentViewController.swift in Sources */,
 				382F9862240C10A6005F9E2C /* NavModelProfileViewController.swift in Sources */,
 				380539802299A6C60009CD49 /* GroupDetailsViewController.swift in Sources */,
+				384CC3F6242B2B2300A5061B /* VotographerBasicViewController.swift in Sources */,
 				3805397C229919280009CD49 /* Group.swift in Sources */,
 				384CBE4D210CF2E700E26A0C /* AppDelegate.swift in Sources */,
 				3827894E22C85F0C005E4E70 /* PurchaseVshootsViewController.swift in Sources */,

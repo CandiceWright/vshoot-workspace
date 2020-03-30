@@ -28,7 +28,7 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         
         //print("printing logged in status")
-        UserDefaults.standard.set(false, forKey: "UserLoggedIn")
+        //UserDefaults.standard.set(false, forKey: "UserLoggedIn")
         print(UserDefaults.standard.bool(forKey: "UserLoggedIn"))
         if(UserDefaults.standard.bool(forKey: "UserLoggedIn") == true){
             
