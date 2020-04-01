@@ -153,7 +153,7 @@ SPEC CHECKSUMS:
   GTMSessionFetcher: 32aeca0aa144acea523e1c8e053089dec2cb98ca
   iOSDropDown: 7a4cfc67d5166f319858747b63cd2f7760c4fb4b
   leveldb-library: 08cba283675b7ed2d99629a4bc5fd052cd2bb6a5
-  MessengerKit: f010a86c1c2f9db3be53b4077a65fcf02944bab1
+  MessengerKit: 41a5742a03e3f9638cb3b4ae310f69161ac1e659
   nanopb: 2901f78ea1b7b4015c860c2fdd1ea2fee1a18d48
   Socket.IO-Client-Swift: b94943e2fb916fe2f95244b9ed21828634002280
   Starscream: ef3ece99d765eeccb67de105bfa143f929026cf5
