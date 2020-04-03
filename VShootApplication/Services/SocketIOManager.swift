@@ -26,7 +26,9 @@ class SocketIOManager: NSObject {
     var currUser: String = "";
     //var currUserObj:MainUser = MainUser()
     var currUserObj:User = User(username: "",imageUrl: "")
+    var friendStrings:[String] = [String]()
     var loadedFriends:Bool = false
+    var loadedProfilePic:Bool = false;
     var vsRequestor:String = "";
     var deviceToken = ""
     var purchases = Dictionary<String,Bool>()
@@ -140,10 +142,13 @@ class SocketIOManager: NSObject {
                 self.storeSocketRef(username: username, completion: {
                     print("stored socket reference")
                     if (fromLogin){
-                        self.loadFriends(username: username, completion: {
-                            print("friends loaded")
-                            completion()
-                        })
+                        //self.loadFriends(username: username, completion: {
+                            self.getUserId(username: username, completion: {
+                                self.storeDeviceToken(completion: {
+                                    completion()
+                                })
+                            })
+                        //})
                     }
                     else {
                         completion()
@@ -154,15 +159,19 @@ class SocketIOManager: NSObject {
         else { //already connected so just store ref
             self.storeSocketRef(username: username, completion: {
                 print("stored socket reference")
-                if (fromLogin){
-                    self.loadFriends(username: username, completion: {
-                        print("friends loaded")
-                        completion()
-                    })
-                }
-                else {
-                    completion()
-                }
+                //self.getProfilePic(username: username, completion: {
+                    //completion()
+                //})
+                completion()
+//                if (fromLogin){
+//                    self.loadFriends(username: username, completion: {
+//                        print("friends loaded")
+//                        completion()
+//                    })
+//                }
+//                else {
+//                    completion()
+//                }
             })
         }
 
@@ -256,10 +265,10 @@ class SocketIOManager: NSObject {
                 }
                 
         }
-        self.getProfilePic(username: username)
+        //self.getProfilePic(username: username)
     }
     
-    func getProfilePic(username: String){
+    func getProfilePic(username: String, completion: @escaping () -> ()){
         //get profile pic url
         let geturl2 = SocketIOManager.sharedInstance.serverUrl + "/user/profilePic/" + SocketIOManager.sharedInstance.currUserObj.username
         let url2 = URL(string: geturl2)
@@ -279,6 +288,8 @@ class SocketIOManager: NSObject {
                             ImageService.getImage(withURL: picurl){ image in
                                 //SocketIOManager.sharedInstance.currUserObj.image = image
                                 self.currUserObj.image = image
+                                print("got profile pic")
+                                completion()
                             }
                         }
                         else {
@@ -287,23 +298,24 @@ class SocketIOManager: NSObject {
                             let noProfileImage: UIImage = UIImage(named: "profilepic_none")!
                                 //SocketIOManager.sharedInstance.currUserObj.image = noProfileImage
                             self.currUserObj.image = noProfileImage
+                            completion()
                         }
                     }
                     else {
                         print("cant convert")
+                        completion()
                     }
                     
                     
                 case .failure(let error):
                     
                     print(error)
+                    completion()
                 }
         }
-        self.getUserId(username: username)
-        self.storeDeviceToken()
     }
     
-    func getUserId(username:String){
+    func getUserId(username:String, completion: @escaping () -> ()){
         let geturl = SocketIOManager.sharedInstance.serverUrl + "/user/" + username
         let url = URL(string: geturl)
         Alamofire.request(url!)
@@ -319,20 +331,23 @@ class SocketIOManager: NSObject {
                         SocketIOManager.sharedInstance.currUserObj.userId = String(idJson["userId"]!)
                         print(SocketIOManager.sharedInstance.currUserObj.userId)
                         print("successfully got userid")
+                        completion()
                     }
                     else {
                         print("cant convert userId")
+                        completion()
                     }
                     
                 case .failure(let error):
                     print("error")
                     print(error)
+                    completion()
                     
                 }
         }
     }
     
-    func storeDeviceToken(){
+    func storeDeviceToken(completion: @escaping () -> ()){
         if(SocketIOManager.sharedInstance.deviceToken != ""){
             var posturl = SocketIOManager.sharedInstance.serverUrl + "/users/devicetokens"
             
@@ -354,12 +369,12 @@ class SocketIOManager: NSObject {
                     switch response.result {
                     case .success(let data):
                         print(data)
-                        
+                        completion()
                         
                     case .failure(let error):
                         print("failure")
                         print(error)
-                        
+                        completion()
                         
                     }
             }

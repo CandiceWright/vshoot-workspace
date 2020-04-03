@@ -43,6 +43,7 @@ class VotographriendViewController: UIViewController, UITableViewDataSource, UIT
         //friends = SocketIOManager.sharedInstance.currUserObj.friends
         //print(friends.count)
         friendTableView.reloadData()
+        self.loadGroups()
         
         
     }
@@ -186,6 +187,37 @@ class VotographriendViewController: UIViewController, UITableViewDataSource, UIT
         }
         friendTableView.reloadData()
     }
+    
+    func loadGroups(){
+        let geturl2 = SocketIOManager.sharedInstance.serverUrl + "/groups/" + SocketIOManager.sharedInstance.currUserObj.username
+            let url = URL(string: geturl2)
+            Alamofire.request(url!)
+                .responseJSON{ (response) in
+                    switch response.result {
+                    case .success(let data):
+                        print(data)
+                        if let groupDict = data as? [Dictionary<String,String>]{
+                            print("successfully converted group response")
+                            //change result to an array of friends like you did with the array of users in addFriend
+                            SocketIOManager.sharedInstance.currUserObj.groups.removeAll()
+                            for i in 0..<groupDict.count {
+                                let newGroup = Group.init(name: groupDict[i]["name"]!, creator: groupDict[i]["creator"]!, description: groupDict[i]["description"]!)
+                                SocketIOManager.sharedInstance.currUserObj.groups.append(newGroup)
+                            }
+                            print("done adding groups")
+    //                        self.getProfilePic(username: username)
+                        }
+                        else {
+                            print("couldnt convert friends at 221")
+                        }
+                        
+                        
+                    case .failure(let error):
+                        print(error)
+                    }
+                    
+            }
+        }
     
 
     

@@ -90,6 +90,59 @@ class VotographerViewController: UIViewController {
         self.connect()
     }
     
+     // MARK: IBActions
+    @IBAction func takePhoto(_ sender: Any) {
+        //emit an event to server through socket manager
+        SocketIOManager.sharedInstance.triggerPhotoCapture(takePhoto: self.flashOn)
+        //self.performSegue(withIdentifier: "photoProcessingSegue", sender: self)
+    }
+    
+    @IBAction func disconnect(_ sender: Any) {
+        self.room!.disconnect()
+        UserDefaults.standard.set(false, forKey: "freeTrialAvailable")
+        logMessage(messageText: "Attempting to disconnect from room \(room!.name)")
+        SocketIOManager.sharedInstance.endVShoot(vsId: self.vshootId, endInitiator: self.title!)
+//        let storyboard = UIStoryboard(name: "Main", bundle: nil);
+//        let vc = storyboard.instantiateViewController(withIdentifier: "VSHome") ; // MySecondSecreen the storyboard ID
+//        self.present(vc, animated: true, completion: nil);
+        //dismiss(animated: true, completion: nil)
+        self.performSegue(withIdentifier: "backToTBFromVotographer", sender: self)
+    }
+ 
+    
+    @IBAction func toggleMic(_ sender: Any) {
+        print("trying to toggle mic")
+        if (self.localAudioTrack != nil) {
+            self.localAudioTrack?.isEnabled = !(self.localAudioTrack?.isEnabled)!
+            
+            // Update the button title
+            if (self.localAudioTrack?.isEnabled == true) {
+                //self.microphoneBtn.setTitle("Mute", for: .normal)
+                let soundon: UIImage = UIImage(named: "soundon")!
+                self.microphoneBtn.setImage(soundon, for: .normal)
+            } else {
+                let soundoff: UIImage = UIImage(named: "soundoff")!
+                self.microphoneBtn.setImage(soundoff, for: .normal)
+                //self.microphoneBtn.setTitle("Unmute", for: .normal)
+            }
+        }
+    }
+    
+    @IBAction func toggleFlash(_ sender: Any) {
+        self.flashOn = !(self.flashOn)
+        if (self.flashOn){
+            let flashon: UIImage = UIImage(named: "flashOn")!
+            self.flashButton.setImage(flashon, for: .normal)
+        }
+        else {
+            let flashoff: UIImage = UIImage(named: "flashOff")!
+            self.flashButton.setImage(flashoff, for: .normal)
+        }
+    }
+    
+    
+    // MARK: Private
+    
     func waitForVmodel(){
         //show a spinner
         self.showSpinner(receiver: "vmodel")
@@ -237,59 +290,7 @@ class VotographerViewController: UIViewController {
         self.showRoomUI(inRoom: true)
         //self.dismissKeyboard()
     }
-     // MARK: IBActions
-    @IBAction func takePhoto(_ sender: Any) {
-        //emit an event to server through socket manager
-        SocketIOManager.sharedInstance.triggerPhotoCapture(takePhoto: self.flashOn)
-        //self.performSegue(withIdentifier: "photoProcessingSegue", sender: self)
-    }
     
-    @IBAction func disconnect(_ sender: Any) {
-        self.room!.disconnect()
-        UserDefaults.standard.set(false, forKey: "freeTrialAvailable")
-        logMessage(messageText: "Attempting to disconnect from room \(room!.name)")
-        SocketIOManager.sharedInstance.endVShoot(vsId: self.vshootId, endInitiator: self.title!)
-//        let storyboard = UIStoryboard(name: "Main", bundle: nil);
-//        let vc = storyboard.instantiateViewController(withIdentifier: "VSHome") ; // MySecondSecreen the storyboard ID
-//        self.present(vc, animated: true, completion: nil);
-        //dismiss(animated: true, completion: nil)
-        self.performSegue(withIdentifier: "backToTBFromVotographer", sender: self)
-    }
- 
-    
-    @IBAction func toggleMic(_ sender: Any) {
-        print("trying to toggle mic")
-        if (self.localAudioTrack != nil) {
-            self.localAudioTrack?.isEnabled = !(self.localAudioTrack?.isEnabled)!
-            
-            // Update the button title
-            if (self.localAudioTrack?.isEnabled == true) {
-                //self.microphoneBtn.setTitle("Mute", for: .normal)
-                let soundon: UIImage = UIImage(named: "soundon")!
-                self.microphoneBtn.setImage(soundon, for: .normal)
-            } else {
-                let soundoff: UIImage = UIImage(named: "soundoff")!
-                self.microphoneBtn.setImage(soundoff, for: .normal)
-                //self.microphoneBtn.setTitle("Unmute", for: .normal)
-            }
-        }
-    }
-    
-    @IBAction func toggleFlash(_ sender: Any) {
-        self.flashOn = !(self.flashOn)
-        if (self.flashOn){
-            let flashon: UIImage = UIImage(named: "flashOn")!
-            self.flashButton.setImage(flashon, for: .normal)
-        }
-        else {
-            let flashoff: UIImage = UIImage(named: "flashOff")!
-            self.flashButton.setImage(flashoff, for: .normal)
-        }
-    }
-    
-    
-    
-    // MARK: Private
     func startPreview() {
         if PlatformUtils.isSimulator {
             return

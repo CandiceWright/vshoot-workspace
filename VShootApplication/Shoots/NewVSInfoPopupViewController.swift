@@ -54,7 +54,7 @@ class NewVSInfoPopupViewController: UIViewController {
         }
         
         print(friends)
-        selectDropDown.optionArray = friends
+        selectDropDown.optionArray = SocketIOManager.sharedInstance.friendStrings
         //selectDropDown.optionIds = [1]
         selectDropDown.didSelect{(selectedText, index, id) in
             self.otherUser = selectedText

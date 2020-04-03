@@ -87,8 +87,10 @@ class ManageFriendshipsViewController: UIViewController {
                             print("friends count before adding")
                             print(SocketIOManager.sharedInstance.currUserObj.friends.count)
                             SocketIOManager.sharedInstance.currUserObj.friends.append(self.selectedUser);
+                            SocketIOManager.sharedInstance.friendStrings.append(self.selectedUser.username);
                             print("friends count after adding")
                             print(SocketIOManager.sharedInstance.currUserObj.friends.count)
+                            print(SocketIOManager.sharedInstance.currUserObj.friends)
                             
                             self.optionBtn.setTitle("Remove", for: UIControl.State.normal)
                    
@@ -140,6 +142,7 @@ class ManageFriendshipsViewController: UIViewController {
                         print("friends count before removing")
                         print(SocketIOManager.sharedInstance.currUserObj.friends.count)
                         SocketIOManager.sharedInstance.currUserObj.friends.remove(at: removedUserIndex);
+                        SocketIOManager.sharedInstance.friendStrings.remove(at: removedUserIndex);
                         print("friends count after removing")
                         print(SocketIOManager.sharedInstance.currUserObj.friends.count)
                         

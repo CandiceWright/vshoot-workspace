@@ -30,11 +30,12 @@ class InitiateVSViewController: UIViewController {
         super.viewDidLoad()
         //UserDefaults.standard.removeObject(forKey: "freeTrialAvailable")
         
-        if(UserDefaults.standard.object(forKey: "freeTrialAvailable") == nil){
-            startVSButton.setTitle("Try Your First VShoot Free!", for: UIControl.State.normal)
-            
-        }
+//        if(UserDefaults.standard.object(forKey: "freeTrialAvailable") == nil){
+//            startVSButton.setTitle("Try Your First VShoot Free!", for: UIControl.State.normal)
+//
+//        }
         if (!SocketIOManager.sharedInstance.loadedFriends){
+            print("need to get friends")
             self.startVSButton.isHidden = true
             getFriends(completion: {
                 self.startVSButton.isHidden = false
@@ -88,7 +89,7 @@ class InitiateVSViewController: UIViewController {
     }
     
     @IBAction func ToVShootOps(_ sender: Any) {
-        performSegue(withIdentifier: "ToVSOptionsSegue", sender: self)
+        performSegue(withIdentifier: "ToVSForm", sender: self)
     }
     
     
@@ -111,8 +112,10 @@ class InitiateVSViewController: UIViewController {
                                     let newUser = User.init(username: friendDict[i]["username"]!, imageUrl: friendDict[i]["pic"]!)
                                     self.friends.append(friendDict[i]["username"]!)
                                     SocketIOManager.sharedInstance.currUserObj.friends.append(newUser)
+                                    SocketIOManager.sharedInstance.friendStrings.append(friendDict[i]["username"]!)
                                 }
                                 print("done adding friends")
+                                SocketIOManager.sharedInstance.loadedFriends = true
                                 print(SocketIOManager.sharedInstance.currUserObj.friends.count)
                                 //now get vsPreference
                                 let geturl2 = SocketIOManager.sharedInstance.serverUrl + "/user/preference/" + currUser
@@ -185,12 +188,12 @@ class InitiateVSViewController: UIViewController {
             destinationController.roomName = self.roomName
         }
             
-        else if (segue.identifier == "ToVSOptionsSegue") {
-            let destinationVC:VShootOptionViewController = segue.destination as! VShootOptionViewController
+        else if (segue.identifier == "ToVSForm") {
+            let destinationVC:NewVSInfoPopupViewController = segue.destination as! NewVSInfoPopupViewController
             print("username before I segue " + username)
             //destinationVC.username = username
             //destinationVC.username = SocketIOManager.sharedInstance.currUser
-            destinationVC.friends = self.friends
+            //destinationVC.friends = self.friends
         }
     }
     

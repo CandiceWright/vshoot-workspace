@@ -50,6 +50,7 @@ class PasswordResetUsernameViewController: UIViewController {
         cancelBtn.isEnabled = false
         //send a request to server to see if username exists. If it does, segue to ask security question and pass UN
         //let username = (usernameTF.text?.trimmingCharacters(in: .whitespaces))?.lowercased()
+        print("this is the username " + self.usernameTF.text! as Any)
         let geturl = SocketIOManager.sharedInstance.serverUrl + "/forgotPass"
         
         let info: [String:Any] = ["username": self.usernameTF.text! as Any]
@@ -80,7 +81,7 @@ class PasswordResetUsernameViewController: UIViewController {
                     else if (data == "could not send email"){ //bad email
                         self.nextBtn.isEnabled = true
                         self.cancelBtn.isEnabled = true
-                        let alertController = UIAlertController(title: "OOPS", message: "It looks like the email you provided is invalid. Please email us at info@thevshoot.com for further assistance.", preferredStyle: UIAlertController.Style.alert)
+                        let alertController = UIAlertController(title: "OOPS", message: "We couldn't send you a password reset link because the email you signed up with is not a valid email. Please email us at info@thevshoot.com for further assistance.", preferredStyle: UIAlertController.Style.alert)
                         alertController.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default,handler: {(action) in }))
                         
                         self.present(alertController, animated: true, completion: nil)

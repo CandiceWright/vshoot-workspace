@@ -35,11 +35,12 @@ class ProfileViewController: UIViewController {
         //profilePic.layer.borderColor = UIColor.black.cgColor
         
         //we should already have an image
-        self.profilePic.image = SocketIOManager.sharedInstance.currUserObj.image
+        //self.profilePic.image = SocketIOManager.sharedInstance.currUserObj.image
         self.profilePic.layer.cornerRadius = self.profilePic.frame.height/2
         self.profilePic.clipsToBounds = true
         print(self.profilePic.frame.height);
         print(self.profilePic.frame.width);
+        self.getProfilePic()
         
         //allow image to be clickable
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(changeProfilePic))
@@ -124,6 +125,48 @@ class ProfileViewController: UIViewController {
         _ = self.navigationController?.popViewController(animated: true)
     }
     
+    @IBAction func logout(_ sender: Any) {
+        print("logging out")
+        var posturl = SocketIOManager.sharedInstance.serverUrl + "/logout"
+        let info: [String:Any] = ["username": currUser as Any]
+        
+        let url = URL(string: posturl);
+        Alamofire.request(url!, method: .post, parameters: info, encoding: JSONEncoding.default, headers: ["Content-Type":"application/json"])
+            .validate(statusCode: 200..<201)
+            .responseString{ (response) in
+                print(response)
+                switch response.result {
+                case .success(let data):
+                    print(data)
+                        print("logout successful")
+                    SocketIOManager.sharedInstance.currUser = ""
+                    SocketIOManager.sharedInstance.currUserObj.username = ""
+                    SocketIOManager.sharedInstance.currUserObj.imageUrl = ""
+                    SocketIOManager.sharedInstance.currUserObj.friends.removeAll()
+                    
+                    SocketIOManager.sharedInstance.currUserObj.image = nil
+                    UserDefaults.standard.set("", forKey: "username")
+                    UserDefaults.standard.set(false, forKey: "UserLoggedIn")
+                    
+                    UserDefaults.standard.set(nil, forKey: "profilepicurl")
+                        //SocketIOManager.sharedInstance.closeConnection()
+                        self.performSegue(withIdentifier: "logoutSegue", sender: self)
+                        
+                    
+                    
+                    
+                case .failure(let error):
+                    print("failure")
+                    print(error)
+                    let alertController = UIAlertController(title: "Sorry!", message:
+                        "Looks like something went wrong. Please try again.", preferredStyle: UIAlertController.Style.alert)
+                    alertController.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default,handler: {(action) in }))
+                    
+                    self.present(alertController, animated: true, completion: nil)
+                }
+        }
+    }
+    
     @objc func changeProfilePic(){
         self.present(imagePicker, animated: true, completion: nil)
     }
@@ -186,6 +229,118 @@ class ProfileViewController: UIViewController {
                     self.present(alertController, animated: true, completion: nil)
                 }
         }
+    }
+    
+    func getProfilePic(){
+        if (!SocketIOManager.sharedInstance.loadedProfilePic){
+                   //needs to get image but first should check if the url is in userdefaults
+                   print("need to get image")
+                   if(UserDefaults.standard.string(forKey: "profilepicurl") != nil){
+                    print("url saved in defaults")
+                       let picurl = UserDefaults.standard.string(forKey: "profilepicurl")
+                       if (picurl != "no profile pic"){
+                           //download this pic
+                           ImageService.getImage(withURL: picurl!){ image in
+                               self.profilePic.image = image
+                               
+                               self.profilePic.layer.cornerRadius = self.profilePic.frame.height/2
+                               self.profilePic.clipsToBounds = true
+                               print(self.profilePic.frame.height);
+                               print(self.profilePic.frame.width);
+                               SocketIOManager.sharedInstance.currUserObj.image = image
+                               UserDefaults.standard.set(picurl, forKey: "profilepicurl")
+                            SocketIOManager.sharedInstance.loadedProfilePic = true
+                           }
+                       }
+                       else {
+                           print("no profile pic")
+                           let noProfileImage: UIImage = UIImage(named: "profilepic_none")!
+                           self.profilePic.image = noProfileImage
+                           self.profilePic.layer.cornerRadius = self.profilePic.frame.height/2
+                           self.profilePic.clipsToBounds = true
+                           
+                           print(self.profilePic.frame.height);
+                           print(self.profilePic.frame.width);
+                           SocketIOManager.sharedInstance.currUserObj.image = noProfileImage
+                           UserDefaults.standard.set("no profile pic", forKey: "profilepicurl")
+                        SocketIOManager.sharedInstance.loadedProfilePic = true
+                       }
+                   }
+                   else {
+                       //first time fetching the photo so need to get it from Server
+                    let geturl2 = SocketIOManager.sharedInstance.serverUrl + "/user/profilePic/" + SocketIOManager.sharedInstance.currUserObj.username
+                       let url2 = URL(string: geturl2)
+                       Alamofire.request(url2!)
+                           .validate(statusCode: 200..<201)
+                           .responseString{ (response) in
+                               print(response)
+                               switch response.result {
+                               case .success(let data):
+                                   print("successfully got image url")
+                                   print(data)
+                                   if let picurl = data as? String {
+                                       print(picurl)
+                                       if (picurl != "no profile pic"){
+                                           //download this pic
+                                           ImageService.getImage(withURL: picurl){ image in
+                                               self.profilePic.image = image
+                                               
+                                               self.profilePic.layer.cornerRadius = self.profilePic.frame.height/2
+                                               self.profilePic.clipsToBounds = true
+                                               print(self.profilePic.frame.height);
+                                               print(self.profilePic.frame.width);
+                                               SocketIOManager.sharedInstance.currUserObj.image = image
+                                               UserDefaults.standard.set(picurl, forKey: "profilepicurl")
+                                            SocketIOManager.sharedInstance.loadedProfilePic = true
+                                           }
+                                       }
+                                       else {
+                                           print("no profile pic")
+                                           let noProfileImage: UIImage = UIImage(named: "profilepic_none")!
+                                           self.profilePic.image = noProfileImage
+                                           self.profilePic.layer.cornerRadius = self.profilePic.frame.height/2
+                                           self.profilePic.clipsToBounds = true
+                                           
+                                           print(self.profilePic.frame.height);
+                                           print(self.profilePic.frame.width);
+                                           SocketIOManager.sharedInstance.currUserObj.image = noProfileImage
+                                           UserDefaults.standard.set("no profile pic", forKey: "profilepicurl")
+                                        SocketIOManager.sharedInstance.loadedProfilePic = true
+                                       }
+                                   }
+                                   else {
+                                       print("cant convert")
+                                       let alertController = UIAlertController(title: "Sorry!", message:
+                                           "Looks like something went wrong. Please try again.", preferredStyle: UIAlertController.Style.alert)
+                                       alertController.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default,handler: {(action) in }))
+                                       
+                                       self.present(alertController, animated: true, completion: nil)
+                                   }
+                                   
+                                   
+                               case .failure(let error):
+                                   
+                                   print(error)
+                                   let alertController = UIAlertController(title: "Sorry!", message:
+                                       "Looks like something went wrong. Please try again.", preferredStyle: UIAlertController.Style.alert)
+                                   alertController.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default,handler: {(action) in }))
+                                   
+                                   self.present(alertController, animated: true, completion: nil)
+                               }
+                       }
+                   }
+                   
+
+               }
+               else {
+                   //we already have an image
+                   print("image already saved")
+                   self.profilePic.image = SocketIOManager.sharedInstance.currUserObj.image
+                   self.profilePic.layer.cornerRadius = self.profilePic.frame.height/2
+                   self.profilePic.clipsToBounds = true
+                   print(self.profilePic.frame.height);
+                   print(self.profilePic.frame.width);
+               }
     }
     
     @objc func uploadProfilePic(image:UIImage){

@@ -30,6 +30,7 @@ class VmodelViewController: UIViewController {
     var position: AVCaptureDevice.Position?
     var photoOutput: AVCapturePhotoOutput!
     var cameraPosition = AVCaptureDevice.Position.back
+    var micStateTxt:String = ""
     
     // Configure remote URL to fetch token from
     var tokenUrl = "http://localhost:8000/token.php"
@@ -86,11 +87,11 @@ class VmodelViewController: UIViewController {
         
         self.messageLabel.adjustsFontSizeToFitWidth = true;
         self.messageLabel.minimumScaleFactor = 0.75;
-        self.disconnectButton.layer.cornerRadius = CGFloat(Float(8.0))
+        //self.disconnectButton.layer.cornerRadius = CGFloat(Float(8.0))
         
         // Disconnect and mic button will be displayed when the Client is connected to a Room.
-        self.disconnectButton.isHidden = true
-        self.micButton.isHidden = true
+        //self.disconnectButton.isHidden = true
+        //self.micButton.isHidden = true
         
         //camera setup
         self.setupCaptureSession()
@@ -159,6 +160,68 @@ class VmodelViewController: UIViewController {
     }
     
     // MARK: IBActions
+    @IBAction func ShowVShootOptions(_ sender: Any) {
+        let alertController = UIAlertController(title: "VShoot Options", message: "", preferredStyle: UIAlertController.Style.alert)
+                  alertController.addAction(UIAlertAction(title: "End VShoot", style: UIAlertAction.Style.default,handler: {(action) in
+                      self.endVShoot() }))
+        alertController.addAction(UIAlertAction(title: "Mute Mic", style: UIAlertAction.Style.default,handler: {(action) in self.muteMic(alert: alertController) }))
+        
+        alertController.addAction(UIAlertAction(title: "Cancel", style: UIAlertAction.Style.default,handler: {(action) in alertController.dismiss(animated: true, completion: nil) }))
+                  
+                  self.present(alertController, animated: true, completion: nil)
+    }
+    
+    func muteMic(alert: UIAlertController){
+        print("trying to toggle mic")
+        //print(self.localAudioTrack)
+
+                if (self.localAudioTrack != nil) {
+                    print("found audio that is ")
+                    print(self.localAudioTrack?.isEnabled)
+                    self.localAudioTrack?.isEnabled = !(self.localAudioTrack?.isEnabled)!
+                    print("just switched audio to")
+                    print(self.localAudioTrack?.isEnabled)
+
+                    // Update the button title
+                    if (self.localAudioTrack?.isEnabled == true) {
+                        //self.micButton.setTitle("Mute", for: .normal)
+                        let soundon: UIImage = UIImage(named: "soundon")!
+                        //self.micButton.imageView?.image = soundon
+                        //self.micButton.setImage(soundon, for: .normal)
+                        self.micStateTxt = "Mute Mic"
+                    } else {
+                        //self.micButton.setTitle("Unmute", for: .normal)
+                        let soundoff: UIImage = UIImage(named: "soundoff")!
+                        //self.micButton.imageView?.image = soundoff
+                        //self.micButton.setImage(soundoff, for: .normal)
+                        self.micStateTxt = "Mute Mic"
+                    }
+                    alert.dismiss(animated: true, completion: nil)
+                }
+    }
+    
+    func endVShoot(){
+        if (room != nil){
+                    self.room!.disconnect()
+                }
+                recorder.stopCapture { (captureError) in
+                    if let error = captureError {
+                        print("Screen capture stop error: ", error as Any)
+                    } else {
+                        print("Screen capture stopped.")
+                        self.videoSource = nil
+                        self.screenTrack = nil
+                    }
+                }
+                UserDefaults.standard.set(false, forKey: "freeTrialAvailable")
+                logMessage(messageText: "Attempting to disconnect from room \(room!.name)")
+                SocketIOManager.sharedInstance.endVShoot(vsId: self.vshootId, endInitiator: self.title!)
+        //        let storyboard = UIStoryboard(name: "Main", bundle: nil);
+        //        let vc = storyboard.instantiateViewController(withIdentifier: "VSHome") ; // MySecondSecreen the storyboard ID
+        //        self.present(vc, animated: true, completion: nil);
+                //dismiss(animated: true, completion: nil)
+                self.performSegue(withIdentifier: "backToTBFromVmodel", sender: self)
+    }
     
     @IBAction func disconnect(_ sender: Any) {
         if (room != nil){
@@ -199,10 +262,10 @@ class VmodelViewController: UIViewController {
                     if (self.localAudioTrack?.isEnabled == true) {
                         //self.micButton.setTitle("Mute", for: .normal)
                         let soundon: UIImage = UIImage(named: "soundon")!
-                        //self.micButton.imageView?.image = soundon
+                        self.micButton.imageView?.image = soundon
                         self.micButton.setImage(soundon, for: .normal)
                     } else {
-                        //self.micButton.setTitle("Unmute", for: .normal)
+                        self.micButton.setTitle("Unmute", for: .normal)
                         let soundoff: UIImage = UIImage(named: "soundoff")!
                         self.micButton.imageView?.image = soundoff
                         self.micButton.setImage(soundoff, for: .normal)
@@ -581,8 +644,8 @@ class VmodelViewController: UIViewController {
         //self.roomTextField.isHidden = inRoom
         //self.roomLine.isHidden = inRoom
         //self.roomLabel.isHidden = inRoom
-        self.micButton.isHidden = !inRoom
-        self.disconnectButton.isHidden = !inRoom
+        //self.micButton.isHidden = !inRoom
+        //self.disconnectButton.isHidden = !inRoom
         self.navigationController?.setNavigationBarHidden(inRoom, animated: true)
         UIApplication.shared.isIdleTimerDisabled = inRoom
         
