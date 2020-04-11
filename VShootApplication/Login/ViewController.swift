@@ -10,9 +10,9 @@ import UIKit
 import Alamofire
 import AlamofireSwiftyJSON
 import SwiftyJSON
-import FirebaseAuth
 import SocketIO
 import SwiftSpinner
+import FirebaseAuth
 
 @IBDesignable
 class ViewController: UIViewController {
@@ -29,21 +29,7 @@ class ViewController: UIViewController {
         
         //print("printing logged in status")
         //UserDefaults.standard.set(false, forKey: "UserLoggedIn")
-        print(UserDefaults.standard.bool(forKey: "UserLoggedIn"))
-        if(UserDefaults.standard.bool(forKey: "UserLoggedIn") == true){
-            
-            let username = UserDefaults.standard.string(forKey: "username")
-            print("printing username is defaults")
-            print(username)
-            
-            SocketIOManager.sharedInstance.establishConnection(username: username!, fromLogin: true, completion: {
-                SwiftSpinner.hide()
-                self.performSegue(withIdentifier: "segueToHomeFromLogin", sender: self)
-
-            })
-            
-        }
-        else {
+       
             self.LoginButton.layer.cornerRadius = CGFloat(Float(4.0))
             self.signUpButton.layer.cornerRadius = CGFloat(Float(4.0))
             NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
@@ -55,14 +41,28 @@ class ViewController: UIViewController {
             //dismiss keyboard if touch outside text field
             //setupKeyboardDismissRecognizer()
             self.hideKeyboard()
-        }
         
         
     }
     
     override func viewDidAppear(_ animated: Bool) {
+        print(UserDefaults.standard.bool(forKey: "UserLoggedIn"))
+
         if(UserDefaults.standard.bool(forKey: "UserLoggedIn") == true){
-            SwiftSpinner.show("One Sec! Logging you back in...")
+            print("already logged in")
+            let username = UserDefaults.standard.string(forKey: "username")
+            print("printing username is defaults")
+            print(username)
+            SocketIOManager.sharedInstance.currUserObj.username = username!
+            SocketIOManager.sharedInstance.currUser = username!
+            self.performSegue(withIdentifier: "segueToHomeFromLogin", sender: self)
+            
+//            SocketIOManager.sharedInstance.establishConnection(username: username!, fromLogin: true, completion: {
+//                //SwiftSpinner.hide()
+//                self.performSegue(withIdentifier: "segueToHomeFromLogin", sender: self)
+//
+//            })
+            
         }
     }
     
@@ -136,34 +136,44 @@ class ViewController: UIViewController {
                             let alertController = UIAlertController(title: "OOPS", message:
                                 "No User exists with the given username. Please try again.", preferredStyle: UIAlertController.Style.alert)
                             alertController.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default,handler: {(action) in }))
-                            
+                            //SwiftSpinner.hide()
                             self.present(alertController, animated: true, completion: nil)
                         }
                         else if(data == "already logged in"){
                             let alertController = UIAlertController(title: "OOPS", message:
                                 "Looks like you are already logged in on another device and you can only be logged into one device at a time.", preferredStyle: UIAlertController.Style.alert)
                             alertController.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default,handler: {(action) in }))
-                            
                             self.present(alertController, animated: true, completion: nil)
                         }
                         
                         else {
                             print("login should be successful")
                             print(data)
+                            SocketIOManager.sharedInstance.currUserObj.username = username!
+                            SocketIOManager.sharedInstance.currUser = username!
+                            UserDefaults.standard.set(username!, forKey: "username")
+                            UserDefaults.standard.set(true, forKey: "UserLoggedIn")
+                            let token = data
+                            Auth.auth().signIn(withCustomToken: token, completion: {user, error in
+                                if let error = error {
+                                    print("unable to sign in with error \(error)")
+                                }
+                            })
+                            self.performSegue(withIdentifier: "segueToHomeFromLogin", sender: self)
                             
                             //establish connection, store socket and load friends
-                            SocketIOManager.sharedInstance.establishConnection(username: username!, fromLogin: true, completion: {
-                                print("friends loading complete")
-                                let token = data
-                                Auth.auth().signIn(withCustomToken: token, completion: {user, error in
-                                    if let error = error {
-                                        print("unable to sign in with error \(error)")
-                                    }
-                                })
-                                UserDefaults.standard.set(username!, forKey: "username")
-                                UserDefaults.standard.set(true, forKey: "UserLoggedIn")
-                                self.performSegue(withIdentifier: "segueToHomeFromLogin", sender: self)
-                            })
+//                            SocketIOManager.sharedInstance.establishConnection(username: username!, fromLogin: true, completion: {
+//                                print("friends loading complete")
+//                                let token = data
+//                                Auth.auth().signIn(withCustomToken: token, completion: {user, error in
+//                                    if let error = error {
+//                                        print("unable to sign in with error \(error)")
+//                                    }
+//                                })
+//                                UserDefaults.standard.set(username!, forKey: "username")
+//                                UserDefaults.standard.set(true, forKey: "UserLoggedIn")
+//                                self.performSegue(withIdentifier: "segueToHomeFromLogin", sender: self)
+//                            })
                             
                         }
                         
@@ -172,6 +182,7 @@ class ViewController: UIViewController {
                         print(error)
                         self.LoginButton.isEnabled = true
                         self.signUpButton.isEnabled = true
+                        SwiftSpinner.hide()
                         let alertController = UIAlertController(title: "Sorry!", message:
                             "Looks like something went wrong. Please try again.", preferredStyle: UIAlertController.Style.alert)
                         alertController.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default,handler: {(action) in }))

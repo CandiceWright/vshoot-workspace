@@ -16,9 +16,11 @@ class WalkthroughViewController: UIViewController, WalkThroughPageViewController
     @IBOutlet weak var nextBtn: UIButton!
     @IBOutlet weak var skipBtn: UIButton!
     
+    @IBOutlet weak var letsGoBtn: UIButton!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        self.letsGoBtn.isHidden = true
         // Do any additional setup after loading the view.
     }
     
@@ -26,17 +28,23 @@ class WalkthroughViewController: UIViewController, WalkThroughPageViewController
         self.performSegue(withIdentifier: "doneOnBoardingSegue", sender: self)
     }
     
+    @IBAction func letsGo(_ sender: Any) {
+        self.performSegue(withIdentifier: "doneOnBoardingSegue", sender: self)
+    }
+    
+    
     func didUpdatePageIndex(currentIndex: Int) {
         pageControllerr.currentPage = currentIndex
-        if currentIndex == 2 {
-            self.skipBtn.setTitle("Get Started", for: UIControl.State.normal)
-            let greenColor = UIColor(rgb: 0x31D283)
-            self.skipBtn.setTitleColor(UIColor.black, for: UIControl.State.normal)
-            self.skipBtn.backgroundColor = greenColor
+        if currentIndex == 1 {
+            self.letsGoBtn.layer.cornerRadius = CGFloat(Float(10.0))
+            self.skipBtn.isHidden = true
+            self.letsGoBtn.isHidden = false
+//            self.skipBtn.setTitle("Get Started", for: UIControl.State.normal)
+//            let greenColor = UIColor(rgb: 0x31D283)
+//            self.skipBtn.setTitleColor(UIColor.black, for: UIControl.State.normal)
+//            self.skipBtn.backgroundColor = greenColor
             //self.skipBtn.frame.size = CGSize(width: 65, height: 33)
-            
-            
-            self.skipBtn.layer.cornerRadius = CGFloat(3.0)
+//            self.skipBtn.layer.cornerRadius = CGFloat(3.0)
         }
         else {
             self.skipBtn.setTitle("Skip", for: UIControl.State.normal)

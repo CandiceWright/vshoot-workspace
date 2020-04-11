@@ -43,8 +43,9 @@ class VotographriendViewController: UIViewController, UITableViewDataSource, UIT
         //friends = SocketIOManager.sharedInstance.currUserObj.friends
         //print(friends.count)
         friendTableView.reloadData()
-        self.loadGroups()
-        
+        if (!SocketIOManager.sharedInstance.loadedGroups){
+            self.loadGroups()
+        }
         
     }
     
@@ -205,6 +206,7 @@ class VotographriendViewController: UIViewController, UITableViewDataSource, UIT
                                 SocketIOManager.sharedInstance.currUserObj.groups.append(newGroup)
                             }
                             print("done adding groups")
+                            SocketIOManager.sharedInstance.loadedGroups = true
     //                        self.getProfilePic(username: username)
                         }
                         else {

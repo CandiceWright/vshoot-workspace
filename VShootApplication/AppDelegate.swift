@@ -21,8 +21,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         print("I am in app  delegate")
         //SocketIOManager.sharedInstance.establishConnection()
         FirebaseApp.configure()
-        IAPService.shared.getProducts()
-        IAPService.shared.restore()
+        //IAPService.shared.getProducts()
+        //IAPService.shared.restore()
         
         // Define the custom actions.
         let acceptAction = UNNotificationAction(identifier: "ACCEPT_ACTION",
@@ -82,7 +82,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         
         print("inside of did become active")
         print(SocketIOManager.sharedInstance.currUserObj.username)
-        if (SocketIOManager.sharedInstance.currUserObj.username != ""){ //someone is logged in
+        
+        if (SocketIOManager.sharedInstance.needToReconnectOnBecomeActive){ //someone is logged in
             print("user is logged in so I am establishing connection again")
             SocketIOManager.sharedInstance.establishConnection(username: SocketIOManager.sharedInstance.currUserObj.username, fromLogin: false, completion: {
                 print("successfully established connection")
@@ -100,14 +101,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     /******** user notification funcs *******/
     
     func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
+        print("did register for remote notifications")
         let tokenParts = deviceToken.map { data -> String in
             return String(format: "%02.2hhx", data)
         }
         let token = tokenParts.joined()
         print("Device Token: \(token)")
+        SocketIOManager.sharedInstance.deviceToken = token
         
         //store with socket io manager, but also store in db
-        SocketIOManager.sharedInstance.deviceToken = token
+        SocketIOManager.sharedInstance.storeDeviceToken(completion: {
+            print("stored device token")
+        })
         
         //let deviceTokenString = deviceToken.reduce("", {$0 + String(format: "%02X", $1)})
         //print("success in registering for remote notifications with token \(deviceTokenString)")

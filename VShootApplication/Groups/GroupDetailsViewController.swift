@@ -46,6 +46,7 @@ class GroupDetailsViewController: UIViewController, UITableViewDataSource, UITab
         self.joinBtn.layer.cornerRadius = CGFloat(Float(4.0))
         
         let newGroupString = name.replacingOccurrences(of: " ", with: "%20")
+        
         //get members
         let geturl = SocketIOManager.sharedInstance.serverUrl + "/groups/members/" + newGroupString
         let url = URL(string: geturl)
@@ -57,6 +58,7 @@ class GroupDetailsViewController: UIViewController, UITableViewDataSource, UITab
                     print(data)
                     self.membersTableView.isHidden = false
                     if let memberDict = data as? [Dictionary<String,String>]{
+                        print(memberDict)
                         for i in 0..<memberDict.count {
                             let newUser = User.init(username: memberDict[i]["name"]!, imageUrl: memberDict[i]["image"]!)
                             self.members.append(newUser)
@@ -258,7 +260,7 @@ class GroupDetailsViewController: UIViewController, UITableViewDataSource, UITab
         cell.username.text = self.members[indexPath.row].username
         print("trying to add row")
         let picUrl = self.members[indexPath.row].imageUrl
-        if (picUrl == "none"){
+        if (picUrl == "no profile pic"){
             let noProfileImage: UIImage = UIImage(named: "profilepic_none")!
             cell.userImg.image = noProfileImage
             cell.userImg.layer.cornerRadius = cell.userImg.frame.height/2

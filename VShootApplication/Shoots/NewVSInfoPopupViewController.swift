@@ -30,7 +30,7 @@ class NewVSInfoPopupViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
 
@@ -54,6 +54,7 @@ class NewVSInfoPopupViewController: UIViewController {
         }
         
         print(friends)
+        print(SocketIOManager.sharedInstance.friendStrings)
         selectDropDown.optionArray = SocketIOManager.sharedInstance.friendStrings
         //selectDropDown.optionIds = [1]
         selectDropDown.didSelect{(selectedText, index, id) in
@@ -92,10 +93,12 @@ class NewVSInfoPopupViewController: UIViewController {
             //segue to a new video view controller, must have two different view controllers
             if (self.role == "vmodel"){
                 //just show view controller that has video, soon allow user to access their albums
+                SwiftSpinner.hide()
                 self.performSegue(withIdentifier: "showVmodelVideoView", sender: self)
             }
             else {
                 //show a view controller with video and camera capture button
+                SwiftSpinner.hide()
                 self.performSegue(withIdentifier: "showVotographerVideoViewFromNewVSScreen", sender: self)
             }
         }

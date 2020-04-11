@@ -29,23 +29,20 @@ class ProfileViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-//        self.currUser = SocketIOManager.sharedInstance.currUser
-        print("I am in view did load")
-        //make profile pic round
-        //profilePic.layer.borderColor = UIColor.black.cgColor
+        print("printing curruser in profile")
+        print(self.currUser)
+        self.username.text = SocketIOManager.sharedInstance.currUserObj.username
         
         //we should already have an image
-        //self.profilePic.image = SocketIOManager.sharedInstance.currUserObj.image
-        self.profilePic.layer.cornerRadius = self.profilePic.frame.height/2
+        //self.getProfilePic()
+        
+        self.profilePic.layer.masksToBounds = false
+        self.profilePic.layer.cornerRadius = self.profilePic.frame.width/2
         self.profilePic.clipsToBounds = true
         print(self.profilePic.frame.height);
         print(self.profilePic.frame.width);
-        self.getProfilePic()
         
-        //allow image to be clickable
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(changeProfilePic))
-        profilePic.isUserInteractionEnabled = true
-        profilePic.addGestureRecognizer(tapGesture)
+        self.profilePic.image = SocketIOManager.sharedInstance.currUserObj.image
         
         imagePicker = UIImagePickerController()
         imagePicker.allowsEditing = true
@@ -54,13 +51,18 @@ class ProfileViewController: UIViewController {
         
         NotificationCenter.default.addObserver(self, selector: #selector(self.refreshlbl(notification:)), name: NSNotification.Name(rawValue: "refresh"), object: nil)
         
-        //print("I am in view will appeear")
-        print(self.profilePic.frame.height);
-        print(self.profilePic.frame.width);
         
-        //profilePic.image = nil
-        self.currUser = SocketIOManager.sharedInstance.currUser
-        self.username.text = currUser
+        //allow image to be clickable
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(changeProfilePic))
+        profilePic.isUserInteractionEnabled = true
+        profilePic.addGestureRecognizer(tapGesture)
+        
+        
+//        self.currUser = SocketIOManager.sharedInstance.currUser
+        print("I am in view did load")
+        //make profile pic round
+        //profilePic.layer.borderColor = UIColor.black.cgColor
+        
         
         //get userId incase they wwant to change their profile pic
         if(SocketIOManager.sharedInstance.currUserObj.userId == ""){
@@ -111,9 +113,7 @@ class ProfileViewController: UIViewController {
         
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-
-    }
+    
     @IBAction func changeUsername(_ sender: Any) {
         
     }
@@ -128,7 +128,7 @@ class ProfileViewController: UIViewController {
     @IBAction func logout(_ sender: Any) {
         print("logging out")
         var posturl = SocketIOManager.sharedInstance.serverUrl + "/logout"
-        let info: [String:Any] = ["username": currUser as Any]
+        let info: [String:Any] = ["username": SocketIOManager.sharedInstance.currUserObj.username as Any]
         
         let url = URL(string: posturl);
         Alamofire.request(url!, method: .post, parameters: info, encoding: JSONEncoding.default, headers: ["Content-Type":"application/json"])
@@ -143,12 +143,22 @@ class ProfileViewController: UIViewController {
                     SocketIOManager.sharedInstance.currUserObj.username = ""
                     SocketIOManager.sharedInstance.currUserObj.imageUrl = ""
                     SocketIOManager.sharedInstance.currUserObj.friends.removeAll()
+                    SocketIOManager.sharedInstance.currUserObj.groups.removeAll()
+                    SocketIOManager.sharedInstance.currUserObj.userId = ""
                     
                     SocketIOManager.sharedInstance.currUserObj.image = nil
+                    SocketIOManager.sharedInstance.currUserObj.userId = ""
+                    SocketIOManager.sharedInstance.loadedFriends = false
+                    SocketIOManager.sharedInstance.loadedGroups = false
+                    SocketIOManager.sharedInstance.loadedProfilePic = false
+                    SocketIOManager.sharedInstance.needToReconnectOnBecomeActive = false
+                    SocketIOManager.sharedInstance.friendStrings.removeAll()
+                    
                     UserDefaults.standard.set("", forKey: "username")
                     UserDefaults.standard.set(false, forKey: "UserLoggedIn")
                     
                     UserDefaults.standard.set(nil, forKey: "profilepicurl")
+                    UserDefaults.standard.set(nil, forKey: "userId")
                         //SocketIOManager.sharedInstance.closeConnection()
                         self.performSegue(withIdentifier: "logoutSegue", sender: self)
                         
@@ -181,7 +191,7 @@ class ProfileViewController: UIViewController {
     
     @objc func savePicUrltoDB(url:String){
         var geturl = SocketIOManager.sharedInstance.serverUrl + "/newProfilePic/"
-        let info: [String:Any] = ["username": currUser as Any, "url": url as Any]
+        let info: [String:Any] = ["username": SocketIOManager.sharedInstance.currUserObj.username as Any, "url": url as Any]
 
         
         let url = URL(string: geturl);
@@ -199,7 +209,7 @@ class ProfileViewController: UIViewController {
                     print(error)
                     //change profilepic in db to be none now that it is inconsistent with firebase
                     var posturl = SocketIOManager.sharedInstance.serverUrl + "/newProfilePic/"
-                    let data: [String:Any] = ["username": self.currUser as Any, "url": "none" as Any]
+                    let data: [String:Any] = ["username": SocketIOManager.sharedInstance.currUserObj.username as Any, "url": "none" as Any]
                     let url2 = URL(string: posturl);
                     Alamofire.request(url2!, method: .post, parameters: data, encoding: JSONEncoding.default, headers: ["Content-Type":"application/json"])
                         .validate(statusCode: 200..<201)

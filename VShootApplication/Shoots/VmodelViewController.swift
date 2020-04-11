@@ -30,7 +30,7 @@ class VmodelViewController: UIViewController {
     var position: AVCaptureDevice.Position?
     var photoOutput: AVCapturePhotoOutput!
     var cameraPosition = AVCaptureDevice.Position.back
-    var micStateTxt:String = ""
+    var micStateTxt:String = "Mute Mic"
     
     // Configure remote URL to fetch token from
     var tokenUrl = "http://localhost:8000/token.php"
@@ -87,6 +87,7 @@ class VmodelViewController: UIViewController {
         
         self.messageLabel.adjustsFontSizeToFitWidth = true;
         self.messageLabel.minimumScaleFactor = 0.75;
+        
         //self.disconnectButton.layer.cornerRadius = CGFloat(Float(8.0))
         
         // Disconnect and mic button will be displayed when the Client is connected to a Room.
@@ -106,8 +107,8 @@ class VmodelViewController: UIViewController {
         //view.layer.insertSublayer(self.cameraPreviewLayer!, at: 0)
         //self.cameraPreviewLayer?.frame = view.frame
         
-        self.isoSlider.minimumValue = (self.currentDevice?.activeFormat.minISO)!
-        self.isoSlider.maximumValue = (self.currentDevice?.activeFormat.maxISO)!
+        //self.isoSlider.minimumValue = (self.currentDevice?.activeFormat.minISO)!
+        //self.isoSlider.maximumValue = (self.currentDevice?.activeFormat.maxISO)!
         
         let tap = UITapGestureRecognizer(target: self, action: #selector(VmodelViewController.showPhotoMsg))
         capturedImage.isUserInteractionEnabled = true
@@ -164,7 +165,7 @@ class VmodelViewController: UIViewController {
         let alertController = UIAlertController(title: "VShoot Options", message: "", preferredStyle: UIAlertController.Style.alert)
                   alertController.addAction(UIAlertAction(title: "End VShoot", style: UIAlertAction.Style.default,handler: {(action) in
                       self.endVShoot() }))
-        alertController.addAction(UIAlertAction(title: "Mute Mic", style: UIAlertAction.Style.default,handler: {(action) in self.muteMic(alert: alertController) }))
+        alertController.addAction(UIAlertAction(title: self.micStateTxt, style: UIAlertAction.Style.default,handler: {(action) in self.muteMic(alert: alertController) }))
         
         alertController.addAction(UIAlertAction(title: "Cancel", style: UIAlertAction.Style.default,handler: {(action) in alertController.dismiss(animated: true, completion: nil) }))
                   
@@ -194,7 +195,7 @@ class VmodelViewController: UIViewController {
                         let soundoff: UIImage = UIImage(named: "soundoff")!
                         //self.micButton.imageView?.image = soundoff
                         //self.micButton.setImage(soundoff, for: .normal)
-                        self.micStateTxt = "Mute Mic"
+                        self.micStateTxt = "Unmute Mic"
                     }
                     alert.dismiss(animated: true, completion: nil)
                 }
@@ -354,10 +355,10 @@ class VmodelViewController: UIViewController {
             //do things here
         }
         
-        //currentDevice?.exposureMode = .autoExpose
+        currentDevice?.exposureMode = .autoExpose
         //currentDevice?.exposureMode = .continuousAutoExposure
         
-        currentDevice?.exposureMode = .custom
+        //currentDevice?.exposureMode = .custom
         currentDevice?.unlockForConfiguration()
         photoOutput.isHighResolutionCaptureEnabled = true
         let photoSettings = AVCapturePhotoSettings()

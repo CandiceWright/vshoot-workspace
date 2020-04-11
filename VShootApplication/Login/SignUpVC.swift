@@ -159,19 +159,22 @@ class SignUpVC: UIViewController {
                         
                         else {
                             //notify the server to store relationship between this user and its socket
-                            
-                            SocketIOManager.sharedInstance.establishConnection(username: self.usernameStr, fromLogin: true, completion: {
-                                print("friends loading complete")
-                                let token = data
-                                Auth.auth().signIn(withCustomToken: token, completion: {user, error in
-                                    if let error = error {
-                                        print("unable to sign in with error \(error)")
-                                    }
-                                })
-                                UserDefaults.standard.set(self.usernameStr, forKey: "username")
-                                UserDefaults.standard.set(true, forKey: "UserLoggedIn")
-                                self.performSegue(withIdentifier: "segueToOnboard", sender: self)
+                            let token = data
+                            Auth.auth().signIn(withCustomToken: token, completion: {user, error in
+                                if let error = error {
+                                    print("unable to sign in with error \(error)")
+                                }
                             })
+                            SocketIOManager.sharedInstance.currUserObj.username = self.usernameStr
+                            SocketIOManager.sharedInstance.currUser = self.usernameStr
+                            UserDefaults.standard.set(self.usernameStr, forKey: "username")
+                            UserDefaults.standard.set(true, forKey: "UserLoggedIn")
+                            self.performSegue(withIdentifier: "segueToOnboard", sender: self)
+                            
+//                            SocketIOManager.sharedInstance.establishConnection(username: self.usernameStr, fromLogin: true, completion: {
+//                                print("friends loading complete")
+//
+//                            })
                             
                         }
                         

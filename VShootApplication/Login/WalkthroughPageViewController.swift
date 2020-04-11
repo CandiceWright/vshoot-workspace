@@ -16,7 +16,8 @@ class WalkthroughPageViewController: UIPageViewController, UIPageViewControllerD
     
     weak var walkthroughDelegate: WalkThroughPageViewControllerDelegate?
     
-    var pageImages = ["OnboardingPg1","OnboardingPg2","OnboardingPg3"]
+//    var pageImages = ["OnboardingPg1","OnboardingPg2","OnboardingPg3"]
+    var pageImages = ["VSOnboarding-blurb","VSOnboarding-HowitWorks"]
     var currIndex = 0
     override func viewDidLoad() {
         super.viewDidLoad()

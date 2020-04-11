@@ -41,6 +41,8 @@ class VotographerViewController: UIViewController {
     @IBOutlet weak var microphoneBtn: UIButton!
     @IBOutlet weak var flashButton: UIButton!
     
+    @IBOutlet weak var remoteParticipantView: UIView!
+    
     // MARK: UIViewController
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -172,47 +174,91 @@ class VotographerViewController: UIViewController {
     }
     
     func setupRemoteVideoView() {
+        
         // Creating `TVIVideoView` programmatically
         self.remoteView = VideoView.init(frame: CGRect.zero, delegate:self)
         
-        self.view.insertSubview(self.remoteView!, at: 0)
+        self.remoteParticipantView.insertSubview(self.remoteView!, at: 0)
         
         // `TVIVideoView` supports scaleToFill, scaleAspectFill and scaleAspectFit
         // scaleAspectFit is the default mode when you create `TVIVideoView` programmatically.
-        self.remoteView!.contentMode = .scaleAspectFit;
+        //self.remoteView!.contentMode = .scaleAspectFit;
+        self.remoteView?.contentMode = .scaleToFill
         
         let centerX = NSLayoutConstraint(item: self.remoteView!,
                                          attribute: NSLayoutConstraint.Attribute.centerX,
                                          relatedBy: NSLayoutConstraint.Relation.equal,
-                                         toItem: self.view,
+                                         toItem: self.remoteParticipantView,
                                          attribute: NSLayoutConstraint.Attribute.centerX,
                                          multiplier: 1,
                                          constant: 0);
-        self.view.addConstraint(centerX)
+        self.remoteParticipantView.addConstraint(centerX)
         let centerY = NSLayoutConstraint(item: self.remoteView!,
                                          attribute: NSLayoutConstraint.Attribute.centerY,
                                          relatedBy: NSLayoutConstraint.Relation.equal,
-                                         toItem: self.view,
+                                         toItem: self.remoteParticipantView,
                                          attribute: NSLayoutConstraint.Attribute.centerY,
                                          multiplier: 1,
                                          constant: 0);
-        self.view.addConstraint(centerY)
+        self.remoteParticipantView.addConstraint(centerY)
         let width = NSLayoutConstraint(item: self.remoteView!,
                                        attribute: NSLayoutConstraint.Attribute.width,
                                        relatedBy: NSLayoutConstraint.Relation.equal,
-                                       toItem: self.view,
+                                       toItem: self.remoteParticipantView,
                                        attribute: NSLayoutConstraint.Attribute.width,
                                        multiplier: 1,
                                        constant: 0);
-        self.view.addConstraint(width)
+        self.remoteParticipantView.addConstraint(width)
         let height = NSLayoutConstraint(item: self.remoteView!,
                                         attribute: NSLayoutConstraint.Attribute.height,
                                         relatedBy: NSLayoutConstraint.Relation.equal,
-                                        toItem: self.view,
+                                        toItem: self.remoteParticipantView,
                                         attribute: NSLayoutConstraint.Attribute.height,
                                         multiplier: 1,
                                         constant: 0);
-        self.view.addConstraint(height)
+        self.remoteParticipantView.addConstraint(height)
+        
+//        // Creating `TVIVideoView` programmatically
+//        self.remoteView = VideoView.init(frame: CGRect.zero, delegate:self)
+//
+//        self.view.insertSubview(self.remoteView!, at: 0)
+//
+//        // `TVIVideoView` supports scaleToFill, scaleAspectFill and scaleAspectFit
+//        // scaleAspectFit is the default mode when you create `TVIVideoView` programmatically.
+//        self.remoteView!.contentMode = .scaleAspectFit;
+//
+//        let centerX = NSLayoutConstraint(item: self.remoteView!,
+//                                         attribute: NSLayoutConstraint.Attribute.centerX,
+//                                         relatedBy: NSLayoutConstraint.Relation.equal,
+//                                         toItem: self.view,
+//                                         attribute: NSLayoutConstraint.Attribute.centerX,
+//                                         multiplier: 1,
+//                                         constant: 0);
+//        self.view.addConstraint(centerX)
+//        let centerY = NSLayoutConstraint(item: self.remoteView!,
+//                                         attribute: NSLayoutConstraint.Attribute.centerY,
+//                                         relatedBy: NSLayoutConstraint.Relation.equal,
+//                                         toItem: self.view,
+//                                         attribute: NSLayoutConstraint.Attribute.centerY,
+//                                         multiplier: 1,
+//                                         constant: 0);
+//        self.view.addConstraint(centerY)
+//        let width = NSLayoutConstraint(item: self.remoteView!,
+//                                       attribute: NSLayoutConstraint.Attribute.width,
+//                                       relatedBy: NSLayoutConstraint.Relation.equal,
+//                                       toItem: self.view,
+//                                       attribute: NSLayoutConstraint.Attribute.width,
+//                                       multiplier: 1,
+//                                       constant: 0);
+//        self.view.addConstraint(width)
+//        let height = NSLayoutConstraint(item: self.remoteView!,
+//                                        attribute: NSLayoutConstraint.Attribute.height,
+//                                        relatedBy: NSLayoutConstraint.Relation.equal,
+//                                        toItem: self.view,
+//                                        attribute: NSLayoutConstraint.Attribute.height,
+//                                        multiplier: 1,
+//                                        constant: 0);
+//        self.view.addConstraint(height)
     }
     
     /* This function handles the case where the votographer opts to cancel the vshoot */

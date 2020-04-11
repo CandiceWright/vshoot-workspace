@@ -15,10 +15,10 @@ class SocketIOManager: NSObject {
     var serverUrl = "https://serve-thevshoot.com";
     let manager = SocketManager(socketURL: URL(string: "https://serve-thevshoot.com")!, config: [.log(false), .forcePolling(false), .reconnects(false)])
 
-    //var serverUrl = "https://42217113.ngrok.io"
+    //var serverUrl = "https://caf97ea2.ngrok.io"
     var dataString: String = "";
     
-    //let manager = SocketManager(socketURL: URL(string: "https://42217113.ngrok.io")!, config: [.log(false), .forcePolling(false), .reconnects(false)])
+//    let manager = SocketManager(socketURL: URL(string: "https://caf97ea2.ngrok.io")!, config: [.log(false), .forcePolling(false), .reconnects(false)])
 
     //var name: String?
     //var resetAck: SocketAckEmitter?
@@ -28,10 +28,15 @@ class SocketIOManager: NSObject {
     var currUserObj:User = User(username: "",imageUrl: "")
     var friendStrings:[String] = [String]()
     var loadedFriends:Bool = false
-    var loadedProfilePic:Bool = false;
-    var vsRequestor:String = "";
+    var loadedProfilePic:Bool = false
+    var loadedGroups:Bool = false
+    var needToReconnectOnBecomeActive = false
+    var needToConnectSocket = true
+    var vsRequestor:String = ""
     var deviceToken = ""
     var purchases = Dictionary<String,Bool>()
+    var token = ""
+    
     
     
     override init() {
@@ -141,37 +146,14 @@ class SocketIOManager: NSObject {
                 print(self.socket.status)
                 self.storeSocketRef(username: username, completion: {
                     print("stored socket reference")
-                    if (fromLogin){
-                        //self.loadFriends(username: username, completion: {
-                            self.getUserId(username: username, completion: {
-                                self.storeDeviceToken(completion: {
-                                    completion()
-                                })
-                            })
-                        //})
-                    }
-                    else {
                         completion()
-                    }
                 })
             }
         }
         else { //already connected so just store ref
             self.storeSocketRef(username: username, completion: {
                 print("stored socket reference")
-                //self.getProfilePic(username: username, completion: {
-                    //completion()
-                //})
                 completion()
-//                if (fromLogin){
-//                    self.loadFriends(username: username, completion: {
-//                        print("friends loaded")
-//                        completion()
-//                    })
-//                }
-//                else {
-//                    completion()
-//                }
             })
         }
 
@@ -348,7 +330,9 @@ class SocketIOManager: NSObject {
     }
     
     func storeDeviceToken(completion: @escaping () -> ()){
-        if(SocketIOManager.sharedInstance.deviceToken != ""){
+        if(UserDefaults.standard.string(forKey: "deviceToken") == nil){
+            print("Storing device token")
+            print(SocketIOManager.sharedInstance.deviceToken)
             var posturl = SocketIOManager.sharedInstance.serverUrl + "/users/devicetokens"
             
             let info: [String:Any] = ["username": SocketIOManager.sharedInstance.currUserObj.username as Any, "token": SocketIOManager.sharedInstance.deviceToken as Any]
@@ -369,6 +353,7 @@ class SocketIOManager: NSObject {
                     switch response.result {
                     case .success(let data):
                         print(data)
+                        UserDefaults.standard.set(SocketIOManager.sharedInstance.deviceToken, forKey: "deviceToken")
                         completion()
                         
                     case .failure(let error):
@@ -379,15 +364,14 @@ class SocketIOManager: NSObject {
                     }
             }
         }
+        else{
+            completion()
+        }
     }
     
     func storeSocketRef(username: String, completion: @escaping () -> ()) {
         print("trying to store reference")
-        //currUserObj.username = username
-        SocketIOManager.sharedInstance.currUserObj.username = username
-        //self.currUser = username;
-        SocketIOManager.sharedInstance.currUser = username
-        //currUserObj.image = nil
+        
         print("username passed to storeSocketRef " + username)
         socket.emit("join", username);
         completion()

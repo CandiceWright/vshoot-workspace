@@ -9,6 +9,8 @@
 import UIKit
 import Alamofire
 import SocketIO
+import SwiftSpinner
+import FirebaseAuth
 
 class InitiateVSViewController: UIViewController {
 
@@ -28,25 +30,11 @@ class InitiateVSViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        //UserDefaults.standard.removeObject(forKey: "freeTrialAvailable")
-        
-//        if(UserDefaults.standard.object(forKey: "freeTrialAvailable") == nil){
-//            startVSButton.setTitle("Try Your First VShoot Free!", for: UIControl.State.normal)
-//
-//        }
-        if (!SocketIOManager.sharedInstance.loadedFriends){
-            print("need to get friends")
-            self.startVSButton.isHidden = true
-            getFriends(completion: {
-                self.startVSButton.isHidden = false
-                SocketIOManager.sharedInstance.loadedFriends = true
-            })
-        }
-        
-        // Do any additional setup after loading the view.
-        
         self.startVSButton.layer.cornerRadius = CGFloat(Float(10.0))
         SocketIOManager.sharedInstance.socket.removeAllHandlers()
+                
+        // Do any additional setup after loading the view.
+        
         SocketIOManager.sharedInstance.socket.on("newVSRequest") { dataArray, ack in
             print("new vs request")
             print("dataArray: ")
@@ -82,6 +70,43 @@ class InitiateVSViewController: UIViewController {
             self.present(alertController, animated: true, completion: nil)
         }
     
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        //get friends and profile pic
+        if (!SocketIOManager.sharedInstance.loadedFriends){
+            SwiftSpinner.show("Loading profile", animated: true)
+            print("need to get friends")
+            self.startVSButton.isHidden = true
+            getFriends(completion: {
+                self.startVSButton.isHidden = false
+                SocketIOManager.sharedInstance.loadedFriends = true
+                self.getProfilePic(completion: {
+                    SwiftSpinner.hide()
+                })
+            })
+        }
+        
+        //get id
+        if( SocketIOManager.sharedInstance.currUserObj.userId == ""){
+            if (UserDefaults.standard.string(forKey: "userId") == nil){
+                self.getUserId(username: self.username, completion: {
+                })
+            }
+            else {
+                let id = UserDefaults.standard.string(forKey: "userId")
+                SocketIOManager.sharedInstance.currUserObj.userId = id!
+            }
+        }
+        
+        if (SocketIOManager.sharedInstance.needToConnectSocket){
+            SocketIOManager.sharedInstance.establishConnection(username: SocketIOManager.sharedInstance.currUserObj.username, fromLogin: true, completion: {
+                print("connection established")
+                SocketIOManager.sharedInstance.needToReconnectOnBecomeActive = true
+                SocketIOManager.sharedInstance.needToConnectSocket = false
+            })
+        }
+        
     }
     
     @IBAction func showVSGuide(_ sender: Any) {
@@ -152,6 +177,127 @@ class InitiateVSViewController: UIViewController {
                         
                         
                 }
+    }
+    
+    func getProfilePic(completion: @escaping () -> ()){
+        if (!SocketIOManager.sharedInstance.loadedProfilePic){
+                   //needs to get image but first should check if the url is in userdefaults
+                   print("need to get image")
+                   if(UserDefaults.standard.string(forKey: "profilepicurl") != nil){
+                    print("url saved in defaults")
+                       let picurl = UserDefaults.standard.string(forKey: "profilepicurl")
+                       if (picurl != "no profile pic"){
+                           //download this pic
+                           ImageService.getImage(withURL: picurl!){ image in
+                            SocketIOManager.sharedInstance.currUserObj.imageUrl = picurl!
+                            SocketIOManager.sharedInstance.currUserObj.image = image
+                               UserDefaults.standard.set(picurl, forKey: "profilepicurl")
+                            SocketIOManager.sharedInstance.loadedProfilePic = true
+                            completion()
+                           }
+                       }
+                       else {
+                           print("no profile pic")
+                            print(picurl)
+                           let noProfileImage: UIImage = UIImage(named: "profilepic_none")!
+                        SocketIOManager.sharedInstance.currUserObj.imageUrl = "no profile pic"
+                        SocketIOManager.sharedInstance.currUserObj.image = noProfileImage
+                           UserDefaults.standard.set("no profile pic", forKey: "profilepicurl")
+                        SocketIOManager.sharedInstance.loadedProfilePic = true
+                        completion()
+                       }
+                   }
+                   else {
+                       //first time fetching the photo so need to get it from Server
+                    let geturl2 = SocketIOManager.sharedInstance.serverUrl + "/user/profilePic/" + SocketIOManager.sharedInstance.currUserObj.username
+                       let url2 = URL(string: geturl2)
+                       Alamofire.request(url2!)
+                           .validate(statusCode: 200..<201)
+                           .responseString{ (response) in
+                               print(response)
+                               switch response.result {
+                               case .success(let data):
+                                   print("successfully got image url")
+                                   print(data)
+                                   if let picurl = data as? String {
+                                       print(picurl)
+                                       if (picurl != "no profile pic"){
+                                           //download this pic
+                                           ImageService.getImage(withURL: picurl){ image in
+                                            SocketIOManager.sharedInstance.currUserObj.imageUrl = picurl
+                                            SocketIOManager.sharedInstance.currUserObj.image = image
+                                               UserDefaults.standard.set(picurl, forKey: "profilepicurl")
+                                            SocketIOManager.sharedInstance.loadedProfilePic = true
+                                            completion()
+                                           }
+                                       }
+                                       else {
+                                           print("no profile pic")
+                                           let noProfileImage: UIImage = UIImage(named: "profilepic_none")!
+                                        SocketIOManager.sharedInstance.currUserObj.imageUrl = "no profile pic"
+                                        SocketIOManager.sharedInstance.currUserObj.image = noProfileImage
+                                           UserDefaults.standard.set("no profile pic", forKey: "profilepicurl")
+                                        SocketIOManager.sharedInstance.loadedProfilePic = true
+                                        completion()
+                                       }
+                                   }
+                                   else {
+                                       print("cant convert")
+                                       let alertController = UIAlertController(title: "Sorry!", message:
+                                           "Looks like something went wrong. Please try again.", preferredStyle: UIAlertController.Style.alert)
+                                       alertController.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default,handler: {(action) in }))
+                                       
+                                       self.present(alertController, animated: true, completion: nil)
+                                   }
+                                   
+                                   
+                               case .failure(let error):
+                                   
+                                   print(error)
+                                   let alertController = UIAlertController(title: "Sorry!", message:
+                                       "Looks like something went wrong. Please try again.", preferredStyle: UIAlertController.Style.alert)
+                                   alertController.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default,handler: {(action) in }))
+                                   
+                                   self.present(alertController, animated: true, completion: nil)
+                               }
+                       }
+                   }
+                   
+
+               }
+    }
+    
+    func getUserId(username:String, completion: @escaping () -> ()){
+        let geturl = SocketIOManager.sharedInstance.serverUrl + "/user/" + username
+        let url = URL(string: geturl)
+        Alamofire.request(url!)
+            .validate(statusCode: 200..<201)
+            .responseJSON{ (response) in
+                switch response.result {
+                case .success(let data):
+                    print(data)
+                    //if let userId = data as? String {
+                    if let idJson = data as? Dictionary<String,Int> {
+                        print("printing userid")
+                        print(idJson["userId"])
+                        SocketIOManager.sharedInstance.currUserObj.userId = String(idJson["userId"]!)
+                        print(SocketIOManager.sharedInstance.currUserObj.userId)
+                        print("successfully got userid")
+                         UserDefaults.standard.set(SocketIOManager.sharedInstance.currUserObj.userId, forKey: "userId")
+                        completion()
+                    }
+                    else {
+                        print("cant convert userId")
+                        completion()
+                    }
+                    
+                case .failure(let error):
+                    print("error")
+                    print(error)
+                    completion()
+                    
+                }
+        }
     }
     
     
