@@ -29,8 +29,10 @@ class ProfileViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        print("I am in view did load")
         print("printing curruser in profile")
         print(self.currUser)
+        
         self.username.text = SocketIOManager.sharedInstance.currUserObj.username
         
         //we should already have an image
@@ -59,57 +61,6 @@ class ProfileViewController: UIViewController {
         
         
 //        self.currUser = SocketIOManager.sharedInstance.currUser
-        print("I am in view did load")
-        //make profile pic round
-        //profilePic.layer.borderColor = UIColor.black.cgColor
-        
-        
-        //get userId incase they wwant to change their profile pic
-        if(SocketIOManager.sharedInstance.currUserObj.userId == ""){
-            if (UserDefaults.standard.string(forKey: "userId") != nil){
-                SocketIOManager.sharedInstance.currUserObj.userId = UserDefaults.standard.string(forKey: "userId")!
-                
-            }
-            else {
-                //need to get userId from server
-                print("need to get userID")
-                let geturl = SocketIOManager.sharedInstance.serverUrl + "/user/" + currUser
-                let url = URL(string: geturl)
-                Alamofire.request(url!)
-                    .validate(statusCode: 200..<201)
-                    .responseString{ (response) in
-                        switch response.result {
-                        case .success(let data):
-                            print(data)
-                            if let userId = data as? String {
-                               print("successfully got userid")
-                             SocketIOManager.sharedInstance.currUserObj.userId = userId
-                             UserDefaults.standard.set(userId, forKey: "userId")
-                            }
-                            else {
-                                print("cant convert userId")
-                                
-                                let alertController = UIAlertController(title: "Sorry!", message:
-                                    "Looks like something went wrong. Please try again.", preferredStyle: UIAlertController.Style.alert)
-                                alertController.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default,handler: {(action) in }))
-                                
-                                self.present(alertController, animated: true, completion: nil)
-                            }
-                            
-                        case .failure(let error):
-                            print("error")
-                            print(error)
-                            let alertController = UIAlertController(title: "Sorry!", message:
-                                "Looks like something went wrong. Please try again.", preferredStyle: UIAlertController.Style.alert)
-                            alertController.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default,handler: {(action) in }))
-                            
-                            self.present(alertController, animated: true, completion: nil)
-                            
-                        }
-                }
-            }
-           
-        }
         
     }
     

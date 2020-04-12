@@ -30,6 +30,7 @@ class InitiateVSViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         self.startVSButton.layer.cornerRadius = CGFloat(Float(10.0))
         SocketIOManager.sharedInstance.socket.removeAllHandlers()
                 
@@ -90,7 +91,9 @@ class InitiateVSViewController: UIViewController {
         //get id
         if( SocketIOManager.sharedInstance.currUserObj.userId == ""){
             if (UserDefaults.standard.string(forKey: "userId") == nil){
-                self.getUserId(username: self.username, completion: {
+                print("user id is nil")
+                print("username is " + SocketIOManager.sharedInstance.currUserObj.username)
+                self.getUserId(username: SocketIOManager.sharedInstance.currUserObj.username, completion: {
                 })
             }
             else {
@@ -268,6 +271,7 @@ class InitiateVSViewController: UIViewController {
     }
     
     func getUserId(username:String, completion: @escaping () -> ()){
+        print("I am getting user id")
         let geturl = SocketIOManager.sharedInstance.serverUrl + "/user/" + username
         let url = URL(string: geturl)
         Alamofire.request(url!)
