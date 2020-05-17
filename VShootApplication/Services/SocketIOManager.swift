@@ -12,13 +12,13 @@ import Alamofire
 class SocketIOManager: NSObject {
     static let sharedInstance = SocketIOManager()
     var resetAck: SocketAckEmitter?
-    var serverUrl = "https://serve-thevshoot.com";
-    let manager = SocketManager(socketURL: URL(string: "https://serve-thevshoot.com")!, config: [.log(false), .forcePolling(false), .reconnects(false)])
+//    var serverUrl = "https://serve-thevshoot.com";
+//    let manager = SocketManager(socketURL: URL(string: "https://serve-thevshoot.com")!, config: [.log(false), .forcePolling(false), .reconnects(false)])
 
-    //var serverUrl = "https://caf97ea2.ngrok.io"
+    var serverUrl = "https://caf97ea2.ngrok.io"
     var dataString: String = "";
     
-//    let manager = SocketManager(socketURL: URL(string: "https://caf97ea2.ngrok.io")!, config: [.log(false), .forcePolling(false), .reconnects(false)])
+    let manager = SocketManager(socketURL: URL(string: "https://caf97ea2.ngrok.io")!, config: [.log(false), .forcePolling(false), .reconnects(false)])
 
     //var name: String?
     //var resetAck: SocketAckEmitter?

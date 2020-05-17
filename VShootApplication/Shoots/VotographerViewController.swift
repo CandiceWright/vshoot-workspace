@@ -35,6 +35,7 @@ class VotographerViewController: UIViewController {
     // `TVIVideoView` created from a storyboard
     @IBOutlet weak var previewView: VideoView!
 
+    @IBOutlet weak var cameraOptionsBar: UIView!
     @IBOutlet weak var disconnectButton: UIButton!
     @IBOutlet weak var messageLabel: UILabel!
     @IBOutlet weak var micButton: UIButton!
@@ -46,7 +47,7 @@ class VotographerViewController: UIViewController {
     // MARK: UIViewController
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        self.cameraOptionsBar.isHidden = true
         SocketIOManager.sharedInstance.socket.on("VShootEnded"){ dataResults, ack in
             print("votographer is ending vshoot")
             let alertController = UIAlertController(title: "The Vmodel has ended the VShoot", message:
@@ -111,6 +112,13 @@ class VotographerViewController: UIViewController {
         self.performSegue(withIdentifier: "backToTBFromVotographer", sender: self)
     }
  
+    @IBAction func showCameraOptions(_ sender: Any) {
+        self.cameraOptionsBar.isHidden = false
+        UIView.animate(withDuration: 0.6, delay: 0, options: .curveEaseInOut, animations: {
+                self.cameraOptionsBar.alpha = 1.0
+            }) { (isCompleted) in
+        }
+    }
     
     @IBAction func toggleMic(_ sender: Any) {
         print("trying to toggle mic")

@@ -46,6 +46,8 @@ class ViewController: UIViewController {
     }
     
     override func viewDidAppear(_ animated: Bool) {
+        UserDefaults.standard.set(false, forKey: "UserLoggedIn")
+        
         print(UserDefaults.standard.bool(forKey: "UserLoggedIn"))
 
         if(UserDefaults.standard.bool(forKey: "UserLoggedIn") == true){
