@@ -137,10 +137,10 @@ class SocketIOManager: NSObject {
         print(socket.status)
         if(socket.status == SocketIOStatus.disconnected || socket.status == SocketIOStatus.notConnected){
             print("status is not connected")
-            socket.connect()
             
             //clientEvent: .connect
-            socket.once("connected") {data, ack in
+            //socket.once("connected") {data, ack in
+            socket.once(clientEvent: .connect) {data, ack in
                 print("socket connected \(data)")
                 print("printing socket status")
                 print(self.socket.status)
@@ -149,6 +149,7 @@ class SocketIOManager: NSObject {
                         completion()
                 })
             }
+            socket.connect()
         }
         else { //already connected so just store ref
             self.storeSocketRef(username: username, completion: {
