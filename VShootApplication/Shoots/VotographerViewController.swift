@@ -111,6 +111,21 @@ class VotographerViewController: UIViewController {
         self.performSegue(withIdentifier: "backToTBFromVotographer", sender: self)
     }
  
+    @IBAction func zoom(_ sender: Any) {
+        let alertController = UIAlertController(title: "Camera Zoom", message: "Select a zoom factor below.", preferredStyle: UIAlertController.Style.alert)
+        alertController.addAction(UIAlertAction(title: "1x (Default)", style: UIAlertAction.Style.default,handler: {(action) in
+            SocketIOManager.sharedInstance.changeZoomFactor(zoomFactor: 1.0)
+            
+        }))
+        alertController.addAction(UIAlertAction(title: "2x", style: UIAlertAction.Style.default,handler: {(action) in
+            SocketIOManager.sharedInstance.changeZoomFactor(zoomFactor: 2.0)
+        }))
+        alertController.addAction(UIAlertAction(title: "3x", style: UIAlertAction.Style.default,handler: {(action) in
+            SocketIOManager.sharedInstance.changeZoomFactor(zoomFactor: 3.0)
+            
+        }))
+        self.present(alertController, animated: true, completion: nil)
+    }
     
     @IBAction func toggleMic(_ sender: Any) {
         print("trying to toggle mic")

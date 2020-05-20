@@ -28,7 +28,7 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         
         //print("printing logged in status")
-        //UserDefaults.standard.set(false, forKey: "UserLoggedIn")
+        UserDefaults.standard.set(false, forKey: "UserLoggedIn")
        
             self.LoginButton.layer.cornerRadius = CGFloat(Float(4.0))
             self.signUpButton.layer.cornerRadius = CGFloat(Float(4.0))

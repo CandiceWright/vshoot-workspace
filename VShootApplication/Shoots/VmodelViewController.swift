@@ -134,6 +134,14 @@ class VmodelViewController: UIViewController {
             self.takePhoto(flashSet: flash)
         }
         
+        SocketIOManager.sharedInstance.socket.on("changeZoom") { dataArray, ack in
+            print("just got notified to zoom")
+            
+            let data = dataArray[0] as! Dictionary<String,AnyObject>
+            let zoomFactor = data["zoomSetting"] as! CGFloat
+            self.zoom(zoomSetting: zoomFactor)
+        }
+        
         SocketIOManager.sharedInstance.socket.on("votographerInBackground"){ dataResults, ack in
             print("votographer is going to background")
             self.waitForVotographer()
@@ -296,12 +304,33 @@ class VmodelViewController: UIViewController {
         }
     }
     
+    @IBAction func testZoom(_ sender: Any) {
+        print(self.currentDevice?.maxAvailableVideoZoomFactor)
+        do {
+            try currentDevice?.lockForConfiguration()
+        } catch {
+                   //do things here
+        }
+        self.currentDevice?.videoZoomFactor = 3.0
+        self.currentDevice?.unlockForConfiguration()
+    }
+    
+    func zoom(zoomSetting: CGFloat){
+        print(self.currentDevice?.maxAvailableVideoZoomFactor)
+        do {
+            try currentDevice?.lockForConfiguration()
+        } catch {
+                   //do things here
+        }
+        self.currentDevice?.videoZoomFactor = 3.0
+        self.currentDevice?.unlockForConfiguration()
+    }
+    
+    
     @IBAction func changeISO(_ sender: UISlider) {
         print(self.isoSlider.value);
         self.updateExposure(isoValue: self.isoSlider.value)
     }
-    
-    
     
     func updateExposure(isoValue: Float){
         do {

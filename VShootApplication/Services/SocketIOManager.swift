@@ -12,13 +12,12 @@ import Alamofire
 class SocketIOManager: NSObject {
     static let sharedInstance = SocketIOManager()
     var resetAck: SocketAckEmitter?
-    var serverUrl = "https://serve-thevshoot.com";
-    let manager = SocketManager(socketURL: URL(string: "https://serve-thevshoot.com")!, config: [.log(false), .forcePolling(false), .reconnects(false)])
-
-    //var serverUrl = "https://caf97ea2.ngrok.io"
+    //var serverUrl = "https://serve-thevshoot.com";
+    //let manager = SocketManager(socketURL: URL(string: "https://serve-thevshoot.com")!, config: [.log(false), .forcePolling(false), .reconnects(false)])
     var dataString: String = "";
-    
-//    let manager = SocketManager(socketURL: URL(string: "https://caf97ea2.ngrok.io")!, config: [.log(false), .forcePolling(false), .reconnects(false)])
+
+    var serverUrl = "https://e8349db3.ngrok.io"
+    let manager = SocketManager(socketURL: URL(string: "https://e8349db3.ngrok.io")!, config: [.log(false), .forcePolling(false), .reconnects(false)])
 
     //var name: String?
     //var resetAck: SocketAckEmitter?
@@ -130,6 +129,13 @@ class SocketIOManager: NSObject {
         data["flash"] = takePhoto
         let socketData = data.socketRepresentation()
         socket.emit("takephoto", socketData)
+    }
+    
+    func changeZoomFactor(zoomFactor: CGFloat){
+        var data = [String:Any]()
+        data["zoomFactor"] = zoomFactor
+        let socketData = data.socketRepresentation()
+        socket.emit("changeZoom", socketData)
     }
     
     func establishConnection(username: String, fromLogin: Bool, completion: @escaping () -> ()) {
