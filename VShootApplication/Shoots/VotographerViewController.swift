@@ -30,6 +30,8 @@ class VotographerViewController: UIViewController {
     var remoteParticipant: RemoteParticipant?
     var remoteView: VideoView?
     var flashOn:Bool = false
+    var zoomFactor:CGFloat = 1.0
+    var maxZoom:CGFloat = 10.0
     // MARK: UI Element Outlets and handles
     
     // `TVIVideoView` created from a storyboard
@@ -112,18 +114,33 @@ class VotographerViewController: UIViewController {
     }
  
     @IBAction func zoom(_ sender: Any) {
-        let alertController = UIAlertController(title: "Camera Zoom", message: "Select a zoom factor below.", preferredStyle: UIAlertController.Style.alert)
-        alertController.addAction(UIAlertAction(title: "1x (Default)", style: UIAlertAction.Style.default,handler: {(action) in
-            SocketIOManager.sharedInstance.changeZoomFactor(zoomFactor: 1.0)
-            
-        }))
-        alertController.addAction(UIAlertAction(title: "2x", style: UIAlertAction.Style.default,handler: {(action) in
-            SocketIOManager.sharedInstance.changeZoomFactor(zoomFactor: 2.0)
-        }))
-        alertController.addAction(UIAlertAction(title: "3x", style: UIAlertAction.Style.default,handler: {(action) in
-            SocketIOManager.sharedInstance.changeZoomFactor(zoomFactor: 3.0)
-            
-        }))
+        print("changing zoom")
+//        let alertController = UIAlertController(title: "Camera Zoom", message: "Select a zoom factor below.", preferredStyle: UIAlertController.Style.alert)
+//        alertController.addAction(UIAlertAction(title: "1x (Default)", style: UIAlertAction.Style.default,handler: {(action) in
+//            SocketIOManager.sharedInstance.changeZoomFactor(zoomFactor: 1.0)
+//
+//        }))
+//        alertController.addAction(UIAlertAction(title: "2x", style: UIAlertAction.Style.default,handler: {(action) in
+//            SocketIOManager.sharedInstance.changeZoomFactor(zoomFactor: 2.0)
+//        }))
+//        alertController.addAction(UIAlertAction(title: "3x", style: UIAlertAction.Style.default,handler: {(action) in
+//            SocketIOManager.sharedInstance.changeZoomFactor(zoomFactor: 3.0)
+//
+//        }))
+        let alertController = UIAlertController(title: "Camera Zoom", message: "The current zoom factor is \(self.zoomFactor) x." , preferredStyle: UIAlertController.Style.alert)
+        if (zoomFactor > 1.0){
+            alertController.addAction(UIAlertAction(title: "Zoom Out", style: UIAlertAction.Style.default,handler: {(action) in
+                SocketIOManager.sharedInstance.changeZoomFactor(zoomFactor: self.zoomFactor - 0.1)
+                self.zoomFactor = self.zoomFactor - 0.1
+                
+            }))
+        }
+        if (self.zoomFactor < self.maxZoom){
+            alertController.addAction(UIAlertAction(title: "Zoom In", style: UIAlertAction.Style.default,handler: {(action) in
+                SocketIOManager.sharedInstance.changeZoomFactor(zoomFactor: self.zoomFactor + 0.1)
+                self.zoomFactor = self.zoomFactor + 0.1
+            }))
+        }
         self.present(alertController, animated: true, completion: nil)
     }
     

@@ -322,7 +322,7 @@ class VmodelViewController: UIViewController {
         } catch {
                    //do things here
         }
-        self.currentDevice?.videoZoomFactor = 3.0
+        self.currentDevice?.videoZoomFactor = zoomSetting
         self.currentDevice?.unlockForConfiguration()
     }
     
