@@ -324,7 +324,7 @@
                                                     </constraints>
                                                 </imageView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="H0w-Y1-Tdj">
-                                                    <rect key="frame" x="54.333333333333343" y="121" width="41.666666666666657" height="21"/>
+                                                    <rect key="frame" x="54" y="121" width="42" height="21"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
@@ -412,11 +412,11 @@
             <objects>
                 <viewController modalPresentationStyle="fullScreen" id="njd-sD-Fcu" customClass="ProfileViewController" customModule="VShootApplication" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="9ZO-Yq-FN9">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="758"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" heightSizable="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Tap Photo to Change" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SVg-Aj-zGP">
-                                <rect key="frame" x="107" y="284" width="161" height="33"/>
+                                <rect key="frame" x="107" y="338" width="161" height="33"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="33" id="cqd-zy-rlx"/>
                                 </constraints>
@@ -491,7 +491,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="profilepic_none" translatesAutoresizingMaskIntoConstraints="NO" id="qpc-0Z-4hq">
-                                <rect key="frame" x="96" y="106" width="180" height="170"/>
+                                <rect key="frame" x="96" y="150" width="180" height="180"/>
                             </imageView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -538,11 +538,11 @@
             <objects>
                 <viewController id="FkW-J7-KbM" customClass="ProfileUsernameChangeViewController" customModule="VShootApplication" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="H7U-su-eyr">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="758"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ht0-ny-8hz">
-                                <rect key="frame" x="0.0" y="293" width="375" height="465"/>
+                                <rect key="frame" x="0.0" y="347" width="375" height="465"/>
                                 <subviews>
                                     <textField opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="New Username" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="yZL-Eg-hsB">
                                         <rect key="frame" x="32" y="86" width="310" height="30"/>
@@ -813,7 +813,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="96p-lF-xPp">
-                                <rect key="frame" x="157.66666666666666" y="714" width="60" height="61"/>
+                                <rect key="frame" x="157.33333333333334" y="714" width="60.333333333333343" height="61"/>
                                 <state key="normal" image="captureButton"/>
                                 <connections>
                                     <action selector="takePhoto:" destination="tCB-qP-t2m" eventType="touchUpInside" id="457-G5-YDW"/>
@@ -840,7 +840,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wj1-CY-jYU">
-                                <rect key="frame" x="102" y="728" width="43" height="43"/>
+                                <rect key="frame" x="102" y="728" width="42.666666666666657" height="43"/>
                                 <state key="normal" image="soundon"/>
                                 <connections>
                                     <action selector="toggleMic:" destination="tCB-qP-t2m" eventType="touchUpInside" id="KPd-aS-yOt"/>
@@ -908,11 +908,11 @@
             <objects>
                 <viewController id="w55-NV-5LV" customClass="ProfileEmailChangeViewController" customModule="VShootApplication" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="n2g-4h-SaN">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="758"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="NHH-bJ-wcj">
-                                <rect key="frame" x="0.0" y="293" width="375" height="465"/>
+                                <rect key="frame" x="0.0" y="347" width="375" height="465"/>
                                 <subviews>
                                     <textField opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="New Email" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Vku-wr-AnG">
                                         <rect key="frame" x="32" y="86" width="310" height="30"/>
@@ -983,11 +983,11 @@
             <objects>
                 <viewController id="kSk-1V-91z" customClass="ProfilePreferencesViewController" customModule="VShootApplication" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="5lG-QW-q0E">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="758"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ypb-gZ-dVj">
-                                <rect key="frame" x="0.0" y="293" width="375" height="465"/>
+                                <rect key="frame" x="0.0" y="347" width="375" height="465"/>
                                 <subviews>
                                     <textField opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Who can send you VShoot requests?" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="mn1-y4-90J" customClass="DropDown" customModule="iOSDropDown">
                                         <rect key="frame" x="32" y="134" width="310" height="30"/>
@@ -1084,11 +1084,11 @@
             <objects>
                 <viewController id="hV9-T0-wKz" customClass="VSPreferenceHelpViewController" customModule="VShootApplication" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" opaque="NO" contentMode="scaleToFill" id="aco-W2-xkd">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="758"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HN7-EK-5na">
-                                <rect key="frame" x="137" y="550" width="98" height="46"/>
+                                <rect key="frame" x="137" y="604" width="98" height="46"/>
                                 <color key="backgroundColor" red="0.41960784309999999" green="0.82745098039999998" blue="0.60392156860000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="98" id="K8q-E3-H6D"/>
@@ -1103,7 +1103,7 @@
                                 </connections>
                             </button>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="VShootPrefs" translatesAutoresizingMaskIntoConstraints="NO" id="fxw-XB-11q">
-                                <rect key="frame" x="21" y="8" width="338" height="528"/>
+                                <rect key="frame" x="21" y="52" width="338" height="538"/>
                             </imageView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -1993,11 +1993,11 @@
             <objects>
                 <viewController storyboardIdentifier="VSHome" title="initiateVS" modalPresentationStyle="fullScreen" id="We4-Xz-rDB" customClass="InitiateVSViewController" customModule="VShootApplication" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="diI-pc-N8o">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="758"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="vshomescreen" translatesAutoresizingMaskIntoConstraints="NO" id="gai-To-AbT">
-                                <rect key="frame" x="0.0" y="-44" width="375" height="719"/>
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="729"/>
                             </imageView>
                             <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="x73-l9-Ljo">
                                 <rect key="frame" x="47" y="312" width="280" height="50"/>
@@ -2163,14 +2163,14 @@
             <objects>
                 <viewController modalTransitionStyle="crossDissolve" modalPresentationStyle="overCurrentContext" id="l0N-qu-jdp" customClass="NewVSInfoPopupViewController" customModule="VShootApplication" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="zDM-C0-Y1l">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="758"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="GSJ-aE-fk5">
-                                <rect key="frame" x="0.0" y="70" width="375" height="688"/>
+                                <rect key="frame" x="0.0" y="114" width="375" height="698"/>
                                 <subviews>
                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="BlackBackgroundLogo" translatesAutoresizingMaskIntoConstraints="NO" id="jH2-cc-mxT">
-                                        <rect key="frame" x="0.0" y="-129" width="375" height="817"/>
+                                        <rect key="frame" x="0.0" y="-119" width="375" height="817"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="817" id="gZn-4M-sFX"/>
                                         </constraints>
@@ -2916,7 +2916,7 @@
                                         <fragment content="Terms of Use">
                                             <attributes>
                                                 <color key="NSColor" red="0.19215686269999999" green="0.82352941180000006" blue="0.51372549020000002" alpha="1" colorSpace="calibratedRGB"/>
-                                                <font key="NSFont" metaFont="label" size="11"/>
+                                                <font key="NSFont" metaFont="message" size="11"/>
                                             </attributes>
                                         </fragment>
                                     </attributedString>
@@ -3030,14 +3030,14 @@
             <objects>
                 <viewController modalPresentationStyle="fullScreen" id="6CF-qt-neY" customClass="ParentViewController" customModule="VShootApplication" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="tCb-4n-Oys">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="758"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="HQM-hq-dzn">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="724"/>
+                                <rect key="frame" x="0.0" y="44" width="375" height="734"/>
                             </scrollView>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="iB3-GL-tNv" customClass="ButtonBarView" customModule="XLPagerTabStrip">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="64"/>
+                                <rect key="frame" x="0.0" y="44" width="375" height="64"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="64" id="LBJ-1J-ID2"/>
@@ -3963,7 +3963,7 @@
         <segue reference="hUl-UN-0N5"/>
         <segue reference="Lgx-tJ-ink"/>
         <segue reference="kI0-Zs-NdU"/>
-        <segue reference="pWC-Xa-Mvn"/>
+        <segue reference="iWf-sx-leS"/>
         <segue reference="UL1-Cd-4Wx"/>
     </inferredMetricsTieBreakers>
     <resources>
