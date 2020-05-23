@@ -2000,14 +2000,18 @@
                 <viewController storyboardIdentifier="VSHome" title="initiateVS" modalPresentationStyle="fullScreen" id="We4-Xz-rDB" customClass="InitiateVSViewController" customModule="VShootApplication" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="diI-pc-N8o">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" heightSizable="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="vshomescreen" translatesAutoresizingMaskIntoConstraints="NO" id="gai-To-AbT">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="729"/>
+                                <rect key="frame" x="0.0" y="-10" width="375" height="739"/>
                             </imageView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="x73-l9-Ljo">
-                                <rect key="frame" x="47" y="312" width="281" height="50"/>
+                                <rect key="frame" x="56" y="333.66666666666669" width="263" height="52"/>
                                 <color key="backgroundColor" red="0.19215686269999999" green="0.82352941180000006" blue="0.51372549020000002" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="52" id="wFd-3C-e0o"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="19"/>
                                 <state key="normal" title="Have a VShoot Now!">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
@@ -2017,9 +2021,12 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nAX-TD-EX6">
-                                <rect key="frame" x="335" y="317" width="35" height="35"/>
+                                <rect key="frame" x="330" y="349" width="30" height="29.666666666666686"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="30" id="PNC-bF-wvx"/>
+                                </constraints>
                                 <color key="tintColor" red="0.19215686269999999" green="0.82352941180000006" blue="0.51372549020000002" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
-                                <state key="normal" image="help_icon"/>
+                                <state key="normal" image="help_icon-1"/>
                                 <connections>
                                     <segue destination="9AW-ax-bNN" kind="presentation" modalPresentationStyle="fullScreen" id="Dbp-VE-W0J"/>
                                 </connections>
@@ -2027,18 +2034,16 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="gai-To-AbT" firstAttribute="bottom" secondItem="69N-1r-OYO" secondAttribute="bottom" id="4El-tu-xGv"/>
-                            <constraint firstItem="69N-1r-OYO" firstAttribute="bottom" secondItem="nAX-TD-EX6" secondAttribute="bottom" constant="377" id="9eN-bR-kPJ"/>
-                            <constraint firstItem="gai-To-AbT" firstAttribute="centerX" secondItem="diI-pc-N8o" secondAttribute="centerX" id="EJL-50-eAI"/>
-                            <constraint firstItem="69N-1r-OYO" firstAttribute="bottom" secondItem="x73-l9-Ljo" secondAttribute="bottom" constant="367" id="EYT-71-1XV"/>
-                            <constraint firstItem="x73-l9-Ljo" firstAttribute="top" secondItem="69N-1r-OYO" secondAttribute="top" constant="268" id="FJ4-i3-cqs"/>
-                            <constraint firstItem="nAX-TD-EX6" firstAttribute="leading" secondItem="x73-l9-Ljo" secondAttribute="trailing" constant="7" id="J5f-ID-3WT"/>
-                            <constraint firstItem="x73-l9-Ljo" firstAttribute="leading" secondItem="69N-1r-OYO" secondAttribute="leading" constant="47" id="Vfe-7s-gur"/>
-                            <constraint firstItem="gai-To-AbT" firstAttribute="centerX" secondItem="x73-l9-Ljo" secondAttribute="centerX" id="Vt7-8r-pZo"/>
-                            <constraint firstItem="nAX-TD-EX6" firstAttribute="top" secondItem="69N-1r-OYO" secondAttribute="top" constant="273" id="YiZ-nm-7qw"/>
-                            <constraint firstItem="gai-To-AbT" firstAttribute="leading" secondItem="69N-1r-OYO" secondAttribute="leading" id="a0c-3K-M8O"/>
-                            <constraint firstItem="gai-To-AbT" firstAttribute="top" secondItem="diI-pc-N8o" secondAttribute="topMargin" constant="-44" id="nGV-Gm-Whr"/>
-                            <constraint firstItem="69N-1r-OYO" firstAttribute="trailing" secondItem="nAX-TD-EX6" secondAttribute="trailing" constant="5" id="zaQ-Ox-8VP"/>
+                            <constraint firstItem="gai-To-AbT" firstAttribute="top" secondItem="diI-pc-N8o" secondAttribute="topMargin" constant="-54" id="Eoc-o2-Dvc"/>
+                            <constraint firstItem="x73-l9-Ljo" firstAttribute="centerY" secondItem="gai-To-AbT" secondAttribute="centerY" id="L83-Gl-8Iv"/>
+                            <constraint firstItem="nAX-TD-EX6" firstAttribute="leading" secondItem="x73-l9-Ljo" secondAttribute="trailing" constant="11" id="LzV-C4-eZF"/>
+                            <constraint firstItem="x73-l9-Ljo" firstAttribute="leading" secondItem="69N-1r-OYO" secondAttribute="leading" constant="56" id="Mdl-nX-TPA"/>
+                            <constraint firstItem="gai-To-AbT" firstAttribute="leading" secondItem="69N-1r-OYO" secondAttribute="leading" id="P5Y-qb-z1w"/>
+                            <constraint firstItem="x73-l9-Ljo" firstAttribute="centerY" secondItem="nAX-TD-EX6" secondAttribute="centerY" constant="-4.3333333333333144" id="U9U-Rb-p1t"/>
+                            <constraint firstItem="gai-To-AbT" firstAttribute="bottom" secondItem="69N-1r-OYO" secondAttribute="bottom" id="bV6-Wh-rS0"/>
+                            <constraint firstItem="nAX-TD-EX6" firstAttribute="top" secondItem="69N-1r-OYO" secondAttribute="top" constant="305" id="d9I-ab-ELP"/>
+                            <constraint firstItem="gai-To-AbT" firstAttribute="centerX" secondItem="x73-l9-Ljo" secondAttribute="centerX" id="of2-du-O7z"/>
+                            <constraint firstItem="x73-l9-Ljo" firstAttribute="centerX" secondItem="diI-pc-N8o" secondAttribute="centerX" id="sXx-TZ-b57"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="69N-1r-OYO"/>
                     </view>
@@ -3946,7 +3951,7 @@
         <image name="captureButton" width="100" height="100"/>
         <image name="edit pencil" width="512" height="512"/>
         <image name="flashOff" width="100" height="100"/>
-        <image name="help_icon" width="100" height="100"/>
+        <image name="help_icon-1" width="100" height="100"/>
         <image name="line" width="166.66667175292969" height="166.66667175292969"/>
         <image name="profileIcon" width="40" height="40"/>
         <image name="profilepic_none" width="100" height="100"/>
