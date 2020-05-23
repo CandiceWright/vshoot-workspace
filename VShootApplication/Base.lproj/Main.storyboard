@@ -2991,9 +2991,6 @@
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="iB3-GL-tNv" customClass="ButtonBarView" customModule="XLPagerTabStrip">
                                 <rect key="frame" x="0.0" y="44" width="375" height="64"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="64" id="Apq-xN-Ad6"/>
-                                </constraints>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="Gyu-2v-4bs">
                                     <size key="itemSize" width="50" height="50"/>
                                     <size key="headerReferenceSize" width="0.0" height="0.0"/>
@@ -3003,18 +3000,19 @@
                                 <cells/>
                             </collectionView>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="HQM-hq-dzn">
-                                <rect key="frame" x="0.0" y="116" width="375" height="613"/>
+                                <rect key="frame" x="0.0" y="44" width="375" height="685"/>
                             </scrollView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="iB3-GL-tNv" firstAttribute="centerX" secondItem="tCb-4n-Oys" secondAttribute="centerX" id="3i4-IC-cn3"/>
-                            <constraint firstItem="iB3-GL-tNv" firstAttribute="top" secondItem="ZuT-hp-pVV" secondAttribute="top" id="Dsy-8C-Tjp"/>
-                            <constraint firstItem="HQM-hq-dzn" firstAttribute="top" secondItem="iB3-GL-tNv" secondAttribute="bottom" constant="8" id="Gx1-Ki-DK8"/>
-                            <constraint firstItem="iB3-GL-tNv" firstAttribute="leading" secondItem="ZuT-hp-pVV" secondAttribute="leading" id="JYq-wp-RTE"/>
-                            <constraint firstItem="HQM-hq-dzn" firstAttribute="bottom" secondItem="ZuT-hp-pVV" secondAttribute="bottom" id="Yng-7p-Rzw"/>
-                            <constraint firstItem="iB3-GL-tNv" firstAttribute="leading" secondItem="HQM-hq-dzn" secondAttribute="leading" id="fpX-KS-ftZ"/>
-                            <constraint firstItem="iB3-GL-tNv" firstAttribute="trailing" secondItem="HQM-hq-dzn" secondAttribute="trailing" id="rI2-fU-zMP"/>
+                            <constraint firstItem="iB3-GL-tNv" firstAttribute="top" secondItem="HQM-hq-dzn" secondAttribute="top" id="2h9-oI-j8C"/>
+                            <constraint firstItem="HQM-hq-dzn" firstAttribute="leading" secondItem="ZuT-hp-pVV" secondAttribute="leading" id="7xh-us-A8q"/>
+                            <constraint firstItem="iB3-GL-tNv" firstAttribute="centerX" secondItem="tCb-4n-Oys" secondAttribute="centerX" id="AsM-q2-qhv"/>
+                            <constraint firstItem="HQM-hq-dzn" firstAttribute="bottom" secondItem="ZuT-hp-pVV" secondAttribute="bottom" id="LGl-mh-MVy"/>
+                            <constraint firstItem="iB3-GL-tNv" firstAttribute="top" secondItem="ZuT-hp-pVV" secondAttribute="top" id="OxD-ZB-PoG"/>
+                            <constraint firstItem="HQM-hq-dzn" firstAttribute="trailing" secondItem="iB3-GL-tNv" secondAttribute="trailing" id="UtK-2p-iBx"/>
+                            <constraint firstItem="HQM-hq-dzn" firstAttribute="leading" secondItem="iB3-GL-tNv" secondAttribute="leading" id="WJN-ck-yFm"/>
+                            <constraint firstItem="ZuT-hp-pVV" firstAttribute="bottom" secondItem="iB3-GL-tNv" secondAttribute="bottom" constant="621" id="kK2-Fs-HVf"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="ZuT-hp-pVV"/>
                     </view>
