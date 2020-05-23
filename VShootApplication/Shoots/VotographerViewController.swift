@@ -128,19 +128,29 @@ class VotographerViewController: UIViewController {
 //
 //        }))
         let alertController = UIAlertController(title: "Camera Zoom", message: "The current zoom factor is \(self.zoomFactor) x." , preferredStyle: UIAlertController.Style.alert)
+        if (zoomFactor != 1.0){
+            alertController.addAction(UIAlertAction(title: "Zoom Out Completely (1x)", style: UIAlertAction.Style.default,handler: {(action) in
+                SocketIOManager.sharedInstance.changeZoomFactor(zoomFactor: 1.0)
+                self.zoomFactor = 1.0
+                
+            }))
+        }
         if (zoomFactor > 1.0){
             alertController.addAction(UIAlertAction(title: "Zoom Out", style: UIAlertAction.Style.default,handler: {(action) in
-                SocketIOManager.sharedInstance.changeZoomFactor(zoomFactor: self.zoomFactor - 0.1)
-                self.zoomFactor = self.zoomFactor - 0.1
+                SocketIOManager.sharedInstance.changeZoomFactor(zoomFactor: self.zoomFactor - CGFloat(0.2))
+                self.zoomFactor = self.zoomFactor - CGFloat(0.2)
                 
             }))
         }
         if (self.zoomFactor < self.maxZoom){
             alertController.addAction(UIAlertAction(title: "Zoom In", style: UIAlertAction.Style.default,handler: {(action) in
-                SocketIOManager.sharedInstance.changeZoomFactor(zoomFactor: self.zoomFactor + 0.1)
-                self.zoomFactor = self.zoomFactor + 0.1
+                SocketIOManager.sharedInstance.changeZoomFactor(zoomFactor: self.zoomFactor + CGFloat(0.2))
+                self.zoomFactor = self.zoomFactor + CGFloat(0.2)
             }))
         }
+        alertController.addAction(UIAlertAction(title: "Cancel", style: UIAlertAction.Style.default,handler: {(action) in
+            
+        }))
         self.present(alertController, animated: true, completion: nil)
     }
     

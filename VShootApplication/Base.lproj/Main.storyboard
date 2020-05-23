@@ -700,11 +700,11 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rfJ-p4-fRI">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="711"/>
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="715"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                             </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9YE-XA-WtJ">
-                                <rect key="frame" x="133" y="731" width="109" height="30"/>
+                                <rect key="frame" x="110" y="735" width="155" height="30"/>
                                 <state key="normal" title="VShoot Options">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
@@ -713,40 +713,29 @@
                                 </connections>
                             </button>
                             <imageView opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="GalleryImg" translatesAutoresizingMaskIntoConstraints="NO" id="IXY-II-Zx5">
-                                <rect key="frame" x="299" y="723" width="40.666666666666686" height="55"/>
+                                <rect key="frame" x="297" y="728" width="45" height="44"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="55" id="jZz-tg-D40"/>
+                                    <constraint firstAttribute="height" constant="44" id="170-y7-Ntj"/>
                                 </constraints>
                                 <edgeInsets key="layoutMargins" top="8" left="8" bottom="8" right="8"/>
                             </imageView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ilX-Kl-mw8">
-                                <rect key="frame" x="35" y="728" width="45" height="33"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="18"/>
-                                <color key="tintColor" red="0.19215686269999999" green="0.82352941180000006" blue="0.51372549020000002" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
-                                <state key="normal" title="zoom"/>
-                                <connections>
-                                    <action selector="testZoom:" destination="OtV-7X-mhZ" eventType="touchUpInside" id="HPe-gk-rW5"/>
-                                </connections>
-                            </button>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="rfJ-p4-fRI" firstAttribute="centerX" secondItem="9YE-XA-WtJ" secondAttribute="centerX" id="04f-rC-fKD"/>
-                            <constraint firstItem="Ehd-4l-YQm" firstAttribute="leading" secondItem="YLC-k3-Mmu" secondAttribute="leading" constant="35" id="1VK-rf-oeA"/>
-                            <constraint firstItem="9YE-XA-WtJ" firstAttribute="centerX" secondItem="jnA-T8-XoT" secondAttribute="centerX" id="6Bq-Ib-XZP"/>
-                            <constraint firstItem="IXY-II-Zx5" firstAttribute="top" secondItem="rfJ-p4-fRI" secondAttribute="bottom" constant="12" id="CrM-HK-7xP"/>
-                            <constraint firstItem="IXY-II-Zx5" firstAttribute="leading" secondItem="9YE-XA-WtJ" secondAttribute="trailing" constant="57" id="NHe-QI-udj"/>
-                            <constraint firstItem="rfJ-p4-fRI" firstAttribute="leading" secondItem="YLC-k3-Mmu" secondAttribute="leading" id="QPq-OC-hjQ"/>
-                            <constraint firstItem="YLC-k3-Mmu" firstAttribute="trailing" secondItem="Ehd-4l-YQm" secondAttribute="trailing" constant="49" id="W7L-qT-CBb"/>
-                            <constraint firstItem="rfJ-p4-fRI" firstAttribute="top" secondItem="jnA-T8-XoT" secondAttribute="topMargin" constant="-44" id="XMw-5a-mZl"/>
-                            <constraint firstItem="ilX-Kl-mw8" firstAttribute="centerY" secondItem="IXY-II-Zx5" secondAttribute="centerY" constant="-6" id="Y3H-I1-TMb"/>
-                            <constraint firstItem="9YE-XA-WtJ" firstAttribute="leading" secondItem="YLC-k3-Mmu" secondAttribute="leading" constant="133" id="YkA-Va-7mM"/>
-                            <constraint firstItem="9YE-XA-WtJ" firstAttribute="top" secondItem="rfJ-p4-fRI" secondAttribute="bottom" constant="20" id="Z2e-Y8-iOe"/>
-                            <constraint firstAttribute="bottomMargin" secondItem="IXY-II-Zx5" secondAttribute="bottom" id="nGC-Mb-1NQ"/>
-                            <constraint firstItem="ilX-Kl-mw8" firstAttribute="top" secondItem="rfJ-p4-fRI" secondAttribute="bottom" constant="17" id="nWX-v6-aFQ"/>
-                            <constraint firstItem="IXY-II-Zx5" firstAttribute="trailing" secondItem="jnA-T8-XoT" secondAttribute="trailingMargin" constant="-19.333333333333314" id="pBk-Vg-Kym"/>
-                            <constraint firstItem="ilX-Kl-mw8" firstAttribute="trailing" secondItem="Ehd-4l-YQm" secondAttribute="trailing" constant="-246" id="qF9-II-moj"/>
-                            <constraint firstItem="Ehd-4l-YQm" firstAttribute="top" secondItem="YLC-k3-Mmu" secondAttribute="top" id="sYz-JQ-tFU"/>
+                            <constraint firstItem="Ehd-4l-YQm" firstAttribute="top" secondItem="YLC-k3-Mmu" secondAttribute="top" id="3GL-bG-Faf"/>
+                            <constraint firstItem="YLC-k3-Mmu" firstAttribute="trailing" secondItem="Ehd-4l-YQm" secondAttribute="trailing" constant="49" id="56P-t4-hXw"/>
+                            <constraint firstItem="rfJ-p4-fRI" firstAttribute="top" secondItem="jnA-T8-XoT" secondAttribute="topMargin" constant="-44" id="DBg-mA-cvn"/>
+                            <constraint firstItem="IXY-II-Zx5" firstAttribute="leading" secondItem="9YE-XA-WtJ" secondAttribute="trailing" constant="32" id="FRh-rF-WjN"/>
+                            <constraint firstItem="YLC-k3-Mmu" firstAttribute="trailing" secondItem="IXY-II-Zx5" secondAttribute="trailing" constant="33" id="GMa-c6-ztJ"/>
+                            <constraint firstItem="Ehd-4l-YQm" firstAttribute="leading" secondItem="YLC-k3-Mmu" secondAttribute="leading" constant="35" id="Hmh-2s-KZb"/>
+                            <constraint firstItem="YLC-k3-Mmu" firstAttribute="bottom" secondItem="IXY-II-Zx5" secondAttribute="bottom" constant="6" id="NqE-cT-s4O"/>
+                            <constraint firstItem="9YE-XA-WtJ" firstAttribute="leading" secondItem="YLC-k3-Mmu" secondAttribute="leading" constant="110" id="OFr-13-bc4"/>
+                            <constraint firstItem="9YE-XA-WtJ" firstAttribute="top" secondItem="rfJ-p4-fRI" secondAttribute="bottom" constant="20" id="epP-Dm-Ggq"/>
+                            <constraint firstItem="rfJ-p4-fRI" firstAttribute="centerX" secondItem="jnA-T8-XoT" secondAttribute="centerX" id="fe6-K3-EQb"/>
+                            <constraint firstItem="rfJ-p4-fRI" firstAttribute="leading" secondItem="YLC-k3-Mmu" secondAttribute="leading" id="gQS-kg-364"/>
+                            <constraint firstItem="9YE-XA-WtJ" firstAttribute="centerY" secondItem="IXY-II-Zx5" secondAttribute="centerY" id="iz5-vq-Mwx"/>
+                            <constraint firstItem="IXY-II-Zx5" firstAttribute="top" secondItem="rfJ-p4-fRI" secondAttribute="bottom" constant="13" id="k5Z-6l-LN3"/>
+                            <constraint firstItem="rfJ-p4-fRI" firstAttribute="centerX" secondItem="9YE-XA-WtJ" secondAttribute="centerX" id="xEZ-iK-Muf"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="YLC-k3-Mmu"/>
                     </view>
@@ -767,7 +756,7 @@
             <objects>
                 <viewController modalPresentationStyle="fullScreen" id="rSj-cz-2Ts" customClass="PhotoProcessingViewController" customModule="VShootApplication" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="kJb-uv-Ide">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="758"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Photo is processing..." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QUY-vF-Vrb">
@@ -3930,8 +3919,8 @@
         <segue reference="Fqc-7d-quI"/>
         <segue reference="btB-pE-CCS"/>
         <segue reference="hUl-UN-0N5"/>
-        <segue reference="ydK-7P-Ukb"/>
-        <segue reference="Nkn-xq-bMA"/>
+        <segue reference="Lgx-tJ-ink"/>
+        <segue reference="kI0-Zs-NdU"/>
         <segue reference="ifN-Zn-8Fu"/>
         <segue reference="UL1-Cd-4Wx"/>
     </inferredMetricsTieBreakers>
