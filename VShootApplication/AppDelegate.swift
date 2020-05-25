@@ -67,7 +67,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
         SocketIOManager.sharedInstance.socket.emit("goingToBackground", SocketIOManager.sharedInstance.currUserObj.username)
         
-        SocketIOManager.sharedInstance.socket.disconnect()
+        //SocketIOManager.sharedInstance.socket.disconnect()
         
     }
 
@@ -84,7 +84,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         print("inside of did become active")
         print(SocketIOManager.sharedInstance.currUserObj.username)
         
-        if (SocketIOManager.sharedInstance.needToReconnectOnBecomeActive){ //someone is logged in
+//        if (SocketIOManager.sharedInstance.needToReconnectOnBecomeActive){ //someone is logged in
+        if (SocketIOManager.sharedInstance.currUserObj.username != ""){
             print("user is logged in so I am establishing connection again")
             SocketIOManager.sharedInstance.establishConnection(username: SocketIOManager.sharedInstance.currUserObj.username, fromLogin: false, completion: {
                 print("successfully established connection")

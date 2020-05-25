@@ -95,7 +95,6 @@ class ProfileViewController: UIViewController {
                     SocketIOManager.sharedInstance.currUserObj.imageUrl = ""
                     SocketIOManager.sharedInstance.currUserObj.friends.removeAll()
                     SocketIOManager.sharedInstance.currUserObj.groups.removeAll()
-                    SocketIOManager.sharedInstance.currUserObj.userId = ""
                     
                     SocketIOManager.sharedInstance.currUserObj.image = nil
                     SocketIOManager.sharedInstance.currUserObj.userId = ""
@@ -103,14 +102,19 @@ class ProfileViewController: UIViewController {
                     SocketIOManager.sharedInstance.loadedGroups = false
                     SocketIOManager.sharedInstance.loadedProfilePic = false
                     SocketIOManager.sharedInstance.needToReconnectOnBecomeActive = false
+                    SocketIOManager.sharedInstance.needToConnectSocket = true
                     SocketIOManager.sharedInstance.friendStrings.removeAll()
                     
+                    //disconnect socket
+                    SocketIOManager.sharedInstance.socket.removeAllHandlers()
+                    SocketIOManager.sharedInstance.socket.disconnect()
+                    
+                    //clear user defaults
                     UserDefaults.standard.set("", forKey: "username")
                     UserDefaults.standard.set(false, forKey: "UserLoggedIn")
                     
                     UserDefaults.standard.set(nil, forKey: "profilepicurl")
                     UserDefaults.standard.set(nil, forKey: "userId")
-                        //SocketIOManager.sharedInstance.closeConnection()
                         self.performSegue(withIdentifier: "logoutSegue", sender: self)
                         
                     

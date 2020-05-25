@@ -7,7 +7,7 @@ target 'VShootApplication' do
     pod 'Alamofire'
     pod 'AlamofireSwiftyJSON'
     pod 'SwiftyJSON'
-    pod 'Socket.IO-Client-Swift', '~> 13.2.0'
+    pod 'Socket.IO-Client-Swift', '~> 15.2.0'
     pod 'iOSDropDown'
     pod 'TwilioVideo', '~> 3.2.0'
     pod 'SwiftSpinner'

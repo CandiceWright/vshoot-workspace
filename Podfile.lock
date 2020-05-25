@@ -79,9 +79,9 @@ PODS:
     - nanopb/encode (= 0.3.901)
   - nanopb/decode (0.3.901)
   - nanopb/encode (0.3.901)
-  - Socket.IO-Client-Swift (13.2.1):
-    - Starscream (~> 3.0.2)
-  - Starscream (3.0.6)
+  - Socket.IO-Client-Swift (15.2.0):
+    - Starscream (~> 3.1)
+  - Starscream (3.1.1)
   - SwiftSpinner (1.6.2)
   - SwiftyJSON (4.2.0)
   - TwilioVideo (3.2.2)
@@ -96,7 +96,7 @@ DEPENDENCIES:
   - Firebase/Storage
   - iOSDropDown
   - MessengerKit (from `https://github.com/steve228uk/MessengerKit.git`)
-  - Socket.IO-Client-Swift (~> 13.2.0)
+  - Socket.IO-Client-Swift (~> 15.2.0)
   - SwiftSpinner
   - SwiftyJSON
   - TwilioVideo (~> 3.2.0)
@@ -120,12 +120,12 @@ SPEC REPOS:
     - iOSDropDown
     - leveldb-library
     - nanopb
-    - Socket.IO-Client-Swift
-    - Starscream
     - SwiftSpinner
     - SwiftyJSON
     - XLPagerTabStrip
   trunk:
+    - Socket.IO-Client-Swift
+    - Starscream
     - TwilioVideo
 
 EXTERNAL SOURCES:
@@ -155,13 +155,13 @@ SPEC CHECKSUMS:
   leveldb-library: 08cba283675b7ed2d99629a4bc5fd052cd2bb6a5
   MessengerKit: 41a5742a03e3f9638cb3b4ae310f69161ac1e659
   nanopb: 2901f78ea1b7b4015c860c2fdd1ea2fee1a18d48
-  Socket.IO-Client-Swift: b94943e2fb916fe2f95244b9ed21828634002280
-  Starscream: ef3ece99d765eeccb67de105bfa143f929026cf5
+  Socket.IO-Client-Swift: 1e3e3a1f09f3312a167f0d781eb2f383d477357c
+  Starscream: 4bb2f9942274833f7b4d296a55504dcfc7edb7b0
   SwiftSpinner: 3a4c6dea425e5a31b908a8b1dd5dcd1ad4d96340
   SwiftyJSON: c4bcba26dd9ec7a027fc8eade48e2c911f229e96
   TwilioVideo: 996f6c2b06f7d3d49f5d4e7cd80a19b0d07f4625
   XLPagerTabStrip: 61c57fd61f611ee5f01ff1495ad6fbee8bf496c5
 
-PODFILE CHECKSUM: 49766dd9d3a6090081e8e7278e4cb40ae89c94c5
+PODFILE CHECKSUM: 73057de234bf0107e5fcb43eaaa59f24497f456e
 
 COCOAPODS: 1.9.1

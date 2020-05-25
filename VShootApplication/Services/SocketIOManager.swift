@@ -17,7 +17,7 @@ class SocketIOManager: NSObject {
     var dataString: String = "";
 
     var serverUrl = "https://e8349db3.ngrok.io"
-    let manager = SocketManager(socketURL: URL(string: "https://e8349db3.ngrok.io")!, config: [.log(false), .forcePolling(false), .reconnects(false)])
+    let manager = SocketManager(socketURL: URL(string: "https://e8349db3.ngrok.io")!, config: [.log(true)])
 
     //var name: String?
     //var resetAck: SocketAckEmitter?
@@ -146,15 +146,27 @@ class SocketIOManager: NSObject {
             
             //clientEvent: .connect
             //socket.once("connected") {data, ack in
-            socket.once(clientEvent: .connect) {data, ack in
-                print("socket connected \(data)")
-                print("printing socket status")
-                print(self.socket.status)
-                self.storeSocketRef(username: username, completion: {
-                    print("stored socket reference")
-                        completion()
-                })
+            var hasConnectEvent = false
+            for handler in socket.handlers{
+                if(handler.event == "connect"){
+                    hasConnectEvent = true;
+                }
             }
+            print("printing whether or not socket has connect event")
+            print(hasConnectEvent)
+            if (!hasConnectEvent){
+                //socket.on("connected") {data, ack in
+                socket.on(clientEvent: .connect) {data, ack in
+                    print("socket connected \(data)")
+                    print("printing socket status")
+                    print(self.socket.status)
+                    self.storeSocketRef(username: username, completion: {
+                        print("stored socket reference")
+                            completion()
+                    })
+                }
+            }
+            
             socket.connect()
         }
         else { //already connected so just store ref
