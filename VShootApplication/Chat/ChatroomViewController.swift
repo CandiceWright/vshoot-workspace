@@ -77,7 +77,7 @@ class ChatroomViewController: MSGMessengerViewController {
             if (groupname == self.chatname){
                 if (username != self.currUser.displayName){ //make sure its not a message sent by currUser
                     var profilePic: UIImage = UIImage()
-                    if(userImgUrl! == "none"){
+                    if(userImgUrl! == "no profile pic"){
                         profilePic = UIImage(named: "profilepic_none")!
                         let chatUser = ChatUser(displayName: username!, avatar: profilePic, avatarUrl: nil, isSender: false)
                         let body: MSGMessageBody = .text(msg!)
