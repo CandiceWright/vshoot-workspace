@@ -928,7 +928,7 @@
 				);
 				INFOPLIST_FILE = VShootApplication/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 3;
+				MARKETING_VERSION = 4;
 				PRODUCT_BUNDLE_IDENTIFIER = com.thevshoot.vshootapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "VShootApplication/Shoots/VShootApplication-Bridging-Header.h";
@@ -956,7 +956,7 @@
 				);
 				INFOPLIST_FILE = VShootApplication/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 3;
+				MARKETING_VERSION = 4;
 				PRODUCT_BUNDLE_IDENTIFIER = com.thevshoot.vshootapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "VShootApplication/Shoots/VShootApplication-Bridging-Header.h";
