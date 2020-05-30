@@ -102,6 +102,8 @@ class ViewController: UIViewController {
             //geturl += UsernameField.text! + "/"
             //geturl += PasswordField.text!
             let username = (UsernameField.text?.trimmingCharacters(in: .whitespaces))?.lowercased()
+        print("printing username")
+        print(username)
             let info: [String:Any] = ["username": username as Any, "password": PasswordField.text as Any]
             do {
                 let data = try JSONSerialization.data(withJSONObject: info, options: [])

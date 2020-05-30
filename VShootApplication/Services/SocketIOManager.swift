@@ -12,8 +12,8 @@ import Alamofire
 class SocketIOManager: NSObject {
     static let sharedInstance = SocketIOManager()
     var resetAck: SocketAckEmitter?
-    var serverUrl = "https://serve-thevshoot.com";
-    let manager = SocketManager(socketURL: URL(string: "https://serve-thevshoot.com")!, config: [.log(true)])
+    var serverUrl = "https://serve-thevshoot.com:7343";
+    let manager = SocketManager(socketURL: URL(string: "https://serve-thevshoot.com:7343")!, config: [.log(true)])
     var dataString: String = "";
 
     //var serverUrl = "https://e8349db3.ngrok.io"
@@ -157,6 +157,27 @@ class SocketIOManager: NSObject {
             if (!hasConnectEvent){
                 //socket.on("connected") {data, ack in
                 socket.on(clientEvent: .connect) {data, ack in
+                    print("socket connected \(data)")
+                    print("printing socket status")
+                    print(self.socket.status)
+                    self.storeSocketRef(username: username, completion: {
+                        print("stored socket reference")
+                            completion()
+                    })
+                }
+            }
+            
+            var hasReConnectEvent = false
+            for handler in socket.handlers{
+                if(handler.event == "reconnect"){
+                    hasReConnectEvent = true;
+                }
+            }
+            print("printing whether or not socket has reconnect event")
+            print(hasReConnectEvent)
+            if (!hasReConnectEvent){
+                //socket.on("connected") {data, ack in
+                socket.on(clientEvent: .reconnect) {data, ack in
                     print("socket connected \(data)")
                     print("printing socket status")
                     print(self.socket.status)
