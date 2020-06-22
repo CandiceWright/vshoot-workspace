@@ -219,7 +219,6 @@
                     <connections>
                         <segue destination="6CF-qt-neY" kind="relationship" relationship="viewControllers" id="rFC-mO-jNP"/>
                         <segue destination="We4-Xz-rDB" kind="relationship" relationship="viewControllers" id="lqP-xD-MsN"/>
-                        <segue destination="njd-sD-Fcu" kind="relationship" relationship="viewControllers" id="m1V-zs-dyk"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="nbR-fv-KNq" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -240,7 +239,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="KZv-dP-xSY" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1290" y="1936"/>
+            <point key="canvasLocation" x="228" y="1637"/>
         </scene>
         <!--Model Profile View Controller-->
         <scene sceneID="pTl-pv-sNb">
@@ -370,7 +369,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="IEx-ZQ-clr" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-442" y="1936"/>
+            <point key="canvasLocation" x="1111" y="1637"/>
         </scene>
         <!--Nav Votographer Profile View Controller-->
         <scene sceneID="xYq-PH-X2I">
@@ -413,7 +412,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" heightSizable="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Tap Photo to Change" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SVg-Aj-zGP">
-                                <rect key="frame" x="107" y="338" width="161" height="33"/>
+                                <rect key="frame" x="107" y="387" width="161" height="33"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="33" id="6eV-Yo-EJT"/>
                                 </constraints>
@@ -422,7 +421,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3hc-nt-Ea8">
-                                <rect key="frame" x="0.0" y="431" width="375" height="49"/>
+                                <rect key="frame" x="0.0" y="480" width="375" height="49"/>
                                 <color key="backgroundColor" red="0.19215686269999999" green="0.82352941180000006" blue="0.51372549020000002" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="49" id="QWc-nn-FEV"/>
@@ -437,7 +436,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4S2-PY-Abo">
-                                <rect key="frame" x="0.0" y="566" width="375" height="49"/>
+                                <rect key="frame" x="0.0" y="615" width="375" height="49"/>
                                 <color key="backgroundColor" red="0.19215686269999999" green="0.82352941180000006" blue="0.51372549020000002" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="49" id="0pI-Y2-Dwq"/>
@@ -451,7 +450,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="APn-MN-uDO">
-                                <rect key="frame" x="0.0" y="498" width="375" height="49"/>
+                                <rect key="frame" x="0.0" y="547" width="375" height="49"/>
                                 <color key="backgroundColor" red="0.19215686269999999" green="0.82352941180000006" blue="0.51372549020000002" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="49" id="9dE-3k-SQw"/>
@@ -466,7 +465,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xor-1D-3t0">
-                                <rect key="frame" x="111" y="628" width="153" height="36"/>
+                                <rect key="frame" x="111" y="677" width="153" height="36"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="36" id="nQe-9F-nft"/>
                                 </constraints>
@@ -488,7 +487,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="profilepic_none" translatesAutoresizingMaskIntoConstraints="NO" id="qpc-0Z-4hq">
-                                <rect key="frame" x="96" y="150" width="180" height="180"/>
+                                <rect key="frame" x="96" y="150" width="180" height="229"/>
                             </imageView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -2900,7 +2899,7 @@
                                         <fragment content="Terms of Use">
                                             <attributes>
                                                 <color key="NSColor" red="0.19215686269999999" green="0.82352941180000006" blue="0.51372549020000002" alpha="1" colorSpace="calibratedRGB"/>
-                                                <font key="NSFont" metaFont="menu" size="11"/>
+                                                <font key="NSFont" metaFont="message" size="11"/>
                                             </attributes>
                                         </fragment>
                                     </attributedString>
