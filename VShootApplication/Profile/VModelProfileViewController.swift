@@ -39,15 +39,15 @@ class VModelProfileViewController: UIViewController, UICollectionViewDelegate, U
         self.profilePic.clipsToBounds = true
         self.numFriendsLabel.isUserInteractionEnabled = true
 
-        cvWidth = VShootsCV.frame.size.width
-        cvHeight = VShootsCV.frame.size.height
-        let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
-//        layout.sectionInset = UIEdgeInsets(top: 20, left: 0, bottom: 10, right: 0)
-        layout.itemSize = CGSize(width: (cvWidth - 10)/2, height: (cvWidth - 10)/2)
-        //height: screenWidth/3
-        layout.minimumInteritemSpacing = 0
-        layout.minimumLineSpacing = 0
-        VShootsCV!.collectionViewLayout = layout
+//        cvWidth = VShootsCV.frame.size.width
+//        cvHeight = VShootsCV.frame.size.height
+        //let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
+
+        //layout.itemSize = CGSize(width: (cvWidth - 10)/2, height: (cvWidth - 10)/2)
+        
+        //layout.minimumInteritemSpacing = 0
+        //layout.minimumLineSpacing = 0
+        //VShootsCV!.collectionViewLayout = layout
         
         self.currUser = SocketIOManager.sharedInstance.currUser
         self.usernameLabel.text = currUser
@@ -56,20 +56,20 @@ class VModelProfileViewController: UIViewController, UICollectionViewDelegate, U
         if (!SocketIOManager.sharedInstance.loadedFriends){
             getFriends(completion: {
                 self.numFriendsLabel.text = String(SocketIOManager.sharedInstance.currUserObj.friends.count)
-                let friendstap = UITapGestureRecognizer(target: self, action: #selector(VModelProfileViewController.FriendsTapFunction))
-                self.numFriendsLabel.addGestureRecognizer(friendstap)
+                //let friendstap = UITapGestureRecognizer(target: self, action: #selector(VModelProfileViewController.FriendsTapFunction))
+                //self.numFriendsLabel.addGestureRecognizer(friendstap)
             })
         }
         else {
             self.numFriendsLabel.text = String(SocketIOManager.sharedInstance.currUserObj.friends.count)
-            let friendstap = UITapGestureRecognizer(target: self, action: #selector(VModelProfileViewController.FriendsTapFunction))
-            self.numFriendsLabel.addGestureRecognizer(friendstap)
+            //let friendstap = UITapGestureRecognizer(target: self, action: #selector(VModelProfileViewController.FriendsTapFunction))
+            //self.numFriendsLabel.addGestureRecognizer(friendstap)
         }
         
-        getVShoots(completion: {
-            self.numVshootsLabel.text = String(self.vshoots.count)
-            self.VShootsCV.reloadData()
-        })
+//        getVShoots(completion: {
+//            self.numVshootsLabel.text = String(self.vshoots.count)
+//            self.VShootsCV.reloadData()
+//        })
         
     }
     
