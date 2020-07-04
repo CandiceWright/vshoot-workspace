@@ -71,7 +71,7 @@ PODS:
   - GoogleUtilities/UserDefaults (5.3.6):
     - GoogleUtilities/Logger
   - GTMSessionFetcher/Core (1.2.1)
-  - iOSDropDown (0.2.7)
+  - iOSDropDown (0.3.4)
   - leveldb-library (1.20)
   - MessengerKit (1.0.4)
   - nanopb (0.3.901):
@@ -117,13 +117,13 @@ SPEC REPOS:
     - GoogleAppMeasurement
     - GoogleUtilities
     - GTMSessionFetcher
-    - iOSDropDown
     - leveldb-library
     - nanopb
     - SwiftSpinner
     - SwiftyJSON
     - XLPagerTabStrip
   trunk:
+    - iOSDropDown
     - Socket.IO-Client-Swift
     - Starscream
     - TwilioVideo
@@ -151,7 +151,7 @@ SPEC CHECKSUMS:
   GoogleAppMeasurement: 98b71f5e04142793729a5ef23e5b96651ff4b70f
   GoogleUtilities: 95996bea7c7d9b8fb811b7507669a4a8762f80c7
   GTMSessionFetcher: 32aeca0aa144acea523e1c8e053089dec2cb98ca
-  iOSDropDown: 7a4cfc67d5166f319858747b63cd2f7760c4fb4b
+  iOSDropDown: c10a761f9a00c3f1cc9d3bce43ae504628e2f692
   leveldb-library: 08cba283675b7ed2d99629a4bc5fd052cd2bb6a5
   MessengerKit: 41a5742a03e3f9638cb3b4ae310f69161ac1e659
   nanopb: 2901f78ea1b7b4015c860c2fdd1ea2fee1a18d48

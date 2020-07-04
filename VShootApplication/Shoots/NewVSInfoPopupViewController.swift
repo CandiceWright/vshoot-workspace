@@ -42,6 +42,7 @@ class NewVSInfoPopupViewController: UIViewController {
         //Its Id Values and its optional
         myRoleDropdown.optionIds = [1,2]
         myRoleDropdown.isSearchEnable = false
+        
         // The the Closure returns Selected Index and String
         myRoleDropdown.didSelect{(selectedText , index ,id) in
             self.role = selectedText
