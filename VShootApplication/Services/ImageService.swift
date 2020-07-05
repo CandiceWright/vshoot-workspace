@@ -24,7 +24,9 @@ class ImageService {
             if let data = data {
                 print(myUrl)
                 downloadedImage = UIImage(data: data)
-                cache.setObject(downloadedImage!, forKey: myUrl as NSString)
+                if (downloadedImage != nil){
+                    cache.setObject(downloadedImage!, forKey: myUrl as NSString)
+                }
             }
             
             DispatchQueue.main.async {

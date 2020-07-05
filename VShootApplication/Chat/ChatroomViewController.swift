@@ -180,7 +180,12 @@ class ChatroomViewController: MSGMessengerViewController {
             print(data["senderImg"])
             ImageService.getImage(withURL: data["senderImg"]!){ image in
                 print("got pic for msg")
-                profilePic = image!
+                if (image != nil){
+                    profilePic = image!
+                }
+                else {
+                    profilePic = UIImage(named: "profilepic_none")!
+                }
                 let chatUser = ChatUser(displayName: data["sender"]!, avatar: profilePic, avatarUrl: nil, isSender: isSender)
                 let body: MSGMessageBody = .text(data["message"]!)
                 let message = MSGMessage(id: id, body: body, user: chatUser, sentAt: Date())
