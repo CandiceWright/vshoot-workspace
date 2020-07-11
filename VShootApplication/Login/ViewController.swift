@@ -213,10 +213,23 @@ class ViewController: UIViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if (segue.identifier == "segueToHomeFromLogin"){
             let barViewControllers = segue.destination as! UITabBarController
-            barViewControllers.selectedIndex = 1
+            barViewControllers.selectedIndex = 2
             
-             let VSViewController = barViewControllers.viewControllers?[1] as! InitiateVSViewController
-            VSViewController.username = UsernameField.text!
+            //erase this once you get the db in place
+            let post1: ForumPost = ForumPost.init(forumId: 1, postText: "This is first test", username: "Candice", numLikes: 12, numComments: 14)
+            
+            let post2: ForumPost = ForumPost.init(forumId: 2, postText: "This is second test", username: "Candice", numLikes: 47, numComments: 20)
+            
+//            var posts:[ForumPost] = [];
+//            posts.append(post1)
+//            posts.append(post2)
+            
+            let forumVC = barViewControllers.viewControllers?[1] as! ForumViewController
+            forumVC.posts.append(post1)
+            forumVC.posts.append(post2)
+            
+//             let VSViewController = barViewControllers.viewControllers?[1] as! InitiateVSViewController
+//            VSViewController.username = UsernameField.text!
 //            let FriendsViewController = barViewControllers.viewControllers?[0] as! FriendsViewController
 //            FriendsViewController.username = UsernameField.text!
 //            let ProfileViewController = barViewControllers.viewControllers?[2] as! ProfileViewController
