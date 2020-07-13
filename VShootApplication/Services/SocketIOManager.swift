@@ -26,6 +26,7 @@ class SocketIOManager: NSObject {
     //var currUserObj:MainUser = MainUser()
     var currUserObj:User = User(username: "",imageUrl: "")
     var friendStrings:[String] = [String]()
+    var forumPosts:[ForumPost] = [ForumPost]()
     var loadedFriends:Bool = false
     var loadedProfilePic:Bool = false
     var loadedGroups:Bool = false

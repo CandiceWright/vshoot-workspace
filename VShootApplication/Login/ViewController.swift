@@ -216,9 +216,9 @@ class ViewController: UIViewController {
             barViewControllers.selectedIndex = 2
             
             //erase this once you get the db in place
-            let post1: ForumPost = ForumPost.init(forumId: 1, postText: "This is first test", username: "Candice", numLikes: 12, numComments: 14)
+            let post1: ForumPost = ForumPost.init(forumId: 1, postText: "This is first test", username: "Candice", datePosted: "06.11.20",numLikes: 12, numComments: 14)
             
-            let post2: ForumPost = ForumPost.init(forumId: 2, postText: "This is second test", username: "Candice", numLikes: 47, numComments: 20)
+            let post2: ForumPost = ForumPost.init(forumId: 2, postText: "This is second test", username: "Candice",datePosted: "06.11.20", numLikes: 47, numComments: 20)
             
 //            var posts:[ForumPost] = [];
 //            posts.append(post1)

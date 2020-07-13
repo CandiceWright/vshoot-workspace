@@ -391,7 +391,7 @@
                                 <rect key="frame" x="148" y="99" width="79" height="30"/>
                                 <state key="normal" title="Learn More"/>
                             </button>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text="Looking for people to vshoot with? Want to say hi to the community? Post a message here." textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="Xjt-GY-xtW">
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="Xjt-GY-xtW">
                                 <rect key="frame" x="33" y="146" width="309" height="72"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                 <constraints>
@@ -553,6 +553,7 @@
                     <tabBarItem key="tabBarItem" title="" image="FriendsImg" id="m4l-hG-7dc"/>
                     <connections>
                         <outlet property="ForumPostsTableView" destination="kMn-fJ-Cax" id="wkj-GK-xMo"/>
+                        <outlet property="postBtn" destination="Vhf-E0-3BN" id="x8x-oN-IPe"/>
                         <outlet property="postTextView" destination="Xjt-GY-xtW" id="KI6-u0-WRH"/>
                     </connections>
                 </viewController>
@@ -3088,7 +3089,7 @@
                                         <fragment content="Terms of Use">
                                             <attributes>
                                                 <color key="NSColor" red="0.19215686269999999" green="0.82352941180000006" blue="0.51372549020000002" alpha="1" colorSpace="calibratedRGB"/>
-                                                <font key="NSFont" metaFont="message" size="11"/>
+                                                <font key="NSFont" metaFont="controlContent" size="11"/>
                                             </attributes>
                                         </fragment>
                                     </attributedString>
