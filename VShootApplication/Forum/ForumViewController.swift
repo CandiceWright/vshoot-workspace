@@ -15,7 +15,7 @@ class ForumViewController: UIViewController, UITableViewDataSource, UITableViewD
     
     var posts:[ForumPost] = [];
     var dataString: String = "";
-    
+    var selectedBtnRow: Int = 0
     
     @IBOutlet weak var postTextView: UITextView!
     @IBOutlet weak var ForumPostsTableView: UITableView!
@@ -24,7 +24,9 @@ class ForumViewController: UIViewController, UITableViewDataSource, UITableViewD
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        print(posts[0].postText)
+        ForumPostsTableView.tableFooterView = UIView()
+        self.ForumPostsTableView.isHidden = true
+        getPosts()
         self.postTextView.delegate = self
         postTextView.text = "Looking for people to vshoot with? Want to say hi to the community? Post a message here."
         postTextView.textColor = .lightGray
@@ -40,8 +42,57 @@ class ForumViewController: UIViewController, UITableViewDataSource, UITableViewD
         
         self.hideKeyboard()
     }
+    func getPosts(){
+        print("user id in get posts" + SocketIOManager.sharedInstance.currUserObj.userId)
+        let geturl = SocketIOManager.sharedInstance.serverUrl + "/posts/all/" + SocketIOManager.sharedInstance.currUserObj.userId
+                let url = URL(string: geturl)
+                Alamofire.request(url!)
+                    .validate(statusCode: 200..<201)
+                    .responseJSON{ (response) in
+                        switch response.result {
+                        case .success(let data):
+                            print(data)
+                            self.ForumPostsTableView.isHidden = false
+                            if let postsDict = data as? [Dictionary<String,String>]{
+                                for item in postsDict.reversed() {
+                                    let post = ForumPost.init(forumId: Int(item["postId"]!)!, postText: item["postText"]!, username: item["posterUsername"]!, imageUrl: item["postUserProfilePic"]!, datePosted: item["postDate"]!, numLikes: Int(item["numPostLikes"]!)!, numComments: Int(item["numPostComments"]!)!, didLikePost: item["didLikePost"]!)
+                                    if (item["postUserProfilePic"]! != "none"){
+                                       ImageService.getImage(withURL: item["postUserProfilePic"]!, completion: {image in
+                                                                                  print("got image")
+                                        post.image = image
+                                                                              })
+                                        
+                                    }
+                                    
+                                    self.posts.append(post)
+                                }
+                                self.ForumPostsTableView.reloadData()
+                            }
+                            else {
+                                print("cannot convert to dict")
+                                let alertController = UIAlertController(title: "Sorry!", message:
+                                    "Looks like something went wrong. Please try again.", preferredStyle: UIAlertController.Style.alert)
+                                alertController.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default,handler: {(action) in }))
+                                
+                                self.present(alertController, animated: true, completion: nil)
+                            }
+                            
+                            
+                            
+                        case .failure(let error):
+                            print("failure")
+                            print(error)
+                            let alertController = UIAlertController(title: "Sorry!", message:
+                                "Looks like something went wrong. Please try again.", preferredStyle: UIAlertController.Style.alert)
+                            alertController.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default,handler: {(action) in }))
+                            
+                            self.present(alertController, animated: true, completion: nil)
+                        }
+                }
+    }
     @IBAction func postToForum(_ sender: Any) {
-        
+        self.postBtn.isEnabled = false;
+        self.postBtn.alpha = 0.1
         let postText = self.postTextView.text
         let date = Date()
         let formatter = DateFormatter()
@@ -71,13 +122,17 @@ class ForumViewController: UIViewController, UITableViewDataSource, UITableViewD
                    if let json = data as? Dictionary<String,String>{
                     print(json["successful"]!)
                     if (json["successful"] == "true"){
-                        let newPost = ForumPost.init(forumId: Int(json["postId"]!)!, postText: postText!, username: SocketIOManager.sharedInstance.currUserObj.username, datePosted: dateStr,  numLikes: 0, numComments: 0)
+                        self.postTextView.text = "Looking for people to vshoot with? Want to say hi to the community? Post a message here."
+                        self.postTextView.textColor = .lightGray
+                        let newPost = ForumPost.init(forumId: Int(json["postId"]!)!, postText: postText!, username: SocketIOManager.sharedInstance.currUserObj.username, imageUrl: SocketIOManager.sharedInstance.currUserObj.imageUrl,datePosted: dateStr,  numLikes: 0, numComments: 0, didLikePost: "false")
                             
                         //self.posts.append(newPost)
                         self.posts.insert(newPost, at: 0)
                         self.ForumPostsTableView.reloadData()
                     }
                     else {
+                        self.postBtn.isEnabled = true
+                        self.postBtn.alpha = 1.0
                         let alertController = UIAlertController(title: "Oops!", message:
                             "There was a problem saving your post. Please try again.", preferredStyle: UIAlertController.Style.alert)
                         alertController.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default,handler: {(action) in  }))
@@ -87,6 +142,8 @@ class ForumViewController: UIViewController, UITableViewDataSource, UITableViewD
                         
                     }
                     else {
+                    self.postBtn.isEnabled = true
+                    self.postBtn.alpha = 1.0
                         let alertController = UIAlertController(title: "Oops!", message:
                             "There was a problem saving your post. Please try again.", preferredStyle: UIAlertController.Style.alert)
                         alertController.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default,handler: {(action) in  }))
@@ -99,6 +156,8 @@ class ForumViewController: UIViewController, UITableViewDataSource, UITableViewD
                 case .failure(let error):
                     print("failure")
                     print(error)
+                    self.postBtn.isEnabled = true
+                    self.postBtn.alpha = 1.0
                     let alertController = UIAlertController(title: "Sorry!", message:
                         "Looks like something went wrong. Please try again.", preferredStyle: UIAlertController.Style.alert)
                     alertController.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default,handler: {(action) in }))
@@ -140,33 +199,108 @@ class ForumViewController: UIViewController, UITableViewDataSource, UITableViewD
         cell.postText.text = posts[indexPath.row].postText
         cell.numComments.text = String(posts[indexPath.row].numComments)
         cell.numLikes.text = String(posts[indexPath.row].numLikes)
+        if (posts[indexPath.row].didLikePost == "true"){
+            print("It is true that the user liked this")
+            print(posts[indexPath.row].postText)
+            print(posts[indexPath.row].forumId)
+            cell.likeBtn.imageView?.image = UIImage(named: "liked_btn")
+        }
         cell.dateLabel.text = posts[indexPath.row].datePosted
+        cell.userImg.image = posts[indexPath.row].image
+        cell.userImg.layer.cornerRadius = cell.userImg.frame.height/2
+                       cell.userImg.clipsToBounds = true
+                       cell.userImg.layer.masksToBounds = true
         cell.delegate = self
             
             return cell
     }
-    /*
+    
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+        if (segue.identifier == "ShowPostComments"){
+            let commentsVC = segue.destination as! PostCommentsViewController
+            commentsVC.postId = posts[selectedBtnRow].forumId
+        }
     }
-    */
+    
 
 }
 
 extension ForumViewController: ForumTableViewCellDelegate {
-    func didTapLikeBtn(rowSelected: Int) {
+    func didTapLikeBtn(rowSelected: Int, cell: ForumTableViewCell) {
         print("curr user just liked a post with message ")
-        print(self.posts[rowSelected].postText)
+        print(self.posts[cell.cellRow].postText)
         print(" with forum id ")
-        print(self.posts[rowSelected].forumId)
+        print(self.posts[cell.cellRow].forumId)
+        var likeBtnAction: String = "like";
+        if (self.posts[cell.cellRow].didLikePost == "true"){
+            likeBtnAction = "unlike"
+        }
+        let posturl = SocketIOManager.sharedInstance.serverUrl + "/posts/likes"
+        let info: [String:Any] = ["userId": SocketIOManager.sharedInstance.currUserObj.userId as Any, "postId": self.posts[cell.cellRow].forumId as Any, "likeAction": likeBtnAction]
+        //"securityQuestion": self.question as Any, "securityAnswer": SQAnswer.text as Any
+        do {
+            let data = try JSONSerialization.data(withJSONObject: info, options: [])
+            dataString = String(data: data, encoding: .utf8)!
+        } catch {
+            print("error")
+        }
+        
+        let url = URL(string: posturl);
+        
+        Alamofire.request(url!, method: .post, parameters: info, encoding: JSONEncoding.default, headers: ["Content-Type":"application/json"])
+            .validate(statusCode: 200..<201)
+            .responseString{ (response) in
+                print(response)
+                switch response.result {
+                case .success(let data):
+                    print(data)
+                    if (data == "successful"){
+                        print("action successful")
+                        //change picture
+                        if (likeBtnAction == "like"){
+//                            cell.likeBtn.imageView?.image = UIImage(named: "heart.fill")
+                                
+                                    cell.likeBtn.imageView?.image = UIImage(named: "liked_btn")
+                           
+                            self.posts[cell.cellRow].numLikes = self.posts[cell.cellRow].numLikes + 1;
+                            self.posts[cell.cellRow].didLikePost = "true"
+                            self.ForumPostsTableView.reloadData()
+                        }
+                        else {
+                            cell.likeBtn.imageView?.image = UIImage(named: "not_liked_btn")
+                            self.posts[cell.cellRow].numLikes = self.posts[cell.cellRow].numLikes - 1;
+                            self.posts[cell.cellRow].didLikePost = "false"
+                            self.ForumPostsTableView.reloadData()
+                        }
+                    }
+                    else {
+                        let alertController = UIAlertController(title: "Oops!", message:
+                            "There was a problem saving your post. Please try again.", preferredStyle: UIAlertController.Style.alert)
+                        alertController.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default,handler: {(action) in  }))
+                        
+                        self.present(alertController, animated: true, completion: nil)
+                    }
+                    
+                case .failure(let error):
+                    print("failure")
+                    print(error)
+                    let alertController = UIAlertController(title: "Sorry!", message:
+                        "Looks like something went wrong. Please try again.", preferredStyle: UIAlertController.Style.alert)
+                    alertController.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default,handler: {(action) in }))
+                    
+                    self.present(alertController, animated: true, completion: nil)
+                    
+                }
+        }
     }
     
     func didTapCommentBtn(rowSelected: Int) {
         print("comment button tapped")
+        self.selectedBtnRow = rowSelected
+        self.performSegue(withIdentifier: "ShowPostComments", sender: self)
     }
     
     

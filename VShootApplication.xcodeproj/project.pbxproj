@@ -89,6 +89,9 @@
 		3898483E24B5A40D00A7B700 /* ForumViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3898483D24B5A40D00A7B700 /* ForumViewController.swift */; };
 		3898484024B5AD8F00A7B700 /* ForumTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3898483F24B5AD8E00A7B700 /* ForumTableViewCell.swift */; };
 		3898484224B84ED900A7B700 /* ForumPost.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3898484124B84ED800A7B700 /* ForumPost.swift */; };
+		3898484424C4626300A7B700 /* PostCommentsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3898484324C4626200A7B700 /* PostCommentsViewController.swift */; };
+		3898484624C466E100A7B700 /* PostCommentTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3898484524C466E100A7B700 /* PostCommentTableViewCell.swift */; };
+		3898484824C4E0BD00A7B700 /* PostComment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3898484724C4E0BD00A7B700 /* PostComment.swift */; };
 		38FAB04D2411AB550031BF52 /* VShootCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38FAB04C2411AB550031BF52 /* VShootCollectionViewCell.swift */; };
 		38FD20232200A7BA00E54A2C /* VShootGuideViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38FD20222200A7BA00E54A2C /* VShootGuideViewController.swift */; };
 		38FEC5CB21F99B340023156A /* PasswordResetUsernameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38FEC5CA21F99B340023156A /* PasswordResetUsernameViewController.swift */; };
@@ -196,6 +199,9 @@
 		3898483D24B5A40D00A7B700 /* ForumViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForumViewController.swift; sourceTree = "<group>"; };
 		3898483F24B5AD8E00A7B700 /* ForumTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForumTableViewCell.swift; sourceTree = "<group>"; };
 		3898484124B84ED800A7B700 /* ForumPost.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForumPost.swift; sourceTree = "<group>"; };
+		3898484324C4626200A7B700 /* PostCommentsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostCommentsViewController.swift; sourceTree = "<group>"; };
+		3898484524C466E100A7B700 /* PostCommentTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostCommentTableViewCell.swift; sourceTree = "<group>"; };
+		3898484724C4E0BD00A7B700 /* PostComment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostComment.swift; sourceTree = "<group>"; };
 		38DED96621B6603C00D83CEC /* WebRTC.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebRTC.framework; path = Carthage/Build/iOS/WebRTC.framework; sourceTree = "<group>"; };
 		38EEE18A227FC92500A370A3 /* VShootApplication.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = VShootApplication.entitlements; sourceTree = "<group>"; };
 		38FAB04C2411AB550031BF52 /* VShootCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VShootCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -454,6 +460,7 @@
 				3805397B229919280009CD49 /* Group.swift */,
 				382F9867240F3643005F9E2C /* VShoot.swift */,
 				3898484124B84ED800A7B700 /* ForumPost.swift */,
+				3898484724C4E0BD00A7B700 /* PostComment.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -484,6 +491,8 @@
 			children = (
 				3898483D24B5A40D00A7B700 /* ForumViewController.swift */,
 				3898483F24B5AD8E00A7B700 /* ForumTableViewCell.swift */,
+				3898484324C4626200A7B700 /* PostCommentsViewController.swift */,
+				3898484524C466E100A7B700 /* PostCommentTableViewCell.swift */,
 			);
 			path = Forum;
 			sourceTree = "<group>";
@@ -712,6 +721,7 @@
 				382F985A240B46F7005F9E2C /* VShootOptionViewController.swift in Sources */,
 				388F36A92180010000C9C306 /* VmodelViewController.swift in Sources */,
 				3805397E22991E6B0009CD49 /* GroupTableViewCell.swift in Sources */,
+				3898484824C4E0BD00A7B700 /* PostComment.swift in Sources */,
 				384CC3DC2426ACB500A5061B /* Telecine.swift in Sources */,
 				384CBE4F210CF2E700E26A0C /* ViewController.swift in Sources */,
 				382596F221E7327500008311 /* ProfileEmailChangeViewController.swift in Sources */,
@@ -729,6 +739,7 @@
 				3805398722A0EA9B0009CD49 /* ChatViewController.swift in Sources */,
 				3864481021BDB52E0021F86E /* VotographriendViewController.swift in Sources */,
 				388F36B221810E7400C9C306 /* VotographerViewController.swift in Sources */,
+				3898484624C466E100A7B700 /* PostCommentTableViewCell.swift in Sources */,
 				384024A122A8AEE4004CD06E /* DataReloadManager.swift in Sources */,
 				3860143D21C4D84B001CD36E /* ManageFriendshipsViewController.swift in Sources */,
 				3864481721BE63170021F86E /* Votographriend.swift in Sources */,
@@ -774,6 +785,7 @@
 				388F36B0218009E400C9C306 /* Utils.swift in Sources */,
 				3867BD9A21F4FC240054DB60 /* PhotoProcessingViewController.swift in Sources */,
 				38FEC5CD21F9A3D90023156A /* PasswordResetSecurityQuestionViewController.swift in Sources */,
+				3898484424C4626300A7B700 /* PostCommentsViewController.swift in Sources */,
 				384CC3AC242336F400A5061B /* PhotoeditingHomeViewController.swift in Sources */,
 				38053972229674090009CD49 /* NavGroupsViewController.swift in Sources */,
 				3864481221BDB6F00021F86E /* FriendTableViewCell.swift in Sources */,

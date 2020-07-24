@@ -9,7 +9,7 @@
 import UIKit
 
 protocol ForumTableViewCellDelegate: AnyObject {
-    func didTapLikeBtn(rowSelected: Int)
+    func didTapLikeBtn(rowSelected: Int, cell:ForumTableViewCell)
     func didTapCommentBtn(rowSelected: Int)
 }
 
@@ -29,15 +29,22 @@ class ForumTableViewCell: UITableViewCell {
         super.awakeFromNib()
         // Initialization code
     }
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        self.userImg.image = nil
+        self.likeBtn.imageView?.image = nil
+    }
     
     @IBAction func likeBtnTapped(_ sender: Any) {
         //change button image
-        delegate?.didTapLikeBtn(rowSelected: self.cellRow)
+//        self.likeBtn.imageView?.image = UIImage(named: "heart.fill")
+        delegate?.didTapLikeBtn(rowSelected: self.cellRow, cell: self)
     }
     
     @IBAction func commentBtnTapped(_ sender: Any) {
         delegate?.didTapCommentBtn(rowSelected: self.cellRow)
     }
+    
     
     
 

@@ -14,12 +14,17 @@ class ForumPost {
     var username: String
     var datePosted: String
     var numLikes: Int
+    var didLikePost: String
     var numComments: Int
+    var imageUrl: String
+    var image: UIImage? = UIImage(named: "profilepic_none")!
     
-    init(forumId: Int, postText:String, username:String, datePosted: String, numLikes: Int, numComments: Int) {
+    init(forumId: Int, postText:String, username:String, imageUrl: String, datePosted: String, numLikes: Int, numComments: Int, didLikePost: String) {
+        self.didLikePost = didLikePost
         self.forumId = forumId
         self.postText = postText
         self.username = username
+        self.imageUrl = imageUrl
         self.datePosted = datePosted
         self.numLikes = numLikes
         self.numComments = numComments
