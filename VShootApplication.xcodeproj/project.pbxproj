@@ -92,6 +92,8 @@
 		3898484424C4626300A7B700 /* PostCommentsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3898484324C4626200A7B700 /* PostCommentsViewController.swift */; };
 		3898484624C466E100A7B700 /* PostCommentTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3898484524C466E100A7B700 /* PostCommentTableViewCell.swift */; };
 		3898484824C4E0BD00A7B700 /* PostComment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3898484724C4E0BD00A7B700 /* PostComment.swift */; };
+		3898484A24CAC0CF00A7B700 /* UpdatedProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3898484924CAC0CD00A7B700 /* UpdatedProfileViewController.swift */; };
+		3898484C24CAC15C00A7B700 /* NavUpdatedProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3898484B24CAC15C00A7B700 /* NavUpdatedProfileViewController.swift */; };
 		38FAB04D2411AB550031BF52 /* VShootCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38FAB04C2411AB550031BF52 /* VShootCollectionViewCell.swift */; };
 		38FD20232200A7BA00E54A2C /* VShootGuideViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38FD20222200A7BA00E54A2C /* VShootGuideViewController.swift */; };
 		38FEC5CB21F99B340023156A /* PasswordResetUsernameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38FEC5CA21F99B340023156A /* PasswordResetUsernameViewController.swift */; };
@@ -202,6 +204,8 @@
 		3898484324C4626200A7B700 /* PostCommentsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostCommentsViewController.swift; sourceTree = "<group>"; };
 		3898484524C466E100A7B700 /* PostCommentTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostCommentTableViewCell.swift; sourceTree = "<group>"; };
 		3898484724C4E0BD00A7B700 /* PostComment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostComment.swift; sourceTree = "<group>"; };
+		3898484924CAC0CD00A7B700 /* UpdatedProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdatedProfileViewController.swift; sourceTree = "<group>"; };
+		3898484B24CAC15C00A7B700 /* NavUpdatedProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavUpdatedProfileViewController.swift; sourceTree = "<group>"; };
 		38DED96621B6603C00D83CEC /* WebRTC.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebRTC.framework; path = Carthage/Build/iOS/WebRTC.framework; sourceTree = "<group>"; };
 		38EEE18A227FC92500A370A3 /* VShootApplication.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = VShootApplication.entitlements; sourceTree = "<group>"; };
 		38FAB04C2411AB550031BF52 /* VShootCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VShootCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -357,6 +361,8 @@
 				382F9861240C10A6005F9E2C /* NavModelProfileViewController.swift */,
 				382F9863240C111B005F9E2C /* NavVotographerProfileViewController.swift */,
 				38FAB04C2411AB550031BF52 /* VShootCollectionViewCell.swift */,
+				3898484924CAC0CD00A7B700 /* UpdatedProfileViewController.swift */,
+				3898484B24CAC15C00A7B700 /* NavUpdatedProfileViewController.swift */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -751,6 +757,7 @@
 				3805398922A0ED1A0009CD49 /* ChatUser.swift in Sources */,
 				388D9C50223EC21E00B4D905 /* AboutVSViewController.swift in Sources */,
 				3840ED68216F400700E003CA /* SocketIOManager.swift in Sources */,
+				3898484C24CAC15C00A7B700 /* NavUpdatedProfileViewController.swift in Sources */,
 				3805396E2293B77C0009CD49 /* GroupsViewController.swift in Sources */,
 				382F985C240C0B5B005F9E2C /* VModelProfileViewController.swift in Sources */,
 				388F36AE218009E400C9C306 /* SettingsTableViewController.swift in Sources */,
@@ -763,6 +770,7 @@
 				384CC3DD2426ACB500A5061B /* ReplayKitVideoSource.swift in Sources */,
 				3864481421BE59090021F86E /* AddFriendsViewController.swift in Sources */,
 				38053974229675FD0009CD49 /* GroupsTableViewController.swift in Sources */,
+				3898484A24CAC0CF00A7B700 /* UpdatedProfileViewController.swift in Sources */,
 				3817571221FC66C400797C4B /* VSPreferenceHelpViewController.swift in Sources */,
 				381C936B21E273FC001CECC2 /* ProfileViewController.swift in Sources */,
 				38FEC5CF21FA28BB0023156A /* PasswordResetViewController.swift in Sources */,
