@@ -24,6 +24,7 @@ class ForumViewController: UIViewController, UITableViewDataSource, UITableViewD
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        print("view did load")
         ForumPostsTableView.tableFooterView = UIView()
         self.ForumPostsTableView.isHidden = true
         getPosts()
@@ -42,6 +43,14 @@ class ForumViewController: UIViewController, UITableViewDataSource, UITableViewD
         
         self.hideKeyboard()
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        print("view appeared")
+        self.ForumPostsTableView.reloadData()
+        postTextView.text = "Looking for people to vshoot with? Want to say hi to the community? Post a message here."
+        postTextView.textColor = .lightGray
+    }
+    
     func getPosts(){
         print("user id in get posts" + SocketIOManager.sharedInstance.currUserObj.userId)
         let geturl = SocketIOManager.sharedInstance.serverUrl + "/posts/all/" + SocketIOManager.sharedInstance.currUserObj.userId
@@ -54,6 +63,7 @@ class ForumViewController: UIViewController, UITableViewDataSource, UITableViewD
                             print(data)
                             self.ForumPostsTableView.isHidden = false
                             if let postsDict = data as? [Dictionary<String,String>]{
+                                SocketIOManager.sharedInstance.forumPosts.removeAll()
                                 for item in postsDict.reversed() {
                                     let post = ForumPost.init(forumId: Int(item["postId"]!)!, postText: item["postText"]!, username: item["posterUsername"]!, imageUrl: item["postUserProfilePic"]!, datePosted: item["postDate"]!, numLikes: Int(item["numPostLikes"]!)!, numComments: Int(item["numPostComments"]!)!, didLikePost: item["didLikePost"]!)
                                     if (item["postUserProfilePic"]! != "none"){
@@ -65,6 +75,7 @@ class ForumViewController: UIViewController, UITableViewDataSource, UITableViewD
                                     }
                                     
                                     self.posts.append(post)
+                                    SocketIOManager.sharedInstance.forumPosts.append(post)
                                 }
                                 self.ForumPostsTableView.reloadData()
                             }
@@ -128,6 +139,7 @@ class ForumViewController: UIViewController, UITableViewDataSource, UITableViewD
                             
                         //self.posts.append(newPost)
                         self.posts.insert(newPost, at: 0)
+                        SocketIOManager.sharedInstance.forumPosts.insert(newPost, at: 0)
                         self.ForumPostsTableView.reloadData()
                     }
                     else {
@@ -188,25 +200,26 @@ class ForumViewController: UIViewController, UITableViewDataSource, UITableViewD
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        print(posts.count)
-        return posts.count;
+        print(SocketIOManager.sharedInstance.forumPosts.count)
+        //return posts.count;
+        return SocketIOManager.sharedInstance.forumPosts.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = ForumPostsTableView.dequeueReusableCell(withIdentifier: "ForumCell") as! ForumTableViewCell
         cell.cellRow = indexPath.row
-        cell.username.text = posts[indexPath.row].username
-        cell.postText.text = posts[indexPath.row].postText
-        cell.numComments.text = String(posts[indexPath.row].numComments)
-        cell.numLikes.text = String(posts[indexPath.row].numLikes)
-        if (posts[indexPath.row].didLikePost == "true"){
+        cell.username.text = SocketIOManager.sharedInstance.forumPosts[indexPath.row].username
+        cell.postText.text = SocketIOManager.sharedInstance.forumPosts[indexPath.row].postText
+        cell.numComments.text = String(SocketIOManager.sharedInstance.forumPosts[indexPath.row].numComments)
+        cell.numLikes.text = String(SocketIOManager.sharedInstance.forumPosts[indexPath.row].numLikes)
+        if (SocketIOManager.sharedInstance.forumPosts[indexPath.row].didLikePost == "true"){
             print("It is true that the user liked this")
-            print(posts[indexPath.row].postText)
-            print(posts[indexPath.row].forumId)
+            print(SocketIOManager.sharedInstance.forumPosts[indexPath.row].postText)
+            print(SocketIOManager.sharedInstance.forumPosts[indexPath.row].forumId)
             cell.likeBtn.imageView?.image = UIImage(named: "liked_btn")
         }
-        cell.dateLabel.text = posts[indexPath.row].datePosted
-        cell.userImg.image = posts[indexPath.row].image
+        cell.dateLabel.text = SocketIOManager.sharedInstance.forumPosts[indexPath.row].datePosted
+        cell.userImg.image = SocketIOManager.sharedInstance.forumPosts[indexPath.row].image
         cell.userImg.layer.cornerRadius = cell.userImg.frame.height/2
                        cell.userImg.clipsToBounds = true
                        cell.userImg.layer.masksToBounds = true
@@ -221,7 +234,8 @@ class ForumViewController: UIViewController, UITableViewDataSource, UITableViewD
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if (segue.identifier == "ShowPostComments"){
             let commentsVC = segue.destination as! PostCommentsViewController
-            commentsVC.postId = posts[selectedBtnRow].forumId
+            commentsVC.postId = SocketIOManager.sharedInstance.forumPosts[selectedBtnRow].forumId
+            commentsVC.postArrIdx = selectedBtnRow
         }
     }
     
@@ -231,15 +245,15 @@ class ForumViewController: UIViewController, UITableViewDataSource, UITableViewD
 extension ForumViewController: ForumTableViewCellDelegate {
     func didTapLikeBtn(rowSelected: Int, cell: ForumTableViewCell) {
         print("curr user just liked a post with message ")
-        print(self.posts[cell.cellRow].postText)
+        print(SocketIOManager.sharedInstance.forumPosts[cell.cellRow].postText)
         print(" with forum id ")
-        print(self.posts[cell.cellRow].forumId)
+        print(SocketIOManager.sharedInstance.forumPosts[cell.cellRow].forumId)
         var likeBtnAction: String = "like";
-        if (self.posts[cell.cellRow].didLikePost == "true"){
+        if (SocketIOManager.sharedInstance.forumPosts[cell.cellRow].didLikePost == "true"){
             likeBtnAction = "unlike"
         }
         let posturl = SocketIOManager.sharedInstance.serverUrl + "/posts/likes"
-        let info: [String:Any] = ["userId": SocketIOManager.sharedInstance.currUserObj.userId as Any, "postId": self.posts[cell.cellRow].forumId as Any, "likeAction": likeBtnAction]
+        let info: [String:Any] = ["userId": SocketIOManager.sharedInstance.currUserObj.userId as Any, "postId": SocketIOManager.sharedInstance.forumPosts[cell.cellRow].forumId as Any, "likeAction": likeBtnAction]
         //"securityQuestion": self.question as Any, "securityAnswer": SQAnswer.text as Any
         do {
             let data = try JSONSerialization.data(withJSONObject: info, options: [])
@@ -265,14 +279,14 @@ extension ForumViewController: ForumTableViewCellDelegate {
                                 
                                     cell.likeBtn.imageView?.image = UIImage(named: "liked_btn")
                            
-                            self.posts[cell.cellRow].numLikes = self.posts[cell.cellRow].numLikes + 1;
-                            self.posts[cell.cellRow].didLikePost = "true"
+                            SocketIOManager.sharedInstance.forumPosts[cell.cellRow].numLikes = SocketIOManager.sharedInstance.forumPosts[cell.cellRow].numLikes + 1;
+                            SocketIOManager.sharedInstance.forumPosts[cell.cellRow].didLikePost = "true"
                             self.ForumPostsTableView.reloadData()
                         }
                         else {
                             cell.likeBtn.imageView?.image = UIImage(named: "not_liked_btn")
-                            self.posts[cell.cellRow].numLikes = self.posts[cell.cellRow].numLikes - 1;
-                            self.posts[cell.cellRow].didLikePost = "false"
+                            SocketIOManager.sharedInstance.forumPosts[cell.cellRow].numLikes = SocketIOManager.sharedInstance.forumPosts[cell.cellRow].numLikes - 1;
+                            SocketIOManager.sharedInstance.forumPosts[cell.cellRow].didLikePost = "false"
                             self.ForumPostsTableView.reloadData()
                         }
                     }

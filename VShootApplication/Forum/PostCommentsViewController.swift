@@ -13,6 +13,7 @@ class PostCommentsViewController: UIViewController, UITableViewDataSource, UITab
     var comments:[PostComment] = []
     var dataString: String = "";
     var postId:Int = 0;
+    var postArrIdx:Int = 0;
     
     @IBOutlet weak var CommentsTableView: UITableView!
     @IBOutlet weak var commentTextView: UITextView!
@@ -84,6 +85,7 @@ class PostCommentsViewController: UIViewController, UITableViewDataSource, UITab
                             
                         //self.posts.append(newPost)
                         self.comments.insert(newComment, at: 0)
+                        SocketIOManager.sharedInstance.forumPosts[self.postArrIdx].numComments += 1
                         self.CommentsTableView.reloadData()
                     }
                     else {
